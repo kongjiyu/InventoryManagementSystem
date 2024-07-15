@@ -1,4 +1,4 @@
-package DAO;
+package DataAccessObject;
 
 public class StaffDAO {
 }

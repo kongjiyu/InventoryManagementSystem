@@ -1,4 +1,5 @@
-package DAO;
+package DataAccessObject;
 
 public class PaymentDAO {
+
 }
