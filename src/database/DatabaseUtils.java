@@ -17,25 +17,4 @@ public class DatabaseUtils {
             throw new RuntimeException(e);
         }
     }
-
-    public ResultSet executeQuery(String query, Connection connection) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            return statement.executeQuery();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void executeUpdate(String query) {
-        try {
-            Connection connection = getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(query);
-            statement.close();
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
