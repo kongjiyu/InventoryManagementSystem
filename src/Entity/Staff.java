@@ -4,6 +4,7 @@ public class Staff {
     private String staffID;
     private String StaffName;
     private String StaffPosition;
+    private double StaffSalary;
 
     public Staff(String staffID, String StaffName, String StaffPosition) {
         this.staffID = staffID;
@@ -33,5 +34,13 @@ public class Staff {
 
     public void setStaffPosition(String staffPosition) {
         this.StaffPosition = staffPosition;
+    }
+
+    public double getStaffSalary() {
+        return StaffSalary;
+    }
+
+    public void setStaffSalary(double staffSalary) {
+        this.StaffSalary = staffSalary;
     }
 }
