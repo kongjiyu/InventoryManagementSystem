@@ -5,6 +5,8 @@ public class Staff {
     private String StaffName;
     private String StaffPosition;
     private String StaffEmail;
+    private double StaffSalary;
+
 
     public Staff(String staffID, String StaffName, String StaffPosition) {
         this.staffID = staffID;
@@ -42,5 +44,13 @@ public class Staff {
 
     public void setStaffEmail(String staffEmail) {
         this.StaffEmail = staffEmail;
+    }
+  
+    public double getStaffSalary() {
+        return StaffSalary;
+    }
+
+    public void setStaffSalary(double staffSalary) {
+        this.StaffSalary = staffSalary;
     }
 }
