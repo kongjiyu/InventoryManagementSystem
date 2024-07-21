@@ -34,4 +34,8 @@ public class Staff {
     public void setStaffPosition(String staffPosition) {
         this.StaffPosition = staffPosition;
     }
+
+    public void printBye(){
+        System.out.println("Bye bye!");
+    }
 }
