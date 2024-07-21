@@ -35,6 +35,14 @@ public class Staff {
         this.StaffPosition = staffPosition;
     }
 
+    public void printBye(){
+        System.out.println("Bye bye!");
+    }
+
+    public void printHallo(){
+        System.out.println("Hallo");
+    }
+
     public void printHello(){
         System.out.println("Hello World!");
     }
