@@ -60,4 +60,9 @@ public class Staff {
     }
 
     public void jyFunction() { System.out.println("I'm Jy"); }
+
+    public void alexhahaFunction() {
+        System.out.println("My name is uwuveuvueevu onyeteyewe uguemugue osas");
+    }
+
 }
