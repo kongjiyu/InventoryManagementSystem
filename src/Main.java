@@ -41,5 +41,6 @@ public class Main {
             throw new RuntimeException(e);
         }
 
+        System.out.println("man what can i say");
     }
 }
