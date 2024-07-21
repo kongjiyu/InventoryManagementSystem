@@ -47,6 +47,9 @@ public class Staff {
         System.out.println("Hello World!");
     }
 
+    public void renJunFunction(){
+        System.out.println("I'm Ren Jun");
+    }
 
     public void alexFunction(){
         System.out.println("I'm Alex");
@@ -54,6 +57,5 @@ public class Staff {
   
     public void jishouFucntion(){
         System.out.println("I'm Jishou");
-
     }
 }
