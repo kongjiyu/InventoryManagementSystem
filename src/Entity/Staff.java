@@ -42,4 +42,8 @@ public class Staff {
     public void printHallo(){
         System.out.println("Hallo");
     }
+
+    public void printHello(){
+        System.out.println("Hello World!");
+    }
 }
