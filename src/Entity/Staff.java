@@ -46,4 +46,8 @@ public class Staff {
     public void printHello(){
         System.out.println("Hello World!");
     }
+
+    public void alexFunction(){
+        System.out.println("I'm Alex");
+    }
 }
