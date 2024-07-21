@@ -46,4 +46,8 @@ public class Staff {
     public void printHello(){
         System.out.println("Hello World!");
     }
+
+    public void renJunFunction(){
+        System.out.println("I'm Ren Jun");
+    }
 }
