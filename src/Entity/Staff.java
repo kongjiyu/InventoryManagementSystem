@@ -58,4 +58,6 @@ public class Staff {
     public void jishouFucntion(){
         System.out.println("I'm Jishou");
     }
+
+    public void jyFunction() { System.out.println("I'm Jy"); }
 }
