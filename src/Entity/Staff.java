@@ -38,4 +38,8 @@ public class Staff {
     public void printBye(){
         System.out.println("Bye bye!");
     }
+
+    public void printHallo(){
+        System.out.println("Hallo");
+    }
 }
