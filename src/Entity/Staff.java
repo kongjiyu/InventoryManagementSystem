@@ -50,4 +50,12 @@ public class Staff {
     public void renJunFunction(){
         System.out.println("I'm Ren Jun");
     }
+
+    public void alexFunction(){
+        System.out.println("I'm Alex");
+    }
+  
+    public void jishouFucntion(){
+        System.out.println("I'm Jishou");
+    }
 }
