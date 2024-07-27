@@ -12,7 +12,6 @@ public class Order {
     private String StaffID;
     private String PaymentID;
 
-
     public int getOrderID() {
         return OrderID;
     }
