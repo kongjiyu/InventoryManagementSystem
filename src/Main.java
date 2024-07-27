@@ -1,11 +1,10 @@
 import Entity.Staff;
-import database.DatabaseUtils;
+import Database.DatabaseUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
