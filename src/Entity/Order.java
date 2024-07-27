@@ -1,23 +1,17 @@
 package Entity;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 public class Order {
     private int OrderID;
-    private String ItemSKU;
-    private int ItemQuantity;
+    private HashMap<String, Integer> OrderItems;
+    private double discount;
+    private double price;
     private LocalDateTime OrderDate;
     private String StaffID;
     private String PaymentID;
 
-    public Order(int OrderID, String ItemSKU, int ItemQuantity, LocalDateTime OrderDate, String StaffID, String PaymentID) {
-        this.OrderID = OrderID;
-        this.ItemSKU = ItemSKU;
-        this.ItemQuantity = ItemQuantity;
-        this.OrderDate = OrderDate;
-        this.StaffID = StaffID;
-        this.PaymentID = PaymentID;
-    }
 
     public int getOrderID() {
         return OrderID;
@@ -27,20 +21,24 @@ public class Order {
         this.OrderID = OrderID;
     }
 
-    public String getItemSKU() {
-        return ItemSKU;
+    public void setOrderItems(String ItemSKU, int Quantity){
+        OrderItems.put(ItemSKU, Quantity);
     }
 
-    public void setItemSKU(String ItemSKU) {
-        this.ItemSKU = ItemSKU;
+    public double getDiscount() {
+        return discount;
     }
 
-    public int getItemQuantity() {
-        return ItemQuantity;
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 
-    public void setItemQuantity(int ItemQuantity) {
-        this.ItemQuantity = ItemQuantity;
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public LocalDateTime getOrderDate() {
