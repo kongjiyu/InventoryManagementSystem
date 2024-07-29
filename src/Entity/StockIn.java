@@ -11,13 +11,13 @@ public class StockIn {
     private LocalDate date;
     private LocalDate expiryDate;
     private String remarks;
-    private Staff receivedBy;
+    private String receivedBy;
 
     public StockIn(){
 
     }
 
-    public StockIn(String id, Product product, int quantity, double unitPrice, double totalPrice, LocalDate date, LocalDate expiryDate, String remarks, Staff receivedBy) {
+    public StockIn(String id, Product product, int quantity, double unitPrice, double totalPrice, LocalDate date, LocalDate expiryDate, String remarks, String receivedBy) {
         this.id = id;
         this.product = product;
         this.quantity = quantity;
@@ -93,11 +93,11 @@ public class StockIn {
         this.remarks = remarks;
     }
 
-    public Staff getReceivedBy() {
+    public String getReceivedBy() {
         return receivedBy;
     }
 
-    public void setReceivedBy(Staff receivedBy) {
+    public void setReceivedBy(String receivedBy) {
         this.receivedBy = receivedBy;
     }
 }
