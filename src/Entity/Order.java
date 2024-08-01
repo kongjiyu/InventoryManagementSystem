@@ -24,6 +24,10 @@ public class Order {
         OrderItems.put(ItemSKU, Quantity);
     }
 
+    public HashMap<String, Integer> getOrderItems() {
+        return OrderItems;
+    }
+
     public double getDiscount() {
         return discount;
     }
