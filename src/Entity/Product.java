@@ -1,6 +1,6 @@
 package Entity;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Product {
     private String SKU;
@@ -9,12 +9,12 @@ public class Product {
     private String category;
     private double price;
     private double weight;
-    private double dimension;
+    private String dimension;
     private int quantity;
-    private LocalDate expDate;
-    private LocalDate updatedAt;
+    private Date expDate;
+    private Date updatedAt;
 
-    public Product(String SKU, String name, String desc, String category, double price, double weight, double dimension, int quantity, LocalDate expDate, LocalDate updatedAt) {
+    public Product(String SKU, String name, String desc, String category, double price, double weight, String dimension, int quantity, Date expDate, Date updatedAt) {
         this.SKU = SKU;
         this.name = name;
         this.desc = desc;
@@ -75,11 +75,11 @@ public class Product {
         this.weight = weight;
     }
 
-    public double getDimension() {
+    public String getDimension() {
         return dimension;
     }
 
-    public void setDimension(double dimension) {
+    public void setDimension(String dimension) {
         this.dimension = dimension;
     }
 
@@ -91,19 +91,19 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public LocalDate getExpDate() {
+    public Date getExpDate() {
         return expDate;
     }
 
-    public void setExpDate(LocalDate expDate) {
+    public void setExpDate(Date expDate) {
         this.expDate = expDate;
     }
 
-    public LocalDate getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

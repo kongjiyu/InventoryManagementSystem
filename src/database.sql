@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS StockIn;
+DROP TABLE IF EXISTS Payment;
+DROP TABLE IF EXISTS LOG;
+DROP TABLE IF EXISTS Purchase;
+DROP TABLE IF EXISTS Report;
+DROP TABLE IF EXISTS Staff;
+DROP TABLE IF EXISTS Product;
+DROP TABLE IF EXISTS Supplier;
+
 CREATE TABLE Staff
 (
     StaffID        VARCHAR(10)   NOT NULL,
@@ -25,14 +35,14 @@ CREATE TABLE LOG
 
 CREATE TABLE Product
 (
-    ProductSKU       DECIMAL(10)    NOT NULL,
+    ProductSKU       VARCHAR(10)    NOT NULL,
     ProductName      VARCHAR(100)   NOT NULL,
     ProductDesc      VARCHAR(200)   NOT NULL,
     ProductCategory  VARCHAR(100)   NOT NULL,
     ProductPrice     DECIMAL(10, 2) NOT NULL,
     ProductWeight    DECIMAL(10, 2) NOT NULL,
     ProductDimension VARCHAR(100)   NOT NULL,
-    Quantity         DECIMAL(10)    NOT NULL,
+    ProductQuantity  DECIMAL(10)    NOT NULL,
     ProductExpDate   Date           NOT NULL,
     ProductUpdatedAt TIMESTAMP NULL,
     PRIMARY KEY (ProductSKU)
@@ -59,7 +69,7 @@ CREATE TABLE Purchase
 (
     PurchaseID   VARCHAR(10)    NOT NULL,
     PurchaseDate DATE           NOT NULL,
-    ProductSKU      DECIMAL(10)    NOT NULL,
+    ProductSKU   DECIMAL(10)    NOT NULL,
     ItemQuantity DECIMAL(10)    NOT NULL,
     ItemPrice    DECIMAL(10, 2) NOT NULL,
     SupplierID   VARCHAR(10)    NOT NULL,
@@ -78,6 +88,13 @@ CREATE TABLE Report
     topSalesStaffPerformance DECIMAL(10, 2) NOT NULL,
     PRIMARY KEY (date)
 );
+
+CREATE TABLE Discount
+(
+    DiscountCode VARCHAR(10)    NOT NULL,
+    DiscountRate DECIMAL(3, 2)  NOT NULL,
+    PRIMARY KEY (DiscountCode)
+)
 
 CREATE TABLE Orders
 (

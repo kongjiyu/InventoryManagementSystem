@@ -5,12 +5,36 @@ import java.util.HashMap;
 
 public class Order {
     private int OrderID;
-    private HashMap<String, Integer> OrderItems;
+    private HashMap<Product, Integer> cart;
     private double discount;
     private double price;
     private LocalDateTime OrderDate;
     private String StaffID;
     private String PaymentID;
+
+    public Order(){
+
+    }
+
+    public Order(int orderID){
+        this.OrderID = orderID;
+        this.cart = new HashMap<Product, Integer>();
+        this.discount = 0;
+        this.price = 0;
+        this.OrderDate = LocalDateTime.now();
+        this.StaffID = "";
+        this.PaymentID = "";
+    }
+
+    public Order(int orderID, HashMap<Product, Integer> cart, double discount, double price, LocalDateTime orderDate, String staffID, String paymentID) {
+        OrderID = orderID;
+        this.cart = cart;
+        this.discount = discount;
+        this.price = price;
+        OrderDate = orderDate;
+        StaffID = staffID;
+        PaymentID = paymentID;
+    }
 
     public int getOrderID() {
         return OrderID;
@@ -20,12 +44,12 @@ public class Order {
         this.OrderID = OrderID;
     }
 
-    public void setOrderItems(String ItemSKU, int Quantity){
-        OrderItems.put(ItemSKU, Quantity);
+    public void setCart(Product product, int quantity){
+        cart.put(product, quantity);
     }
 
-    public HashMap<String, Integer> getOrderItems() {
-        return OrderItems;
+    public HashMap<Product, Integer> getCart() {
+        return cart;
     }
 
     public double getDiscount() {
