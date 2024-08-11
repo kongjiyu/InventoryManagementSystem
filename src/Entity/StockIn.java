@@ -6,8 +6,6 @@ public class StockIn {
     private String id;
     private Product product;
     private int quantity;
-    private double unitPrice;
-    private double totalPrice;
     private LocalDate date;
     private LocalDate expiryDate;
     private String remarks;
@@ -16,13 +14,11 @@ public class StockIn {
     public StockIn(){
 
     }
-
-    public StockIn(String id, Product product, int quantity, double unitPrice, double totalPrice, LocalDate date, LocalDate expiryDate, String remarks, String receivedBy) {
+    
+    public StockIn(String id, Product product, int quantity, LocalDate date, LocalDate expiryDate, String remarks, String receivedBy) {
         this.id = id;
         this.product = product;
         this.quantity = quantity;
-        this.unitPrice = unitPrice;
-        this.totalPrice = totalPrice;
         this.date = date;
         this.expiryDate = expiryDate;
         this.remarks = remarks;
@@ -51,22 +47,6 @@ public class StockIn {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public double getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public LocalDate getDate() {
