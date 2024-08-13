@@ -1,8 +1,10 @@
 package Entity;
 
 public class Storage {
+    private String storageID;
     private Retailer retailer;
     private Product product;
+    private Warehouse warehouse;
     private int quantity;
 
     public Storage(){

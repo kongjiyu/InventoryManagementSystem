@@ -1,11 +1,14 @@
 package Entity;
 
+import java.time.LocalDate;
+
 public class Transfer {
     private String transferID;
     private Warehouse fromWarehouse;
     private Warehouse toWarehouse;
     private Product product;
     private int quantity;
+    private LocalDate transferDate;
 
     public Transfer(){
 

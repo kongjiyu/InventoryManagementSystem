@@ -1,12 +1,15 @@
-DROP TABLE IF EXISTS Orders;
-DROP TABLE IF EXISTS StockIn;
-DROP TABLE IF EXISTS Payment;
 DROP TABLE IF EXISTS LOG;
-DROP TABLE IF EXISTS Purchase;
-DROP TABLE IF EXISTS Report;
+DROP TABLE IF EXISTS Inventory;
 DROP TABLE IF EXISTS Staff;
+DROP TABLE IF EXISTS Retailer;
+DROP TABLE IF EXISTS Transfer;
+DROP TABLE IF EXISTS Warehouse;
+DROP TABLE IF EXISTS Purchase;
 DROP TABLE IF EXISTS Product;
 DROP TABLE IF EXISTS Supplier;
+DROP TABLE IF EXISTS Payment;
+DROP TABLE IF EXISTS Report;
+DROP TABLE IF EXISTS Storage;
 
 CREATE TABLE Staff
 (
@@ -21,16 +24,28 @@ CREATE TABLE Staff
     StaffEmail     VARCHAR(100)  NOT NULL,
     StaffPhone     VARCHAR(20)   NOT NULL,
     StaffAddress   VARCHAR(100)  NOT NULL,
-    AdminPrivilege DECIMAL(1)    NOT NULL,
+    AdminPrivilege DECIMAL(1)    ,
     PRIMARY KEY (StaffID)
 );
 
-CREATE TABLE LOG
+CREATE TABLE Retailer
 (
-    time    TIMESTAMP   NOT NULL,
-    staffID VARCHAR(10) NOT NULL,
-    PRIMARY KEY (time),
-    FOREIGN KEY (staffID) REFERENCES Staff (StaffID)
+    RetailerID      VARCHAR(10)  NOT NULL,
+    RetailerName    VARCHAR(100) NOT NULL,
+    RetailerAddress VARCHAR(100) NOT NULL,
+    RetailerPhone   VARCHAR(20)  NOT NULL,
+    RetailerEmail   VARCHAR(100) NOT NULL,
+    PRIMARY KEY (RetailerID)
+);
+
+CREATE TABLE Warehouse
+(
+    WarehouseID   VARCHAR(10)  NOT NULL,
+    WarehouseName VARCHAR(100) NOT NULL,
+    WarehouseAddress VARCHAR(100) NOT NULL,
+    WarehousePhone VARCHAR(20)  NOT NULL,
+    WarehouseEmail VARCHAR(100) NOT NULL,
+    PRIMARY KEY (WarehouseID)
 );
 
 CREATE TABLE Product
@@ -44,8 +59,31 @@ CREATE TABLE Product
     ProductDimension VARCHAR(100)   NOT NULL,
     ProductQuantity  DECIMAL(10)    NOT NULL,
     ProductExpDate   Date           NOT NULL,
-    ProductUpdatedAt TIMESTAMP NULL,
+    ProductUpdatedAt TIMESTAMP      NOT NULL,
     PRIMARY KEY (ProductSKU)
+);
+
+CREATE TABLE Transfer
+(
+    TransferID     VARCHAR(10)  NOT NULL,
+    FromWarehouse  VARCHAR(10)  NOT NULL,
+    ToWarehouse    VARCHAR(10)  NOT NULL,
+    ProductSKU      VARCHAR(10)  NOT NULL,
+    Quantity       DECIMAL(10)  NOT NULL,
+    TransferDate   DATE         NOT NULL,
+    TransferStatus VARCHAR(100) NOT NULL,
+    PRIMARY KEY (TransferID),
+    FOREIGN KEY (FromWarehouse) REFERENCES Warehouse (WarehouseID),
+    FOREIGN KEY (ToWarehouse) REFERENCES Warehouse (WarehouseID),
+    FOREIGN KEY (ProductSKU) REFERENCES Product (ProductSKU)
+);
+
+CREATE TABLE LOG
+(
+    Time    TIMESTAMP   NOT NULL,
+    StaffID VARCHAR(10) NOT NULL,
+    PRIMARY KEY (time),
+    FOREIGN KEY (StaffID) REFERENCES Staff (StaffID)
 );
 
 CREATE TABLE Supplier
@@ -58,18 +96,11 @@ CREATE TABLE Supplier
     PRIMARY KEY (SupplierID)
 );
 
-CREATE TABLE Payment
-(
-    InvoiceDECIMAL VARCHAR(10)    NOT NULL,
-    Amount         DECIMAL(10, 2) NOT NULL,
-    PRIMARY KEY (InvoiceDECIMAL)
-);
-
 CREATE TABLE Purchase
 (
     PurchaseID   VARCHAR(10)    NOT NULL,
     PurchaseDate DATE           NOT NULL,
-    ProductSKU   DECIMAL(10)    NOT NULL,
+    ProductSKU   VARCHAR(10)    NOT NULL,
     ItemQuantity DECIMAL(10)    NOT NULL,
     ItemPrice    DECIMAL(10, 2) NOT NULL,
     SupplierID   VARCHAR(10)    NOT NULL,
@@ -80,53 +111,43 @@ CREATE TABLE Purchase
 
 CREATE TABLE Report
 (
-    date                     TIMESTAMP      NOT NULL,
-    totalSales               DECIMAL(10, 2) NOT NULL,
-    topSalesProduct          VARCHAR(100)   NOT NULL,
-    topSalesProductQuantity  DECIMAL(10)    NOT NULL,
-    topSalesStaff            VARCHAR(100)   NOT NULL,
-    topSalesStaffPerformance DECIMAL(10, 2) NOT NULL,
-    PRIMARY KEY (date)
+    Date                     TIMESTAMP      NOT NULL,
+    TotalSales               DECIMAL(10, 2) NOT NULL,
+    TopSalesProduct          VARCHAR(100)   NOT NULL,
+    TopSalesProductQuantity  DECIMAL(10)    NOT NULL,
+    TopSalesStaff            VARCHAR(100)   NOT NULL,
+    TopSalesStaffPerformance DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (Date)
 );
 
-CREATE TABLE Discount
+CREATE TABLE Inventory
 (
-    DiscountCode VARCHAR(10)    NOT NULL,
-    DiscountRate DECIMAL(3, 2)  NOT NULL,
-    PRIMARY KEY (DiscountCode)
-)
-
-CREATE TABLE Orders
-(
-    OrderID      DECIMAL(10)    NOT NULL,
-    ItemSKU      VARCHAR(10)    NOT NULL,
-    ItemQuantity DECIMAL(10)    NOT NULL,
-    DISCOUNT     DECIMAL(10, 2) NOT NULL,
-    PRICE        DECIMAL(10, 2) NOT NULL,
-    OrderDate    DATETIME       NOT NULL,
-    StaffID      VARCHAR(10)    NOT NULL,
-    PaymentID    VARCHAR(10)    NOT NULL,
-    PRIMARY KEY (OrderID),
-    FOREIGN KEY (ItemSKU) REFERENCES Product (ProductSKU),
-    FOREIGN KEY (StaffID) REFERENCES Staff (StaffID),
-    FOREIGN KEY (PaymentID) REFERENCES Payment (InvoiceDECIMAL)
+    InventoryID   VARCHAR(10)  NOT NULL,
+    ProductSKU    VARCHAR(10)  NOT NULL,
+    Quantity      DECIMAL(10)  NOT NULL,
+    SupplierID    VARCHAR(10),
+    RetailerID    VARCHAR(10),
+    InventoryType VARCHAR(100) NOT NULL,
+    InventoryTime TIMESTAMP    NOT NULL,
+    expiryDate    DATE,
+    remarks       VARCHAR(200),
+    receivedBy    VARCHAR(100) NOT NULL,
+    PRIMARY KEY (InventoryID),
+    FOREIGN KEY (ProductSKU) REFERENCES Product (ProductSKU),
+    FOREIGN KEY (receivedBy) REFERENCES Staff (StaffID),
+    FOREIGN KEY (SupplierID) REFERENCES Supplier (SupplierID),
+    FOREIGN KEY (RetailerID) REFERENCES Retailer (RetailerID)
 );
 
-CREATE TABLE StockIn
+CREATE TABLE Storage
 (
-    StockInID  VARCHAR(10)    NOT NULL,
-    ItemSKU    VARCHAR(10)    NOT NULL,
-    Quantity   DECIMAL(10)    NOT NULL,
-    unitPrice  DECIMAL(10, 2) NOT NULL,
-    totalPrice DECIMAL(10, 2) NOT NULL,
-    date       TIMESTAMP      NOT NULL,
-    expiryDate DATE           NOT NULL,
-    remarks    VARCHAR(200)   NOT NULL,
-    receivedBy VARCHAR(100)   NOT NULL,
-    PRIMARY KEY (StockInID),
-    FOREIGN KEY (ItemSKU) REFERENCES Product (ProductSKU),
-    FOREIGN KEY (receivedBy) REFERENCES Staff (StaffID)
+    StorageID   VARCHAR(10) NOT NULL,
+    RetailerID  VARCHAR(10) NOT NULL,
+    ProductSKU  VARCHAR(10) NOT NULL,
+    WarehouseID VARCHAR(10) NOT NULL,
+    Quantity    DECIMAL(10) NOT NULL,
+    PRIMARY KEY (StorageID),
+    FOREIGN KEY (ProductSKU) REFERENCES Product (ProductSKU),
+    FOREIGN KEY (RetailerID) REFERENCES Retailer (RetailerID),
+    FOREIGN KEY (WarehouseID) REFERENCES Warehouse (WarehouseID)
 );
-
-
-
