@@ -24,4 +24,6 @@ public class StaffTools {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean checkStaffAccount(String staffID, String password)
 }
