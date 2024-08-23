@@ -8,7 +8,7 @@ public class DatabaseUtils {
     public static Connection getConnection() {
         final String DBURL = "jdbc:mysql://localhost:3306/inventory"; //replace the string with your local host url
         final String DBUSER = "root"; //replace the username String with your username (default is root)
-        final String DBPASSWORD = "kongjiyu"; //replace the password String with your password
+        final String DBPASSWORD = "kongjishou"; //replace the password String with your password
         try {
             DriverManager.getConnection(DBURL, DBUSER, DBPASSWORD);
             System.out.println("Connect Successful");
