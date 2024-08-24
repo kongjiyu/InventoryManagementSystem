@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS Storage;
 CREATE TABLE Staff
 (
     StaffID        VARCHAR(10)   NOT NULL,
+    StaffUsername  VARCHAR(20)   NOT NULL,
     Password       VARCHAR(100)  NOT NULL,
     StaffIC        VARCHAR(20)   NOT NULL,
     StaffName      VARCHAR(100)  NOT NULL,
