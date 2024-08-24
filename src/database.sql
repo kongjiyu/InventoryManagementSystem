@@ -58,7 +58,6 @@ CREATE TABLE Product
     ProductWeight    DECIMAL(10, 2) NOT NULL,
     ProductDimension VARCHAR(100)   NOT NULL,
     ProductQuantity  DECIMAL(10)    NOT NULL,
-    ProductExpDate   Date           NOT NULL,
     ProductUpdatedAt TIMESTAMP      NOT NULL,
     PRIMARY KEY (ProductSKU)
 );

@@ -37,7 +37,6 @@ public class ProductTools {
                         resultSet.getDouble("ProductWeight"),
                         resultSet.getString("ProductDimension"),
                         resultSet.getInt("ProductQuantity"),
-                        resultSet.getDate("ProductExpDate"),
                         resultSet.getTimestamp("ProductUpdatedAt")
                 );
             }else{
