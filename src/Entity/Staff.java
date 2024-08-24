@@ -20,7 +20,7 @@ public class Staff {
 
     }
 
-    public Staff(String staffID, String password, String staffIC, String name, int age, LocalDate hireDate, LocalDate birthDate, double salary, String email, String phone, String address) {
+    public Staff(String staffID, String password, String staffIC, String name, int age, LocalDate hireDate, LocalDate birthDate, double salary, String email, String phone, String address, boolean isAdmin) {
         this.staffID = staffID;
         this.password = password;
         this.staffIC = staffIC;
@@ -32,6 +32,7 @@ public class Staff {
         this.email = email;
         this.phone = phone;
         this.address = address;
+        this.isAdmin = isAdmin;
     }
 
     public String getStaffID() {
@@ -120,5 +121,13 @@ public class Staff {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }
