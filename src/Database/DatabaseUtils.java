@@ -1,14 +1,20 @@
 package Database;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class DatabaseUtils {
     public static Connection connection;
+    static String DBPASSWORD; //replace the password String with your password
 
     public static Connection getConnection() {
+        Scanner scanner = new Scanner(System.in);
         final String DBURL = "jdbc:mysql://localhost:3306/inventory"; //replace the string with your local host url
         final String DBUSER = "root"; //replace the username String with your username (default is root)
-        final String DBPASSWORD = "kongjishou"; //replace the password String with your password
+        if(DBPASSWORD == null){
+            System.out.print("Please enter database password: ");
+            DBPASSWORD = scanner.nextLine();
+        }
         try {
             DriverManager.getConnection(DBURL, DBUSER, DBPASSWORD);
             System.out.println("Connect Successful");
