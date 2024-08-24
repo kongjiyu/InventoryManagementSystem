@@ -14,6 +14,7 @@ public class Staff {
     private String email;
     private String phone;
     private String address;
+    private boolean isAdmin;
 
     public Staff() {
 
