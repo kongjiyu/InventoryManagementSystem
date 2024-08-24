@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS Storage;
 CREATE TABLE Staff
 (
     StaffID        VARCHAR(10)   NOT NULL,
+    StaffUsername  VARCHAR(20)   NOT NULL,
     Password       VARCHAR(100)  NOT NULL,
     StaffIC        VARCHAR(20)   NOT NULL,
     StaffName      VARCHAR(100)  NOT NULL,
@@ -58,7 +59,6 @@ CREATE TABLE Product
     ProductWeight    DECIMAL(10, 2) NOT NULL,
     ProductDimension VARCHAR(100)   NOT NULL,
     ProductQuantity  DECIMAL(10)    NOT NULL,
-    ProductExpDate   Date           NOT NULL,
     ProductUpdatedAt TIMESTAMP      NOT NULL,
     PRIMARY KEY (ProductSKU)
 );

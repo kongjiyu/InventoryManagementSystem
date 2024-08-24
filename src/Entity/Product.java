@@ -11,10 +11,13 @@ public class Product {
     private double weight;
     private String dimension;
     private int quantity;
-    private Date expDate;
     private Date updatedAt;
 
-    public Product(String SKU, String name, String desc, String category, double price, double weight, String dimension, int quantity, Date expDate, Date updatedAt) {
+    public Product(){
+        
+    }
+
+    public Product(String SKU, String name, String desc, String category, double price, double weight, String dimension, int quantity, Date updatedAt) {
         this.SKU = SKU;
         this.name = name;
         this.desc = desc;
@@ -23,7 +26,6 @@ public class Product {
         this.weight = weight;
         this.dimension = dimension;
         this.quantity = quantity;
-        this.expDate = expDate;
         this.updatedAt = updatedAt;
     }
 
@@ -89,14 +91,6 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public Date getExpDate() {
-        return expDate;
-    }
-
-    public void setExpDate(Date expDate) {
-        this.expDate = expDate;
     }
 
     public Date getUpdatedAt() {
