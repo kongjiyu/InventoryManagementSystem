@@ -5,6 +5,7 @@ import Entity.Staff;
 import Entity.Admin;
 
 import java.sql.*;
+import java.util.*;
 
 public class StaffTools {
     public boolean checkStaffID(String staffID){
@@ -23,8 +24,37 @@ public class StaffTools {
         }
     }
 
+    public boolean checkPassword(String staffID,String password){
+        Staff staff = null;
+
+        Connection connection = DatabaseUtils.getConnection();
+        String sql = "SELECT * FROM staff WHERE StaffID = ? AND Password=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, staffID);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public boolean checkStaffAccount(String staffID, String password){
-        return true;
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter staffID: ");
+        String checkStaffID= scanner.nextLine();
+        System.out.print("Enter password: ");
+        String checkPassword = scanner.nextLine();
+
+        if(checkStaffID(checkStaffID) && checkPassword(staffID,password)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
@@ -66,4 +96,6 @@ public class StaffTools {
         }
 
     }
+
+
 }
