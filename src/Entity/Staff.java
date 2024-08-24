@@ -1,14 +1,36 @@
 package Entity;
 
+import java.time.LocalDate;
+
 public class Staff {
     private String staffID;
-    private String StaffName;
-    private String StaffPosition;
+    private String password;
+    private String staffIC;
+    private String name;
+    private int age;
+    private LocalDate hireDate;
+    private LocalDate birthDate;
+    private double salary;
+    private String email;
+    private String phone;
+    private String address;
 
-    public Staff(String staffID, String StaffName, String StaffPosition) {
+    public Staff() {
+
+    }
+
+    public Staff(String staffID, String password, String staffIC, String name, int age, LocalDate hireDate, LocalDate birthDate, double salary, String email, String phone, String address) {
         this.staffID = staffID;
-        this.StaffName = StaffName;
-        this.StaffPosition = StaffPosition;
+        this.password = password;
+        this.staffIC = staffIC;
+        this.name = name;
+        this.age = age;
+        this.hireDate = hireDate;
+        this.birthDate = birthDate;
+        this.salary = salary;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
     }
 
     public String getStaffID() {
@@ -19,50 +41,83 @@ public class Staff {
         this.staffID = staffID;
     }
 
-    public String getStaffName() {
-        return StaffName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setStaffName(String staffName) {
-        this.StaffName = staffName;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getStaffPosition() {
-        return StaffPosition;
+    public String getStaffIC() {
+        return staffIC;
     }
 
-    public void setStaffPosition(String staffPosition) {
-        this.StaffPosition = staffPosition;
+    public void setStaffIC(String staffIC) {
+        this.staffIC = staffIC;
     }
 
-    public void printBye(){
-        System.out.println("Bye bye!");
+    public String getName() {
+        return name;
     }
 
-    public void printHallo(){
-        System.out.println("Hallo");
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void printHello(){
-        System.out.println("Hello World!");
+    public int getAge() {
+        return age;
     }
 
-    public void renJunFunction(){
-        System.out.println("I'm Ren Jun");
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public void alexFunction(){
-        System.out.println("I'm Alex");
-    }
-  
-    public void jishouFucntion(){
-        System.out.println("I'm Jishou");
+    public LocalDate getHireDate() {
+        return hireDate;
     }
 
-    public void jyFunction() { System.out.println("I'm Jy"); }
-
-    public void alexhahaFunction() {
-        System.out.println("My name is uwuveuvueevu onyeteyewe uguemugue osas");
+    public void setHireDate(LocalDate hireDate) {
+        this.hireDate = hireDate;
     }
 
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

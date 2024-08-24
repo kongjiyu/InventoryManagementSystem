@@ -1,5 +1,5 @@
 package DataAccessObject;
 
-public class ItemDAO {
+public class ProductDAO {
 
 }
