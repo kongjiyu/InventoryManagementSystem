@@ -1,12 +1,14 @@
 package DatabaseTools;
 
 import Entity.Product;
+import Model.Dimension;
 import Database.DatabaseUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ProductTools {
     public static Product retrieveProduct(String SKU){
@@ -35,7 +37,11 @@ public class ProductTools {
                         resultSet.getString("ProductCategory"),
                         resultSet.getDouble("ProductPrice"),
                         resultSet.getDouble("ProductWeight"),
-                        resultSet.getString("ProductDimension"),
+                        new Dimension(
+                                resultSet.getDouble("ProductWidth"),
+                                resultSet.getDouble("ProductLength"),
+                                resultSet.getDouble("ProductHeight")
+                        ),
                         resultSet.getInt("ProductQuantity"),
                         resultSet.getTimestamp("ProductUpdatedAt")
                 );
@@ -48,5 +54,25 @@ public class ProductTools {
         return product;
     }
 
-    
+    public static ArrayList<String> retrieveAllCategories(){
+        ArrayList<String> categories = new ArrayList<>();
+
+        String sql = "SELECT DISTINCT ProductCategory FROM Product";
+
+        Connection connection = DatabaseUtils.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                categories.add(resultSet.getString("ProductCategory"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return categories;
+    }
+
+
 }

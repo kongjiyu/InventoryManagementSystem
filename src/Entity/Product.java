@@ -1,5 +1,7 @@
 package Entity;
 
+import Model.Dimension;
+
 import java.util.Date;
 
 public class Product {
@@ -9,7 +11,7 @@ public class Product {
     private String category;
     private double price;
     private double weight;
-    private String dimension;
+    private Dimension dimension;
     private int quantity;
     private Date updatedAt;
 
@@ -17,7 +19,7 @@ public class Product {
         
     }
 
-    public Product(String SKU, String name, String desc, String category, double price, double weight, String dimension, int quantity, Date updatedAt) {
+    public Product(String SKU, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, Date updatedAt) {
         this.SKU = SKU;
         this.name = name;
         this.desc = desc;
@@ -77,11 +79,11 @@ public class Product {
         this.weight = weight;
     }
 
-    public String getDimension() {
+    public Dimension getDimension() {
         return dimension;
     }
 
-    public void setDimension(String dimension) {
+    public void setDimension(Dimension dimension) {
         this.dimension = dimension;
     }
 

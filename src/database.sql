@@ -57,7 +57,9 @@ CREATE TABLE Product
     ProductCategory  VARCHAR(100)   NOT NULL,
     ProductPrice     DECIMAL(10, 2) NOT NULL,
     ProductWeight    DECIMAL(10, 2) NOT NULL,
-    ProductDimension VARCHAR(100)   NOT NULL,
+    ProductWidth     DECIMAL(10, 2) NOT NULL,
+    ProductLength    DECIMAL(10, 2) NOT NULL,
+    ProductHeight    DECIMAL(10, 2) NOT NULL,
     ProductQuantity  DECIMAL(10)    NOT NULL,
     ProductUpdatedAt TIMESTAMP      NOT NULL,
     PRIMARY KEY (ProductSKU)
