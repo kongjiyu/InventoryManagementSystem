@@ -2,10 +2,11 @@ package Entity;
 
 import Model.Dimension;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Product {
-    private String SKU;
+    private String UPC;
     private String name;
     private String desc;
     private String category;
@@ -13,14 +14,14 @@ public class Product {
     private double weight;
     private Dimension dimension;
     private int quantity;
-    private Date updatedAt;
+    private LocalDate updatedAt;
 
     public Product(){
-        
+        dimension = new Dimension();
     }
 
-    public Product(String SKU, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, Date updatedAt) {
-        this.SKU = SKU;
+    public Product(String UPC, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, LocalDate updatedAt) {
+        this.UPC = UPC;
         this.name = name;
         this.desc = desc;
         this.category = category;
@@ -31,12 +32,12 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
-    public String getSKU() {
-        return SKU;
+    public String getUPC() {
+        return UPC;
     }
 
-    public void setSKU(String SKU) {
-        this.SKU = SKU;
+    public void setUPC(String UPC) {
+        this.UPC = UPC;
     }
 
     public String getName() {
@@ -95,11 +96,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
