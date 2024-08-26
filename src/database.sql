@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS LOG;
 DROP TABLE IF EXISTS Inventory;
 DROP TABLE IF EXISTS Staff;
+DROP TABLE IF EXISTS Storage;
 DROP TABLE IF EXISTS Retailer;
 DROP TABLE IF EXISTS Transfer;
 DROP TABLE IF EXISTS Warehouse;
@@ -9,7 +10,7 @@ DROP TABLE IF EXISTS Product;
 DROP TABLE IF EXISTS Supplier;
 DROP TABLE IF EXISTS Payment;
 DROP TABLE IF EXISTS Report;
-DROP TABLE IF EXISTS Storage;
+
 
 CREATE TABLE Staff
 (
@@ -51,16 +52,18 @@ CREATE TABLE Warehouse
 
 CREATE TABLE Product
 (
-    ProductSKU       VARCHAR(10)    NOT NULL,
+    ProductUPC       INT            NOT NULL AUTO_INCREMENT,
     ProductName      VARCHAR(100)   NOT NULL,
     ProductDesc      VARCHAR(200)   NOT NULL,
     ProductCategory  VARCHAR(100)   NOT NULL,
     ProductPrice     DECIMAL(10, 2) NOT NULL,
     ProductWeight    DECIMAL(10, 2) NOT NULL,
-    ProductDimension VARCHAR(100)   NOT NULL,
+    ProductWidth     DECIMAL(10, 2) NOT NULL,
+    ProductLength    DECIMAL(10, 2) NOT NULL,
+    ProductHeight    DECIMAL(10, 2) NOT NULL,
     ProductQuantity  DECIMAL(10)    NOT NULL,
     ProductUpdatedAt TIMESTAMP      NOT NULL,
-    PRIMARY KEY (ProductSKU)
+    PRIMARY KEY (ProductUPC)
 );
 
 CREATE TABLE Transfer
@@ -68,14 +71,14 @@ CREATE TABLE Transfer
     TransferID     VARCHAR(10)  NOT NULL,
     FromWarehouse  VARCHAR(10)  NOT NULL,
     ToWarehouse    VARCHAR(10)  NOT NULL,
-    ProductSKU      VARCHAR(10)  NOT NULL,
+    ProductUPC      INT  NOT NULL,
     Quantity       DECIMAL(10)  NOT NULL,
     TransferDate   DATE         NOT NULL,
     TransferStatus VARCHAR(100) NOT NULL,
     PRIMARY KEY (TransferID),
     FOREIGN KEY (FromWarehouse) REFERENCES Warehouse (WarehouseID),
     FOREIGN KEY (ToWarehouse) REFERENCES Warehouse (WarehouseID),
-    FOREIGN KEY (ProductSKU) REFERENCES Product (ProductSKU)
+    FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC)
 );
 
 CREATE TABLE LOG
@@ -100,12 +103,12 @@ CREATE TABLE Purchase
 (
     PurchaseID   VARCHAR(10)    NOT NULL,
     PurchaseDate DATE           NOT NULL,
-    ProductSKU   VARCHAR(10)    NOT NULL,
+    ProductUPC   INT    NOT NULL,
     ItemQuantity DECIMAL(10)    NOT NULL,
     ItemPrice    DECIMAL(10, 2) NOT NULL,
     SupplierID   VARCHAR(10)    NOT NULL,
     PRIMARY KEY (PurchaseID),
-    FOREIGN KEY (ProductSKU) REFERENCES Product (ProductSKU),
+    FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC),
     FOREIGN KEY (SupplierID) REFERENCES Supplier (SupplierID)
 );
 
@@ -123,7 +126,7 @@ CREATE TABLE Report
 CREATE TABLE Inventory
 (
     InventoryID   VARCHAR(10)  NOT NULL,
-    ProductSKU    VARCHAR(10)  NOT NULL,
+    ProductUPC    INT  NOT NULL,
     Quantity      DECIMAL(10)  NOT NULL,
     SupplierID    VARCHAR(10),
     RetailerID    VARCHAR(10),
@@ -133,7 +136,7 @@ CREATE TABLE Inventory
     remarks       VARCHAR(200),
     receivedBy    VARCHAR(100) NOT NULL,
     PRIMARY KEY (InventoryID),
-    FOREIGN KEY (ProductSKU) REFERENCES Product (ProductSKU),
+    FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC),
     FOREIGN KEY (receivedBy) REFERENCES Staff (StaffID),
     FOREIGN KEY (SupplierID) REFERENCES Supplier (SupplierID),
     FOREIGN KEY (RetailerID) REFERENCES Retailer (RetailerID)
@@ -143,11 +146,11 @@ CREATE TABLE Storage
 (
     StorageID   VARCHAR(10) NOT NULL,
     RetailerID  VARCHAR(10) NOT NULL,
-    ProductSKU  VARCHAR(10) NOT NULL,
+    ProductUPC  INT NOT NULL,
     WarehouseID VARCHAR(10) NOT NULL,
     Quantity    DECIMAL(10) NOT NULL,
     PRIMARY KEY (StorageID),
-    FOREIGN KEY (ProductSKU) REFERENCES Product (ProductSKU),
+    FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC),
     FOREIGN KEY (RetailerID) REFERENCES Retailer (RetailerID),
     FOREIGN KEY (WarehouseID) REFERENCES Warehouse (WarehouseID)
 );
