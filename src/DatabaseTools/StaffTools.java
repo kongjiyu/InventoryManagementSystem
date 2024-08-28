@@ -7,7 +7,7 @@ import Entity.Admin;
 import java.sql.*;
 
 public class StaffTools {
-    public boolean checkStaffID(String staffID){
+    public static boolean checkStaffID(String staffID){
         Staff staff = null;
 
         Connection connection = DatabaseUtils.getConnection();
