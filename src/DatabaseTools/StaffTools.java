@@ -72,7 +72,7 @@ public class StaffTools {
         //get connection
         Connection connection = DatabaseUtils.getConnection();
         //set the sql statement
-        String sql = "INSERT INTO staff VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO staff VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             //create a prepared statement
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -92,9 +92,9 @@ public class StaffTools {
             preparedStatement.setString(12, staff.getAddress());
             //check is the staff admin
             if(staff instanceof Admin){
-                preparedStatement.setInt(12, 1);
+                preparedStatement.setInt(13, 1);
             }else{
-                preparedStatement.setNull(12, Types.INTEGER);
+                preparedStatement.setNull(13, Types.INTEGER);
             }
 
             int result = preparedStatement.executeUpdate();
