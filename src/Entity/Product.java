@@ -3,6 +3,7 @@ package Entity;
 import Model.Dimension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Product {
@@ -14,13 +15,13 @@ public class Product {
     private double weight;
     private Dimension dimension;
     private int quantity;
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     public Product(){
         dimension = new Dimension();
     }
 
-    public Product(String UPC, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, LocalDate updatedAt) {
+    public Product(String UPC, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, LocalDateTime updatedAt) {
         this.UPC = UPC;
         this.name = name;
         this.desc = desc;
@@ -96,11 +97,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

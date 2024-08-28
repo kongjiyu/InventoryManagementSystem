@@ -5,6 +5,7 @@ import Model.Dimension;
 import Database.DatabaseUtils;
 
 import java.sql.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -41,7 +42,7 @@ public class ProductTools {
                                 resultSet.getDouble("ProductHeight")
                         ),
                         resultSet.getInt("ProductQuantity"),
-                        resultSet.getDate("ProductUpdatedAt").toLocalDate()
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
                 );
             }else{
                 System.out.println("Product not found");
@@ -62,9 +63,6 @@ public class ProductTools {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             ResultSet resultSet = preparedStatement.executeQuery(sql);
-            if(resultSet.next() == false){
-                return null;
-            }
             while(resultSet.next()){
                 categories.add(resultSet.getString(1));
             }
@@ -91,7 +89,7 @@ public class ProductTools {
             preparedStatement.setDouble(7, product.getDimension().getLength());
             preparedStatement.setDouble(8, product.getDimension().getHeight());
             preparedStatement.setInt(9, product.getQuantity());
-            preparedStatement.setDate(10, Date.valueOf(LocalDate.now()));
+            preparedStatement.setTimestamp(10, Timestamp.from(Instant.now()));
 
             int result = preparedStatement.executeUpdate();
             //return UPC if the product is inserted successfully
@@ -100,7 +98,7 @@ public class ProductTools {
                 preparedStatement = connection.prepareStatement(getID);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 resultSet.next();
-                System.out.println(resultSet.getString(1));
+                System.out.println("The ID of the inserted item: " + resultSet.getString(1));
             }
 
         } catch (SQLException e) {
