@@ -79,16 +79,17 @@ public class StaffTools {
 
             //set the parameters
             preparedStatement.setString(1, staff.getStaffID());
-            preparedStatement.setString(2, staff.getPassword());
-            preparedStatement.setString(3, staff.getStaffIC());
-            preparedStatement.setString(4, staff.getName());
-            preparedStatement.setInt(5, staff.getAge());
-            preparedStatement.setDate(6, Date.valueOf(staff.getHireDate()));
-            preparedStatement.setDate(7, Date.valueOf(staff.getBirthDate()));
-            preparedStatement.setDouble(8, staff.getSalary());
-            preparedStatement.setString(9, staff.getEmail());
-            preparedStatement.setString(10, staff.getPhone());
-            preparedStatement.setString(11, staff.getAddress());
+            preparedStatement.setString(2, staff.getUsername());
+            preparedStatement.setString(3, staff.getPassword());
+            preparedStatement.setString(4, staff.getStaffIC());
+            preparedStatement.setString(5, staff.getName());
+            preparedStatement.setInt(6, staff.getAge());
+            preparedStatement.setDate(7, Date.valueOf(staff.getHireDate()));
+            preparedStatement.setDate(8, Date.valueOf(staff.getBirthDate()));
+            preparedStatement.setDouble(9, staff.getSalary());
+            preparedStatement.setString(10, staff.getEmail());
+            preparedStatement.setString(11, staff.getPhone());
+            preparedStatement.setString(12, staff.getAddress());
             //check is the staff admin
             if(staff instanceof Admin){
                 preparedStatement.setInt(12, 1);
