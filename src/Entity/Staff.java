@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class Staff {
     private String staffID;
+    private String username;
     private String password;
     private String staffIC;
     private String name;
@@ -20,8 +21,9 @@ public class Staff {
 
     }
 
-    public Staff(String staffID, String password, String staffIC, String name, int age, LocalDate hireDate, LocalDate birthDate, double salary, String email, String phone, String address, boolean isAdmin) {
+    public Staff(String staffID, String username, String password, String staffIC, String name, int age, LocalDate hireDate, LocalDate birthDate, double salary, String email, String phone, String address, boolean isAdmin) {
         this.staffID = staffID;
+        this.username = username;
         this.password = password;
         this.staffIC = staffIC;
         this.name = name;
@@ -41,6 +43,14 @@ public class Staff {
 
     public void setStaffID(String staffID) {
         this.staffID = staffID;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -127,7 +137,7 @@ public class Staff {
         return isAdmin;
     }
 
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }

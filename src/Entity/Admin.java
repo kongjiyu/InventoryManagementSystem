@@ -10,8 +10,8 @@ public class Admin extends Staff {
         super();
     }
 
-    public Admin(String staffID, String password, String staffIC, String name, int age, LocalDate hireDate, LocalDate birthDate, double salary, String email, String phone, String address, ArrayList<String> privilege) {
-        super(staffID, password, staffIC, name, age, hireDate, birthDate, salary, email, phone, address);
+    public Admin(String staffID, String username, String password, String staffIC, String name, int age, LocalDate hireDate, LocalDate birthDate, double salary, String email, String phone, String address, boolean isAdmin, ArrayList<String> privilege) {
+        super(staffID, username, password, staffIC, name, age, hireDate, birthDate, salary, email, phone, address, isAdmin);
         this.privilege = privilege;
     }
 

@@ -14,13 +14,17 @@ public class DatabaseUtils {
         if(DBPASSWORD == null){
             System.out.print("Please enter database password: ");
             DBPASSWORD = scanner.nextLine();
-        }
-        try {
-            DriverManager.getConnection(DBURL, DBUSER, DBPASSWORD);
-            System.out.println("Connect Successful");
+
+            try {
+                connection = DriverManager.getConnection(DBURL, DBUSER, DBPASSWORD);
+                System.out.println("Connect Successful");
+                return connection;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
             return connection;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
+
     }
 }

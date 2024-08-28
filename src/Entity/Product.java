@@ -1,21 +1,27 @@
 package Entity;
 
+import Model.Dimension;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Product {
-    private String SKU;
+    private String UPC;
     private String name;
     private String desc;
     private String category;
     private double price;
     private double weight;
-    private String dimension;
+    private Dimension dimension;
     private int quantity;
-    private Date expDate;
-    private Date updatedAt;
+    private LocalDate updatedAt;
 
-    public Product(String SKU, String name, String desc, String category, double price, double weight, String dimension, int quantity, Date expDate, Date updatedAt) {
-        this.SKU = SKU;
+    public Product(){
+        dimension = new Dimension();
+    }
+
+    public Product(String UPC, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, LocalDate updatedAt) {
+        this.UPC = UPC;
         this.name = name;
         this.desc = desc;
         this.category = category;
@@ -23,16 +29,15 @@ public class Product {
         this.weight = weight;
         this.dimension = dimension;
         this.quantity = quantity;
-        this.expDate = expDate;
         this.updatedAt = updatedAt;
     }
 
-    public String getSKU() {
-        return SKU;
+    public String getUPC() {
+        return UPC;
     }
 
-    public void setSKU(String SKU) {
-        this.SKU = SKU;
+    public void setUPC(String UPC) {
+        this.UPC = UPC;
     }
 
     public String getName() {
@@ -75,11 +80,11 @@ public class Product {
         this.weight = weight;
     }
 
-    public String getDimension() {
+    public Dimension getDimension() {
         return dimension;
     }
 
-    public void setDimension(String dimension) {
+    public void setDimension(Dimension dimension) {
         this.dimension = dimension;
     }
 
@@ -91,19 +96,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public Date getExpDate() {
-        return expDate;
-    }
-
-    public void setExpDate(Date expDate) {
-        this.expDate = expDate;
-    }
-
-    public Date getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
