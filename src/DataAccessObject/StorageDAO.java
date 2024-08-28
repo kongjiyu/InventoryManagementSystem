@@ -11,7 +11,7 @@ import static DatabaseTools.ProductTools.retrieveProduct;
 public class StorageDAO {
 
     //let user choose Product based on branch
-    public Product getProductSKU(String warehouseID) {
+    public Product getProductUPC(String warehouseID) {
 
         //create object of product
         Product product = null;
@@ -25,11 +25,11 @@ public class StorageDAO {
         //create object for product
         ProductTools pt = new ProductTools();
 
-        // let user choose which style to search ProductSKU
+        // let user choose which style to search ProductUPC
         do{
             // get user prefer style to search product
             System.out.println("[1] Search By Enter Product Name");
-            System.out.println("[2] Search By Enter Product SKU");
+            System.out.println("[2] Search By Enter Product UPC");
             System.out.println("[3] Search By Check Product List");
             System.out.println("[4] Exit");
             int option = scanner.nextInt();
@@ -41,19 +41,22 @@ public class StorageDAO {
                     String productName = scanner.nextLine();
 
                     product = st.getProductByNameANDWarehouseID(productName, warehouseID);
-
+                    break;
                 case 2:
                     //search by product SKU
                     System.out.print("Enter Product SKU: ");
-                    String productSKU = scanner.nextLine();
+                    String productUPC = scanner.nextLine();
                     // set product when get the product
-                    product = st.getProductBySKUANDWarehouseID(productSKU, warehouseID);
-
+                    product = st.getProductByUPCANDWarehouseID(productUPC, warehouseID);
+                    break;
                 case 3:
                     product = getProductByList(warehouseID);
-
+                    break;
                 case 4:
                     return null;
+                default:
+                    System.out.println("Invalid Input!");
+                    break;
             }
 
         }while(product == null);
@@ -77,7 +80,7 @@ public class StorageDAO {
         final int product_per_page = 5;
         int page = 0;
         // get the maximum pages can print
-        int max_pages = (totalIndex) / product_per_page;
+        int max_pages = (totalIndex-1) / product_per_page;
         // check whether the prodcut been choosen or not
         boolean check = false;
         do {
@@ -89,33 +92,42 @@ public class StorageDAO {
             for (int i = startIndex; i < endIndex; i++) {
                 System.out.printf("[%d] %-20s%-20s%-5d%-10.2f\n",
                         count,
-                        productList.get(i).getSKU(),
+                        productList.get(i).getUPC(),
                         productList.get(i).getName(),
                         productList.get(i).getQuantity(),
                         productList.get(i).getPrice());
                 count++;
             }
             System.out.printf("Page %d of %d\n", page+1, max_pages + 1);
-            System.out.printf("Total product: %d\n", totalIndex+1);
+            System.out.printf("Total product: %d\n", totalIndex);
             System.out.println("[\"A\" for last page]\t[\"D\" for next page]");
+            System.out.println("[\"Q\" to exit]");
+            System.out.print("Input: ");
             char input = scanner.nextLine().charAt(0);
             switch (input) {
                 case 'A':
                 case 'a':
                     if (page > 0)
                         page--;
+                    break;
                 case 'D':
                 case 'd':
                     if (page < max_pages)
                         page++;
+                    break;
+                case 'Q':
+                case 'q':
+                    check = true;
+                    break;
                 default:
                     if (Character.isDigit(input)){
-                        int num = input = '0';
+                        int num = input - '0';
                         if (num<=5 && num>0){
                             product = productList.get(startIndex+num-1);
                             check = true;
                         }
                     }
+                    break;
             }
         }while(!check);
         return product;
