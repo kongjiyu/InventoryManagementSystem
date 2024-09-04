@@ -65,7 +65,6 @@ public class ProductDAO {
                 System.out.print("Please choose an category: ");
                 try{
                     //get user input
-                    System.out.println();
                     int categoryIndex = scanner.nextInt();
                     scanner.nextLine();
 
@@ -92,7 +91,6 @@ public class ProductDAO {
             }while(true);
         }else{
             System.out.print("Please enter category: ");
-            scanner.nextLine();
             product.setCategory(scanner.nextLine());
         }
 
@@ -103,7 +101,6 @@ public class ProductDAO {
             System.out.println();
             System.out.print("Enter product price: ");
             try{
-                System.out.println();
                 product.setPrice(scanner.nextDouble());
                 scanner.nextLine();
                 if(product.getPrice() < 0){

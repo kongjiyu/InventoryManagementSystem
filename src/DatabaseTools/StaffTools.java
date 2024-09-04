@@ -5,9 +5,11 @@ import Entity.Staff;
 import Entity.Admin;
 
 import java.sql.*;
+import java.sql.Date;
+import java.util.*;
 
 public class StaffTools {
-    public boolean checkStaffID(String staffID){
+    public static boolean checkStaffID(String staffID){
         Staff staff = null;
 
         Connection connection = DatabaseUtils.getConnection();
@@ -23,10 +25,47 @@ public class StaffTools {
         }
     }
 
-    public boolean checkStaffAccount(String staffID, String password){
-        return true;
+    public static boolean checkPassword(String staffID,String password){
+        Staff staff = new Staff();
+
+        Connection connection = DatabaseUtils.getConnection();
+        String sql = "SELECT * FROM staff WHERE StaffID = ? AND Password=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, staffID);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    public static boolean checkAdmin(Staff staff){
+        Connection connection = DatabaseUtils.getConnection();
+        String sql = "SELECT * FROM staff WHERE StaffID = ? AND Password=?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, staff.getStaffIC());
+            preparedStatement.setString(2, staff.getPassword());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            resultSet.next();
+
+            int isAdmin = resultSet.getInt("isAdmin");
+            if(isAdmin == 1){
+                return true;
+            }
+            else{
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     public static boolean registerStaff(Staff staff){
@@ -67,4 +106,6 @@ public class StaffTools {
         }
 
     }
+
+
 }

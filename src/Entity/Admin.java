@@ -1,7 +1,11 @@
 package Entity;
 
+import DatabaseTools.StaffTools;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Admin extends Staff {
     ArrayList<String> privilege = new ArrayList<>();
