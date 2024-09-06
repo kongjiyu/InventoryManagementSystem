@@ -6,6 +6,9 @@ import Model.Dimension;
 
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.time.Instant;
+
 
 public class StorageTools {
 
@@ -48,7 +51,8 @@ public class StorageTools {
                                 resultSet.getDouble("ProductHeight")
                         ),
                         resultSet.getInt("ProductQuantity"),
-                        resultSet.getDate("ProductUpdatedAt").toLocalDate()));
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime(),
+                        resultSet.getString("WarehouseID")));
             }
 
             //return list
@@ -96,9 +100,15 @@ public class StorageTools {
                                 resultSet.getDouble("ProductHeight")
                         ),
                         resultSet.getInt("ProductQuantity"),
-                        resultSet.getDate("ProductUpdatedAt").toLocalDate());
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime(),
+                        resultSet.getString("WarehouseID"));
             }else {
                 System.out.println("Product not found");
+                try{
+                    TimeUnit.SECONDS.sleep(2);
+                } catch (InterruptedException ie) {
+                    throw new RuntimeException(ie);
+                }
             }
         }catch(SQLException e){
             throw new RuntimeException(e);
@@ -128,7 +138,7 @@ public class StorageTools {
             preparedStatement.setString(2, WarehouseID);
             // get the result
             ResultSet resultSet = preparedStatement.executeQuery();
-            //create product if there have
+            // create product if there have
             if(resultSet.next()) {
                 product = new Product(
                         resultSet.getString("ProductUPC"),
@@ -143,9 +153,15 @@ public class StorageTools {
                                 resultSet.getDouble("ProductHeight")
                         ),
                         resultSet.getInt("ProductQuantity"),
-                        resultSet.getDate("ProductUpdatedAt").toLocalDate());
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime(),
+                        resultSet.getString("WarehouseID"));
             }else {
                 System.out.println("Product not found");
+                try{
+                    TimeUnit.SECONDS.sleep(2);
+                } catch (InterruptedException ie) {
+                    throw new RuntimeException(ie);
+                }
             }
         }catch(SQLException e){
             throw new RuntimeException(e);
@@ -164,7 +180,7 @@ public class StorageTools {
         String sql =    "UPDATE storage s " +
                         "JOIN product p " +
                         "ON p.ProductUPC = s.ProductUPC" +
-                        "SET p.Quantity = ? " +
+                        "SET p.Quantity = ? , p.ProductUpdatedAt = ?" +
                         "WHERE s.ProductUPC = ? " +
                         "AND s.WarehouseID = ?";
 
@@ -172,10 +188,11 @@ public class StorageTools {
             //prepare the sql query
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            // inpu the variable from the parameter
+            // input the variable from the parameter
             preparedStatement.setInt(1, quantity);
-            preparedStatement.setString(2, productUPC);
-            preparedStatement.setString(3, warehouseID);
+            preparedStatement.setTimestamp(2, Timestamp.from(Instant.now()));
+            preparedStatement.setString(3, productUPC);
+            preparedStatement.setString(4, warehouseID);
 
             //run the sql query
             preparedStatement.executeUpdate();

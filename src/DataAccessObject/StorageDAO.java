@@ -28,6 +28,7 @@ public class StorageDAO {
         // let user choose which style to search ProductUPC
         do{
             // get user prefer style to search product
+            System.out.println("\n\n\n\n\n\n\n\n\n\n");
             System.out.println("[1] Search By Enter Product Name");
             System.out.println("[2] Search By Enter Product UPC");
             System.out.println("[3] Search By Check Product List");
@@ -58,7 +59,19 @@ public class StorageDAO {
                     System.out.println("Invalid Input!");
                     break;
             }
-
+            // confirmation for the choosen product
+            if (product != null) {
+                System.out.println("Product Detail Confirmation");
+                System.out.println("=====================================================================================================");
+                System.out.printf("|%-15s|%-20s|%-20s|%-20s|%-20s|\n", "Product UPC", "Product Name", "Product Category", "Product Price", "Product Quantity");
+                System.out.println("=====================================================================================================");
+                System.out.printf("|%-15s|%-20s|%-20s|RM%-18.2f|%-20d|\n", product.getUPC(), product.getName(), product.getCategory(), product.getPrice(), product.getQuantity());
+                System.out.println("=====================================================================================================");
+                System.out.println("Confirm this product? <Y/N> :");
+                if (scanner.nextLine().toUpperCase().equals("N")) {
+                    product = null;
+                }
+            }
         }while(product == null);
         return product;
     }
@@ -89,19 +102,24 @@ public class StorageDAO {
             int startIndex = page * product_per_page;
             int endIndex = startIndex + product_per_page < totalIndex ? startIndex + product_per_page : totalIndex;
             // print the product within the index
+            System.out.println("\n\n\n\n\n\n\n\n\n\n");
+            System.out.println("=========================================================================================================");
+            System.out.printf("|%-3s|%-15s|%-20s|%-20s|%-20s|%-20s|\n", "No.", "Product UPC", "Product Name", "Product Category", "Product Price", "Product Quantity");
             for (int i = startIndex; i < endIndex; i++) {
-                System.out.printf("[%d] %-20s%-20s%-5d%-10.2f\n",
+                System.out.println("=========================================================================================================");
+                System.out.printf("|[%d]|%-15s|%-20s|%-20s|RM%-18.2f|%-20d|\n",
                         count,
                         productList.get(i).getUPC(),
                         productList.get(i).getName(),
-                        productList.get(i).getQuantity(),
-                        productList.get(i).getPrice());
+                        productList.get(i).getCategory(),
+                        productList.get(i).getPrice(),
+                        productList.get(i).getQuantity());
                 count++;
             }
+            System.out.println("=========================================================================================================");
             System.out.printf("Page %d of %d\n", page+1, max_pages + 1);
             System.out.printf("Total product: %d\n", totalIndex);
-            System.out.println("[\"A\" for last page]\t[\"D\" for next page]");
-            System.out.println("[\"Q\" to exit]");
+            System.out.println("[\"A\" for last page]\t\t\t\t\t\t[\"Q\" to exit]\t\t\t\t\t\t[\"D\" for next page]");
             System.out.print("Input: ");
             char input = scanner.nextLine().charAt(0);
             switch (input) {

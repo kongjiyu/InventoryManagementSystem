@@ -111,19 +111,6 @@ CREATE TABLE Supplier
     PRIMARY KEY (SupplierID)
 );
 
-CREATE TABLE Purchase
-(
-    PurchaseID   VARCHAR(10)    NOT NULL,
-    PurchaseDate DATE           NOT NULL,
-    ProductUPC   INT    NOT NULL,
-    ItemQuantity DECIMAL(10)    NOT NULL,
-    ItemPrice    DECIMAL(10, 2) NOT NULL,
-    SupplierID   VARCHAR(10)    NOT NULL,
-    PRIMARY KEY (PurchaseID),
-    FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC),
-    FOREIGN KEY (SupplierID) REFERENCES Supplier (SupplierID)
-);
-
 CREATE TABLE Report
 (
     Date                     TIMESTAMP      NOT NULL,
@@ -140,6 +127,7 @@ CREATE TABLE Inventory
     InventoryID   VARCHAR(10)  NOT NULL,
     ProductUPC    INT  NOT NULL,
     Quantity      DECIMAL(10)  NOT NULL,
+    Price         DECIMAL(10,2)  NOT NULL,
     SupplierID    VARCHAR(10),
     RetailerID    VARCHAR(10),
     InventoryType VARCHAR(100) NOT NULL,
@@ -157,9 +145,9 @@ CREATE TABLE Inventory
 CREATE TABLE Storage
 (
     StorageID   VARCHAR(10) NOT NULL,
-    RetailerID  VARCHAR(10) NOT NULL,
+    RetailerID  VARCHAR(10),
     ProductUPC  INT NOT NULL,
-    WarehouseID VARCHAR(10) NOT NULL,
+    WarehouseID VARCHAR(10),
     Quantity    DECIMAL(10) NOT NULL,
     PRIMARY KEY (StorageID),
     FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC),
