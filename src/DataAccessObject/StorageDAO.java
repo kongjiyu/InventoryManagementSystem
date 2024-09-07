@@ -124,7 +124,7 @@ public class StorageDAO {
             System.out.printf("|%-3s|%-15s|%-20s|%-20s|%-20s|%-20s|\n", "No.", "Product UPC", "Product Name", "Product Category", "Product Price", "Product Quantity");
             for (int i = startIndex; i < endIndex; i++) {
                 System.out.println("=========================================================================================================");
-                System.out.printf("|[%d]|%-15s|%-20s|%-20s|RM%-18.2f|%-20d|\n",
+                System.out.printf("|%-3d|%-15s|%-20s|%-20s|RM%-18.2f|%-20d|\n",
                         count,
                         productList.get(i).getUPC(),
                         productList.get(i).getName(),
