@@ -1,5 +1,7 @@
 package DatabaseTools;
 
+import DataAccessObject.TransferDAO;
+import DataAccessObject.TransferSet;
 import Database.DatabaseUtils;
 import Entity.Product;
 import Model.Dimension;
@@ -36,8 +38,13 @@ public class StorageTools {
             //get the result from the qul query
             ResultSet resultSet = preparedStatement.executeQuery();
 
+            TransferDAO transferDAO = new TransferDAO();
             // loop to get the product and add into the product list
-            while(resultSet.next()) {
+            while (resultSet.next()) {
+                if(resultSet.getInt("ProductQuantity")<=0) {
+                    continue;
+                }
+                // If not skipping, add the product to the productList
                 productList.add(new Product(
                         resultSet.getString("ProductUPC"),
                         resultSet.getString("ProductName"),
@@ -50,9 +57,80 @@ public class StorageTools {
                                 resultSet.getDouble("ProductLength"),
                                 resultSet.getDouble("ProductHeight")
                         ),
-                        resultSet.getInt("ProductQuantity"),
-                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime(),
-                        resultSet.getString("WarehouseID")));
+                        resultSet.getInt("Quantity"),
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
+                ));
+            }
+
+            //return list
+            return productList;
+
+        }catch(SQLException e) {
+            // catch exception if unsuccess to get the query
+            throw new RuntimeException(e);
+        }
+    }
+
+    // get the Product List by insert Warehouse ID
+    public List<Product> getProductListByWarehouseIDAndException(String warehouseID, List<TransferSet> transferList) {
+
+        // get connection to the array
+        Connection connection = DatabaseUtils.getConnection();
+
+        // set the sql query to get the product follow the warehouse ID
+        String sql =    "SELECT * " +
+                "FROM product p " +
+                "JOIN storage s " +
+                "ON s.ProductUPC = p.ProductUPC " +
+                "WHERE s.WarehouseID = ?";
+
+        List<Product> productList = new ArrayList<>();
+        // try to get run the sql query
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            //set the warehouseID from the parameter
+            preparedStatement.setString(1, warehouseID);
+
+            //get the result from the qul query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // loop to get the product and add into the product list
+            while (resultSet.next()) {
+                boolean skip = false;  // Flag to check if UPC should be skipped
+
+                if(resultSet.getInt("Quantity")<=0) {
+                    continue;
+                }
+
+                for (TransferSet transferSet : transferList) {
+                    if (transferSet.getProductUPC().equals(resultSet.getString("ProductUPC"))) {
+                        skip = true;  // Set flag to skip adding this product
+                        break;  // Exit the loop since we found a match
+                    }
+                }
+
+                // If skip is true, continue to the next result
+                if (skip) {
+                    continue;
+                }
+
+                // If not skipping, add the product to the productList
+                productList.add(new Product(
+                        resultSet.getString("ProductUPC"),
+                        resultSet.getString("ProductName"),
+                        resultSet.getString("ProductDesc"),
+                        resultSet.getString("ProductCategory"),
+                        resultSet.getDouble("ProductPrice"),
+                        resultSet.getDouble("ProductWeight"),
+                        new Dimension(
+                                resultSet.getDouble("ProductWidth"),
+                                resultSet.getDouble("ProductLength"),
+                                resultSet.getDouble("ProductHeight")
+                        ),
+                        resultSet.getInt("Quantity"),
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
+                ));
             }
 
             //return list
@@ -72,8 +150,8 @@ public class StorageTools {
         Product product = null;
         //set the sql query
         String sql =    "SELECT * " +
-                        "FROM product p J" +
-                        "OIN storage s " +
+                        "FROM product p " +
+                        "JOIN storage s " +
                         "ON p.ProductUPC = s.ProductUPC " +
                         "WHERE p.ProductName = ? " +
                         "AND s.WarehouseID = ?";
@@ -99,9 +177,8 @@ public class StorageTools {
                                 resultSet.getDouble("ProductLength"),
                                 resultSet.getDouble("ProductHeight")
                         ),
-                        resultSet.getInt("ProductQuantity"),
-                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime(),
-                        resultSet.getString("WarehouseID"));
+                        resultSet.getInt("Quantity"),
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime());
             }else {
                 System.out.println("Product not found");
                 try{
@@ -125,8 +202,8 @@ public class StorageTools {
         Product product = null;
         //set the sql query
         String sql =    "SELECT * " +
-                "FROM product p J" +
-                "OIN storage s " +
+                "FROM product p " +
+                "JOIN storage s " +
                 "ON p.ProductUPC = s.ProductUPC " +
                 "WHERE s.ProductUPC = ? " +
                 "AND s.WarehouseID = ?";
@@ -152,9 +229,8 @@ public class StorageTools {
                                 resultSet.getDouble("ProductLength"),
                                 resultSet.getDouble("ProductHeight")
                         ),
-                        resultSet.getInt("ProductQuantity"),
-                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime(),
-                        resultSet.getString("WarehouseID"));
+                        resultSet.getInt("Quantity"),
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime());
             }else {
                 System.out.println("Product not found");
                 try{
@@ -177,10 +253,10 @@ public class StorageTools {
         Connection connection = DatabaseUtils.getConnection();
 
         // set sql query
-        String sql =    "UPDATE storage s " +
-                        "JOIN product p " +
-                        "ON p.ProductUPC = s.ProductUPC" +
-                        "SET p.Quantity = ? , p.ProductUpdatedAt = ?" +
+        String sql =    "UPDATE product p " +
+                        "JOIN storage s " +
+                        "ON p.ProductUPC = s.ProductUPC " +
+                        "SET s.Quantity = ? , p.ProductUpdatedAt = ? " +
                         "WHERE s.ProductUPC = ? " +
                         "AND s.WarehouseID = ?";
 
@@ -201,5 +277,45 @@ public class StorageTools {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void insertStorageForWarehouseProduct(String WarehouseID, String ProductUPC, int Quantity) {
+        // get connection to database
+        Connection connection = DatabaseUtils.getConnection();
+        // sql string
+        String sql = "INSERT INTO storage(StorageID, ProductUPC, WarehouseID, Quantity) VALUES (?,?,?,?)";
+        try{
+           PreparedStatement preparedStatement = connection.prepareStatement(sql);
+           preparedStatement.setString(1, getNewStorageID());
+           preparedStatement.setString(2, ProductUPC);
+           preparedStatement.setString(3, WarehouseID);
+           preparedStatement.setInt(4, Quantity);
+
+           preparedStatement.executeUpdate();
+
+        }catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getNewStorageID() {
+        // get connection to database
+        Connection connection = DatabaseUtils.getConnection();
+        String storageID = null;
+        //sql string
+        String sql = "SELECT MAX(StorageID) AS MAX_STORAGE_ID FROM storage";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                return "STG" + String.format("%03d", (Integer.parseInt(resultSet.getString("MAX_STORAGE_ID").replace("STG", "")) + 1));
+            }else {
+                return storageID = "STG001";
+            }
+
+        }catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

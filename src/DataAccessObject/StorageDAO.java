@@ -11,7 +11,7 @@ import static DatabaseTools.ProductTools.retrieveProduct;
 public class StorageDAO {
 
     //let user choose Product based on branch
-    public Product getProductUPC(String warehouseID) {
+    public Product getProductUPC(String warehouseID, List<TransferSet> transferList) {
 
         //create object of product
         Product product = null;
@@ -33,6 +33,7 @@ public class StorageDAO {
             System.out.println("[2] Search By Enter Product UPC");
             System.out.println("[3] Search By Check Product List");
             System.out.println("[4] Exit");
+            System.out.print(" > ");
             int option = scanner.nextInt();
             scanner.nextLine();
             switch(option) {
@@ -51,23 +52,29 @@ public class StorageDAO {
                     product = st.getProductByUPCANDWarehouseID(productUPC, warehouseID);
                     break;
                 case 3:
-                    product = getProductByList(warehouseID);
+                    product = getProductByList(warehouseID, transferList);
                     break;
                 case 4:
                     return null;
                 default:
                     System.out.println("Invalid Input!");
+                    try{
+                        Thread.sleep(2000);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
             // confirmation for the choosen product
             if (product != null) {
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
                 System.out.println("Product Detail Confirmation");
                 System.out.println("=====================================================================================================");
                 System.out.printf("|%-15s|%-20s|%-20s|%-20s|%-20s|\n", "Product UPC", "Product Name", "Product Category", "Product Price", "Product Quantity");
                 System.out.println("=====================================================================================================");
                 System.out.printf("|%-15s|%-20s|%-20s|RM%-18.2f|%-20d|\n", product.getUPC(), product.getName(), product.getCategory(), product.getPrice(), product.getQuantity());
                 System.out.println("=====================================================================================================");
-                System.out.println("Confirm this product? <Y/N> :");
+                System.out.print("Confirm this product? <Y/N> : ");
                 if (scanner.nextLine().toUpperCase().equals("N")) {
                     product = null;
                 }
@@ -76,7 +83,7 @@ public class StorageDAO {
         return product;
     }
 
-    public Product getProductByList(String warehouseID) {
+    public Product getProductByList(String warehouseID, List<TransferSet> transferList) {
         //create scanner object
         Scanner scanner = new Scanner(System.in);
         //StorageTools object
@@ -86,7 +93,17 @@ public class StorageDAO {
         // create product ArrayList for listing
         List<Product> productList = new ArrayList<>();
         // get the product list
-        productList = st.getProductListByWarehouseID(warehouseID);
+        productList = st.getProductListByWarehouseIDAndException(warehouseID, transferList);
+        // check there is product or not
+        if(productList.isEmpty()) {
+            System.out.println("No Product Available");
+            try{
+                Thread.sleep(2000);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return product;
+        }
         //print by page
         int totalIndex = productList.size();
         // how many item in 1 page

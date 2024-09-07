@@ -18,7 +18,7 @@ public class WarehouseDAO {
             System.out.println("[1] Search Warehouse by ID");
             System.out.println("[2] Search Warehouse by Name");
             System.out.println("[999] Exit");
-            System.out.print(" >");
+            System.out.print(" > ");
             int choice = scanner.nextInt();
             scanner.nextLine();
             switch(choice)
@@ -52,13 +52,14 @@ public class WarehouseDAO {
             }
             // check user choice is correct or not
             if (warehouse != null) {
-                System.out.println("Product Detail Confirmation");
-                System.out.println("=====================================================================================================================================================================================");
-                System.out.printf("|%-15s|%-20s|%-100s|%-20s|%-20s|\n", "Warehouse ID", "Warehouse Name", "Warehouse Address", "Warehouse Phone", "Warehouse Email");
-                System.out.println("=====================================================================================================================================================================================");
-                System.out.printf("|%-15s|%-20s|%-100s|%-20s|%-20s|\n", warehouse.getWarehouseId(), warehouse.getWarehouseName(), warehouse.getWarehouseAddress(), warehouse.getWarehousePhone(), warehouse.getWarehouseEmail());
-                System.out.println("=====================================================================================================================================================================================");
-                System.out.println("Confirm this warehouse? <Y/N> :");
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("Warehouse Detail Confirmation");
+                System.out.println("===============================================================================================================================================================================================");
+                System.out.printf("|%-15s|%-20s|%-100s|%-20s|%-30s|\n", "Warehouse ID", "Warehouse Name", "Warehouse Address", "Warehouse Phone", "Warehouse Email");
+                System.out.println("===============================================================================================================================================================================================");
+                System.out.printf("|%-15s|%-20s|%-100s|%-20s|%-30s|\n", warehouse.getWarehouseId(), warehouse.getWarehouseName(), warehouse.getWarehouseAddress(), warehouse.getWarehousePhone(), warehouse.getWarehouseEmail());
+                System.out.println("===============================================================================================================================================================================================");
+                System.out.print("Confirm this warehouse? <Y/N> : ");
                 if (scanner.nextLine().toUpperCase().equals("N")) {
                     warehouse = null;
                 }

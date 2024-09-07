@@ -3,6 +3,7 @@ package Driver;
 import DataAccessObject.ProductDAO;
 import DataAccessObject.StaffDAO;
 import DataAccessObject.StorageDAO;
+import DataAccessObject.TransferDAO;
 import Database.DatabaseUtils;
 import Entity.Product;
 
@@ -11,7 +12,7 @@ import java.sql.Connection;
 public class Main {
     public static void main(String[] args) {
         Connection connection = DatabaseUtils.getConnection();
-        StorageDAO sd = new StorageDAO();
-        Product product = sd.getProductUPC("W001");
+        TransferDAO tDAO = new TransferDAO();
+        System.out.println(tDAO.transferStock("W001"));
     }
 }

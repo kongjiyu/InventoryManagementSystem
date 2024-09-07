@@ -42,8 +42,7 @@ public class ProductTools {
                                 resultSet.getDouble("ProductHeight")
                         ),
                         resultSet.getInt("ProductQuantity"),
-                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime(),
-                        resultSet.getString("WarehouseID")
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
                 );
             }else{
                 System.out.println("Product not found");
@@ -75,7 +74,7 @@ public class ProductTools {
     }
 
     public static void insertProduct(Product product){
-        String sql = "INSERT INTO Product (ProductName, ProductDesc, ProductCategory, ProductPrice, ProductWeight, ProductWidth, ProductLength, ProductHeight, ProductQuantity, ProductUpdatedAt, WarehouseID) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Product (ProductName, ProductDesc, ProductCategory, ProductPrice, ProductWeight, ProductWidth, ProductLength, ProductHeight, ProductQuantity, ProductUpdatedAt) VALUES (?,?,?,?,?,?,?,?,?,?)";
         String getID = "SELECT LAST_INSERT_ID()";
         Connection connection = DatabaseUtils.getConnection();
         try {
@@ -91,7 +90,6 @@ public class ProductTools {
             preparedStatement.setDouble(8, product.getDimension().getHeight());
             preparedStatement.setInt(9, product.getQuantity());
             preparedStatement.setTimestamp(10, Timestamp.from(Instant.now()));
-            preparedStatement.setString(11, product.getWarehouseID());
 
             int result = preparedStatement.executeUpdate();
             //return UPC if the product is inserted successfully

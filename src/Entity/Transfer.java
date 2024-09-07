@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 public class Transfer {
     private String transferID;
-    private Warehouse fromWarehouse;
-    private Warehouse toWarehouse;
-    private Product product;
+    private String fromWarehouseID;
+    private String toWarehouseID;
+    private String productUPC;
     private int quantity;
     private LocalDate transferDate;
 
@@ -14,11 +14,11 @@ public class Transfer {
 
     }
 
-    public Transfer(String transferID, Warehouse fromWarehouse, Warehouse toWarehouse, Product product, int quantity) {
+    public Transfer(String transferID, String fromWarehouseID, String toWarehouseID, String productUPC, int quantity) {
         this.transferID = transferID;
-        this.fromWarehouse = fromWarehouse;
-        this.toWarehouse = toWarehouse;
-        this.product = product;
+        this.fromWarehouseID = fromWarehouseID;
+        this.toWarehouseID = toWarehouseID;
+        this.productUPC = productUPC;
         this.quantity = quantity;
     }
 
@@ -30,28 +30,28 @@ public class Transfer {
         this.transferID = transferID;
     }
 
-    public Warehouse getFromWarehouse() {
-        return fromWarehouse;
+    public String getFromWarehouseID() {
+        return fromWarehouseID;
     }
 
-    public void setFromWarehouse(Warehouse fromWarehouse) {
-        this.fromWarehouse = fromWarehouse;
+    public void setFromWarehouseID(String fromWarehouseID) {
+        this.fromWarehouseID = fromWarehouseID;
     }
 
-    public Warehouse getToWarehouse() {
-        return toWarehouse;
+    public String getToWarehouseID() {
+        return toWarehouseID;
     }
 
-    public void setToWarehouse(Warehouse toWarehouse) {
-        this.toWarehouse = toWarehouse;
+    public void setToWarehouseID(String toWarehouseID) {
+        this.toWarehouseID = toWarehouseID;
     }
 
-    public Product getProduct() {
-        return product;
+    public String getProductUPC() {
+        return productUPC;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductUPC(String productUPC) {
+        this.productUPC = productUPC;
     }
 
     public int getQuantity() {
@@ -60,5 +60,13 @@ public class Transfer {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public LocalDate getTransferDate() {
+        return transferDate;
+    }
+
+    public void setTransferDate(LocalDate transferDate) {
+        this.transferDate = transferDate;
     }
 }

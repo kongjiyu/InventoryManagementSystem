@@ -13,35 +13,84 @@ public class TransferDAO{
     // transfer the stock from a warehouse to another warehouse
     public boolean transferStock(String warehouseID) {
         // create object
+        List<TransferSet> transferList = new ArrayList<TransferSet>();
         WarehouseDAO wDAO = new WarehouseDAO();
         StorageDAO sDAO = new StorageDAO();
         Scanner sc = new Scanner(System.in);
         TransferTools tTools = new TransferTools();
+        Product product;
+        int quantity = 0;
+        String secondWarehouseID;
         // List to transfer stock
-        List<TransferSet> transferList = new ArrayList<TransferSet>();
+
         boolean flag = false;
+        boolean exit = false;
         do {
-            String secondWarehouseID = wDAO.getWarehouse().getWarehouseId();
-            Product product = sDAO.getProductUPC(warehouseID);
-            int quantity = 0;
-            do {
-                // let user to enter quantity
-                System.out.print("Enter the product quantity to transfer [999 to exit] : ");
-                quantity = sc.nextInt();
-                sc.nextLine();
-                if (quantity < 0 || quantity > product.getQuantity()) {
-                    System.out.println("Invalid Quantity");
-                    quantity = 0;
+            // reset checker
+            flag = false;
+            exit = false;
+            // get product
+            product = sDAO.getProductUPC(warehouseID,transferList);
+            // check is null then exit
+            if (product == null) {
+                exit = true;
+            }
+            // get quantity
+            quantity = 0;
+            if (!exit) {
+                do {
+                    // let user to enter quantity
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                    System.out.print("Enter the product quantity to transfer [999 to exit] : ");
+                    quantity = sc.nextInt();
+                    sc.nextLine();
+                    // exit if type 999
+                    if (quantity == 999) {
+                        exit = true;
+                    }
+                    // check valid quantity
+                    else if (quantity < 0 || quantity > product.getQuantity()) {
+                        System.out.println("Invalid Quantity");
+                        try{
+                            Thread.sleep(2000);
+                        }catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        quantity = 0;
+                    }
+                } while (quantity == 0);
+            }
+            // get warehouse to transfer
+            if (!exit) {
+                do {
+                    Warehouse secondWarehouse = wDAO.getWarehouse();
+                    // if warehouse is null, set warehouseID to null
+                    if (secondWarehouse == null) {
+                        secondWarehouseID = "XXX";
+                        exit = true;
+                    }else {
+                        // get the warehouseID if not null
+                        secondWarehouseID = secondWarehouse.getWarehouseId();
+                        // validation check
+                        if (secondWarehouseID.equals(warehouseID)) {
+                            System.out.println("Cannot be the same warehouse!");
+                            try{
+                                Thread.sleep(2000);
+                            }catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } while (secondWarehouseID.equals(warehouseID));
+                // add to the transfer list if exit not true
+                if (!exit) {
+                    transferList.add(new TransferSet(warehouseID, secondWarehouseID, product.getUPC(), quantity));
                 }
-                if (quantity == 999){
-                    return false;
-                }
-            }while (quantity == 0);
-            // add to the transfer list
-            transferList.add(new TransferSet(warehouseID, secondWarehouseID, product.getUPC(), quantity));
+            }
             // check whether have more transfer or not
             boolean validationCheck = false;
             do {
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
                 System.out.print("More transfer?<Y/N>: ");
                 String choice = sc.nextLine();
                 if (choice.equalsIgnoreCase("y")) {
@@ -52,59 +101,24 @@ public class TransferDAO{
                     validationCheck = true;
                 }else {
                     System.out.println("Invalid input!");
+                    try{
+                        Thread.sleep(2000);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }while(!validationCheck);
-        }while(flag == false);
+        }while(flag);
         // start transfer
-        for (TransferSet transfer : transferList) {
-            tTools.transferStock(transfer.getFirstWarehouseID(), transfer.getSecondWarehouseID(), transfer.getProductUPC(), transfer.getQuantity());
+        if(!transferList.isEmpty()) {
+            for (TransferSet transfer : transferList) {
+                tTools.transferStock(transfer.getFirstWarehouseID(), transfer.getSecondWarehouseID(), transfer.getProductUPC(), transfer.getQuantity());
+                tTools.recordTransfer(tTools.getNewTransferID(), transfer.getFirstWarehouseID(), transfer.getSecondWarehouseID(), transfer.getProductUPC(), transfer.getQuantity());
+            }
+            return true;
+        }else{
+            return false;
         }
-        return true;
     }
 }
 
-class TransferSet{
-    private String firstWarehouseID;
-    private String secondWarehouseID;
-    private String ProductUPC;
-    private int Quantity;
-
-    TransferSet(String firstWarehouseID, String secondWarehouseID, String ProductUPC, int Quantity) {
-        this.firstWarehouseID = firstWarehouseID;
-        this.secondWarehouseID = secondWarehouseID;
-        this.ProductUPC = ProductUPC;
-        this.Quantity = Quantity;
-    }
-
-    public String getFirstWarehouseID() {
-        return firstWarehouseID;
-    }
-
-    public void setFirstWarehouseID(String firstWarehouseID) {
-        this.firstWarehouseID = firstWarehouseID;
-    }
-
-    public String getSecondWarehouseID() {
-        return secondWarehouseID;
-    }
-
-    public void setSecondWarehouseID(String secondWarehouseID) {
-        this.secondWarehouseID = secondWarehouseID;
-    }
-
-    public String getProductUPC() {
-        return ProductUPC;
-    }
-
-    public void setProductUPC(String productUPC) {
-        ProductUPC = productUPC;
-    }
-
-    public int getQuantity() {
-        return Quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        Quantity = quantity;
-    }
-}

@@ -86,7 +86,6 @@ CREATE TABLE Transfer
     ProductUPC      INT  NOT NULL,
     Quantity       DECIMAL(10)  NOT NULL,
     TransferDate   DATE         NOT NULL,
-    TransferStatus VARCHAR(100) NOT NULL,
     PRIMARY KEY (TransferID),
     FOREIGN KEY (FromWarehouse) REFERENCES Warehouse (WarehouseID),
     FOREIGN KEY (ToWarehouse) REFERENCES Warehouse (WarehouseID),
