@@ -6,7 +6,6 @@ import Database.DatabaseUtils;
 
 import java.sql.*;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ProductTools {
@@ -69,7 +68,6 @@ public class ProductTools {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(categories);
         return categories;
     }
 

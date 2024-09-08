@@ -38,4 +38,9 @@ public class Dimension {
     public void setHeight(double height) {
         this.height = height;
     }
+
+    @Override
+    public String toString() {
+        return "Width: " + width + "\n" + "Length: " + length + "\n" + "Height: " + height;
+    }
 }
