@@ -1,3 +1,4 @@
+DELETE FROM StockRequest;
 DELETE FROM LOG;
 DELETE FROM Inventory;
 DELETE FROM Staff;
@@ -10,6 +11,7 @@ DELETE FROM Product;
 DELETE FROM Supplier;
 DELETE FROM Report;
 
+DROP TABLE IF EXISTS StockRequest;
 DROP TABLE IF EXISTS LOG;
 DROP TABLE IF EXISTS Inventory;
 DROP TABLE IF EXISTS Staff;
@@ -165,3 +167,16 @@ CREATE TABLE Storage
     FOREIGN KEY (RetailerID) REFERENCES Retailer (RetailerID),
     FOREIGN KEY (WarehouseID) REFERENCES Warehouse (WarehouseID)
 );
+
+CREATE TABLE StockRequest
+(
+    RequestID   VARCHAR(10)  NOT NULL,
+    ProductUPC      INT  NOT NULL,
+    Quantity INT NOT NULL,
+    requestedBy VARCHAR(100) NOT NULL,
+    warehouseID VARCHAR(10) NOT NULL,
+    requestDate DATE NOT NULL,
+    PRIMARY KEY (RequestID),
+    FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC),
+    FOREIGN KEY (warehouseID) REFERENCES Warehouse (WarehouseID)
+)
