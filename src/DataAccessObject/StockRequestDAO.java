@@ -2,41 +2,66 @@ package DataAccessObject;
 
 import DatabaseTools.StockRequestTools;
 import Entity.StockRequest;
+
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class StockRequestDAO {
+
     public static void requestStock() {
         Scanner scanner = new Scanner(System.in);
-        StockRequestTools stockRequestTools = new StockRequestTools();
         String continueEntering;
 
         do {
             System.out.println("Enter Stock Request Details");
 
-            String requestId = stockRequestTools.generateRequestId();
+            StockRequest request = new StockRequest();
 
-            System.out.print("Enter Item ID: ");
-            String itemId = scanner.nextLine();
+            String requestId = StockRequestTools.retrieveMaxRequestID();
+            request.setRequestId(requestId);
 
-            System.out.print("Enter Quantity: ");
-            int quantity = scanner.nextInt();
-            scanner.nextLine();
+            String productUPC;
+            do {
+                System.out.print("Enter Product UPC: ");
+                productUPC = scanner.nextLine();
+                if (!StockRequestTools.ValidateProductUPC(productUPC)) {
+                    System.out.println("Invalid Product UPC. Please enter a valid one.");
+                }
+            } while (!StockRequestTools.ValidateProductUPC(productUPC));
+            request.setProductUPC(productUPC);
 
-            System.out.print("Enter Requestor Name: ");
+            int quantity;
+            do {
+                System.out.print("Enter Quantity (must be a positive number): ");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.next();
+                }
+                quantity = scanner.nextInt();
+                scanner.nextLine();
+            } while (quantity <= 0);
+            request.setQuantity(quantity);
+
+            System.out.print("Enter Requester Name: ");
             String requestedBy = scanner.nextLine();
+            request.setRequestBy(requestedBy);
 
-            System.out.print("Enter Warehouse Location: ");
-            String warehouseLocation = scanner.nextLine();
+            String warehouseId;
+            do {
+                System.out.print("Enter Warehouse ID: ");
+                warehouseId = scanner.nextLine();
+                if (!StockRequestTools.ValidateWarehouseId(warehouseId)) {
+                    System.out.println("Invalid Warehouse ID. Please enter a valid one.");
+                }
+            } while (!StockRequestTools.ValidateWarehouseId(warehouseId));
+            request.setWarehouseId(warehouseId);
 
             LocalDate requestDate = LocalDate.now();
-
-            StockRequest request = new StockRequest(requestId, itemId, quantity, requestedBy, warehouseLocation, requestDate);
+            request.setRequestDate(requestDate);
 
             StockRequestTools.insertStockRequest(request);
 
-            //Ask Staff want to enter another stock or not
             System.out.print("Do you want to enter another stock request? (Y/N): ");
             continueEntering = scanner.nextLine();
 
@@ -45,15 +70,14 @@ public class StockRequestDAO {
         System.out.println("Displaying all stock requests made:");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        stockRequestTools.getStockRequestLog().forEach(request -> {
+        StockRequestTools.getStockRequestLog().forEach(request -> {
             System.out.println("Request ID: " + request.getRequestId() +
-                    ", Item ID: " + request.getItemId() +
+                    ", Item ID: " + request.getProductUPC() +
                     ", Quantity: " + request.getQuantity() +
                     ", Requested By: " + request.getRequestBy() +
-                    ", Warehouse: " + request.getWarehouseLocation() +
+                    ", Warehouse: " + request.getWarehouseId() +
                     ", Date: " + request.getRequestDate().format(dateFormatter));
         });
-
 
         scanner.close();
     }

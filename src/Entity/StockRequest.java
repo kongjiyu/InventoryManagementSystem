@@ -4,18 +4,22 @@ import java.time.LocalDate;
 
 public class StockRequest {
     private String requestId;
-    private String itemId;
+    private String productUPC;
     private int quantity;
     private String requestBy;
-    private String warehouseLocation;
+    private String warehouseId;
     private LocalDate requestDate;
 
-    public StockRequest(String requestId, String itemId, int quantity, String requestBy, String warehouseLocation, LocalDate requestDate) {
+    public StockRequest() {
+
+    }
+
+    public StockRequest(String requestId, String productUPC, int quantity, String requestBy, String warehouseId, LocalDate requestDate) {
         this.requestId = requestId;
-        this.itemId = itemId;
+        this.productUPC = productUPC;
         this.quantity = quantity;
         this.requestBy = requestBy;
-        this.warehouseLocation = warehouseLocation;
+        this.warehouseId = warehouseId;
         this.requestDate = requestDate;
     }
 
@@ -27,12 +31,12 @@ public class StockRequest {
         this.requestId = requestId;
     }
 
-    public String getItemId() {
-        return itemId;
+    public String getProductUPC() {
+        return productUPC;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setProductUPC(String productUPC) {
+        this.productUPC = productUPC;
     }
 
     public int getQuantity() {
@@ -51,12 +55,12 @@ public class StockRequest {
         this.requestBy = requestBy;
     }
 
-    public String getWarehouseLocation() {
-        return warehouseLocation;
+    public String getWarehouseId() {
+        return warehouseId;
     }
 
-    public void setWarehouseLocation(String warehouseLocation) {
-        this.warehouseLocation = warehouseLocation;
+    public void setWarehouseId(String warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
     public LocalDate getRequestDate() {
@@ -66,4 +70,5 @@ public class StockRequest {
     public void setRequestDate(LocalDate requestDate) {
         this.requestDate = requestDate;
     }
+
 }
