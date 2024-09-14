@@ -1,5 +1,6 @@
 package DataAccessObject;
 
+
 import DatabaseTools.LogTools;
 import DatabaseTools.StaffTools;
 import Entity.Staff;
@@ -9,13 +10,13 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class StaffDAO {
-
     public static void registerStaff() {
         Scanner sc = new Scanner(System.in);
         Staff newStaff = new Staff();
 
         System.out.print("Enter Staff ID: ");
         newStaff.setStaffID(sc.nextLine());
+
 
         if (StaffTools.checkUsername(newStaff.getUsername())) {
             System.out.println("Staff ID already exists! Please try another Staff ID!");
@@ -44,7 +45,8 @@ public class StaffDAO {
         do {
             System.out.print("Enter Staff Malaysia IC: ");
             newStaff.setStaffIC(sc.nextLine());
-            if (!Validator.validateIc(newStaff.getStaffIC())) {
+
+            if(!Validator.validateIc(newStaff.getStaffIC())) {
                 System.out.println("Invalid Ic");
                 System.out.println("IC number should be between 12 digits");
             }
@@ -55,7 +57,10 @@ public class StaffDAO {
 
         System.out.print("Enter Age: ");
         newStaff.setAge(sc.nextInt());
-        sc.nextLine();
+        sc.nextLine();  // Consume newline
+        System.out.print("Enter Department: ");
+        newStaff.setDepartment(sc.nextLine());
+
 
         do {
             System.out.print("Enter Hire Date (YYYY-MM-DD): ");
@@ -69,7 +74,7 @@ public class StaffDAO {
         do {
             System.out.print("Enter Date of Birth (YYYY-MM-DD): ");
             newStaff.setBirthDate(LocalDate.parse(sc.nextLine()));
-            if (!Validator.validateDOB(newStaff.getBirthDate().toString())) {
+            if(!Validator.validateDOB(newStaff.getBirthDate().toString())) {
                 System.out.println("Invalid Date of Birth");
                 System.out.println("Date of Birth must be in the format YYYY-MM-DD");
             }
@@ -98,7 +103,6 @@ public class StaffDAO {
         do {
             System.out.println("Is this staff an Admin? (Y/N): ");
             isAdmin = sc.nextLine().toUpperCase();
-
             if (isAdmin.equals("Y")) {
                 newStaff.setAdmin(true);
             } else if (isAdmin.equals("N")) {
@@ -230,5 +234,4 @@ public class StaffDAO {
             }
         } while (choice != 0);
     }
-
 }

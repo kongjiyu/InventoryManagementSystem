@@ -9,6 +9,7 @@ public class Staff {
     private String staffIC;
     private String name;
     private int age;
+    private String department;
     private LocalDate hireDate;
     private LocalDate birthDate;
     private double salary;
@@ -84,6 +85,10 @@ public class Staff {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public String getDepartment() { return department; }
+
+    public void setDepartment(String department) { this.department = department; }
 
     public LocalDate getHireDate() {
         return hireDate;
