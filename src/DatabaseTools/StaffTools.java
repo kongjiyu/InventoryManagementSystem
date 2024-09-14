@@ -9,15 +9,13 @@ import java.sql.Date;
 import java.util.*;
 
 public class StaffTools {
-    public static boolean checkStaffID(String staffID){
-        Staff staff = null;
-
+    public static boolean checkUsername(String username){
         Connection connection = DatabaseUtils.getConnection();
-        String sql = "SELECT * FROM staff WHERE StaffID = ?";
+        String sql = "SELECT * FROM staff WHERE StaffUsername = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, staffID);
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
@@ -25,15 +23,30 @@ public class StaffTools {
         }
     }
 
-    public static boolean checkPassword(String staffID,String password){
-        Staff staff = new Staff();
-
+    public static String getStaffID(String username){
         Connection connection = DatabaseUtils.getConnection();
-        String sql = "SELECT * FROM staff WHERE StaffID = ? AND Password=?";
+        String sql = "SELECT * FROM staff WHERE StaffUsername = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, staffID);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getString("StaffID");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean checkPassword(String username,String password){
+        Staff staff = new Staff();
+
+        Connection connection = DatabaseUtils.getConnection();
+        String sql = "SELECT * FROM staff WHERE StaffUsername = ? AND Password=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();

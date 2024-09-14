@@ -98,7 +98,7 @@ CREATE TABLE LOG
 (
     Time    TIMESTAMP   NOT NULL,
     StaffID VARCHAR(10) NOT NULL,
-    PRIMARY KEY (time),
+    PRIMARY KEY (Time),
     FOREIGN KEY (StaffID) REFERENCES Staff (StaffID)
 );
 

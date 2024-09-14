@@ -96,7 +96,7 @@ public class SupplierDAO {
 
     public static String generateSupplierId(){
         String maxSupplierID = SupplierTools.retrieveMaxSupplierID().replace("S", "");
-        return "S" + (Integer.parseInt(maxSupplierID) + 1);
+        return "SUP" + (Integer.parseInt(maxSupplierID) + 1);
     }
 
 }

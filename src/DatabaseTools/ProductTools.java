@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 public class ProductTools {
-    public static Product retrieveProduct(String UPC){
+    public static Product retrieveProduct(int UPC){
         //create a product
         Product product = null;
 
@@ -23,13 +23,13 @@ public class ProductTools {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             //set parameter
-            preparedStatement.setString(1, UPC);
+            preparedStatement.setInt(1, UPC);
 
             //get result
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
                 product = new Product(
-                        resultSet.getString("ProductUPC"),
+                        resultSet.getInt("ProductUPC"),
                         resultSet.getString("ProductName"),
                         resultSet.getString("ProductDesc"),
                         resultSet.getString("ProductCategory"),
@@ -50,6 +50,38 @@ public class ProductTools {
             throw new RuntimeException(e);
         }
         return product;
+    }
+
+    public static ArrayList<Product> retrieveAllProducts(){
+        ArrayList<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM Product";
+
+        Connection connection = DatabaseUtils.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                products.add(new Product(
+                        resultSet.getInt("ProductUPC"),
+                        resultSet.getString("ProductName"),
+                        resultSet.getString("ProductDesc"),
+                        resultSet.getString("ProductCategory"),
+                        resultSet.getDouble("ProductPrice"),
+                        resultSet.getDouble("ProductWeight"),
+                        new Dimension(
+                                resultSet.getDouble("ProductWidth"),
+                                resultSet.getDouble("ProductLength"),
+                                resultSet.getDouble("ProductHeight")
+                        ),
+                        resultSet.getInt("ProductQuantity"),
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return products;
     }
 
     public static ArrayList<String> retrieveAllCategories(){
@@ -99,6 +131,19 @@ public class ProductTools {
                 System.out.println("The ID of the inserted item: " + resultSet.getString(1));
             }
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean deleteProduct(int UPC){
+        String sql = "DELETE FROM Product WHERE ProductUPC = ?";
+        Connection connection = DatabaseUtils.getConnection();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, UPC);
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
