@@ -1,6 +1,7 @@
 package Entity;
 
 public class Validator {
+    //Must at least one uppercase letter in Username
     private static final String usernameRegex = ".*[A-Z].*";
 
     //Must have at least one number, lower and uppercase letters and symbols

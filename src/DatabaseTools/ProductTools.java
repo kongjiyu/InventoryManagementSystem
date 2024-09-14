@@ -5,11 +5,11 @@ import Model.Dimension;
 import Database.DatabaseUtils;
 
 import java.sql.*;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class ProductTools {
-    public static Product retrieveProduct(String UPC){
+    public static Product retrieveProduct(int UPC){
         //create a product
         Product product = null;
 
@@ -23,13 +23,13 @@ public class ProductTools {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             //set parameter
-            preparedStatement.setString(1, UPC);
+            preparedStatement.setInt(1, UPC);
 
             //get result
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
                 product = new Product(
-                        resultSet.getString("ProductUPC"),
+                        resultSet.getInt("ProductUPC"),
                         resultSet.getString("ProductName"),
                         resultSet.getString("ProductDesc"),
                         resultSet.getString("ProductCategory"),
@@ -41,7 +41,7 @@ public class ProductTools {
                                 resultSet.getDouble("ProductHeight")
                         ),
                         resultSet.getInt("ProductQuantity"),
-                        resultSet.getDate("ProductUpdatedAt").toLocalDate()
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
                 );
             }else{
                 System.out.println("Product not found");
@@ -50,6 +50,38 @@ public class ProductTools {
             throw new RuntimeException(e);
         }
         return product;
+    }
+
+    public static ArrayList<Product> retrieveAllProducts(){
+        ArrayList<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM Product";
+
+        Connection connection = DatabaseUtils.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                products.add(new Product(
+                        resultSet.getInt("ProductUPC"),
+                        resultSet.getString("ProductName"),
+                        resultSet.getString("ProductDesc"),
+                        resultSet.getString("ProductCategory"),
+                        resultSet.getDouble("ProductPrice"),
+                        resultSet.getDouble("ProductWeight"),
+                        new Dimension(
+                                resultSet.getDouble("ProductWidth"),
+                                resultSet.getDouble("ProductLength"),
+                                resultSet.getDouble("ProductHeight")
+                        ),
+                        resultSet.getInt("ProductQuantity"),
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return products;
     }
 
     public static ArrayList<String> retrieveAllCategories(){
@@ -62,16 +94,12 @@ public class ProductTools {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             ResultSet resultSet = preparedStatement.executeQuery(sql);
-            if(resultSet.next() == false){
-                return null;
-            }
             while(resultSet.next()){
                 categories.add(resultSet.getString(1));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(categories);
         return categories;
     }
 
@@ -91,7 +119,7 @@ public class ProductTools {
             preparedStatement.setDouble(7, product.getDimension().getLength());
             preparedStatement.setDouble(8, product.getDimension().getHeight());
             preparedStatement.setInt(9, product.getQuantity());
-            preparedStatement.setDate(10, Date.valueOf(LocalDate.now()));
+            preparedStatement.setTimestamp(10, Timestamp.from(Instant.now()));
 
             int result = preparedStatement.executeUpdate();
             //return UPC if the product is inserted successfully
@@ -100,9 +128,22 @@ public class ProductTools {
                 preparedStatement = connection.prepareStatement(getID);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 resultSet.next();
-                System.out.println(resultSet.getString(1));
+                System.out.println("The ID of the inserted item: " + resultSet.getString(1));
             }
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean deleteProduct(int UPC){
+        String sql = "DELETE FROM Product WHERE ProductUPC = ?";
+        Connection connection = DatabaseUtils.getConnection();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, UPC);
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

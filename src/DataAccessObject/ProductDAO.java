@@ -33,111 +33,154 @@ public class ProductDAO {
         //input product quantity
         inputQuantity(product);
 
-        //insert product into database
-        ProductTools.insertProduct(product);
+        do{
+            //confirm product information
+            System.out.println("Product information:");
+            System.out.println("1. Name: " + product.getName());
+            System.out.println("2. Description: " + product.getDesc());
+            System.out.println("3. Category: " + product.getCategory());
+            System.out.println("4. Price: " + product.getPrice());
+            System.out.println("5. Weight: " + product.getWeight());
+            System.out.println("6. Dimension: ");
+            System.out.println(product.getDimension().toString());
+            System.out.println("7. Quantity: " + product.getQuantity());
+            System.out.println();
+            System.out.print("Are you sure the product information is correct? (y/n) : ");
+            if (scanner.next().equalsIgnoreCase("y")) {
+                ProductTools.insertProduct(product);
+                break;
+            } else {
+                System.out.print("Select an option to modify: ");
+                int option = scanner.nextInt();
+                scanner.nextLine();
+                switch (option) {
+                    case 1:
+                        inputName(product);
+                        break;
+                    case 2:
+                        inputDesc(product);
+                        break;
+                    case 3:
+                        inputCategory(product);
+                        break;
+                    case 4:
+                        inputPrice(product);
+                        break;
+                    case 5:
+                        inputWeight(product);
+                        break;
+                    case 6:
+                        inputDimension(product);
+                        break;
+                    case 7:
+                        inputQuantity(product);
+                        break;
+                    default:
+                        System.out.println("Invalid option!");
+                        break;
+                }
+            }
+        }while(true);
     }
 
-    public static void inputName(Product product){
+    public static void inputName(Product product) {
         System.out.println();
         System.out.print("Please enter product name: ");
         product.setName(scanner.nextLine());
     }
 
-    public static void inputDesc(Product product){
+    public static void inputDesc(Product product) {
         System.out.println();
         System.out.print("Please enter product description: ");
         product.setDesc(scanner.nextLine());
     }
 
-    public static void inputCategory(Product product){
+    public static void inputCategory(Product product) {
         //store all categories in an arraylist
         ArrayList<String> categories = ProductTools.retrieveAllCategories();
-        if(categories != null){
-            do{
+        if (!categories.isEmpty()) {
+            do {
                 System.out.println("To add new category please enter 0");
                 System.out.println("List of all categories: ");
 
                 //print all categories
-                for(int i = 0; i < categories.size(); i++) {
-                    System.out.println((i+1) + ". " + categories.get(i));
+                for (int i = 0; i < categories.size(); i++) {
+                    System.out.println((i + 1) + ". " + categories.get(i));
                 }
 
                 System.out.print("Please choose an category: ");
-                try{
+                try {
                     //get user input
-                    System.out.println();
                     int categoryIndex = scanner.nextInt();
                     scanner.nextLine();
 
                     //add new category
-                    if(categoryIndex == 0){
+                    if (categoryIndex == 0) {
                         System.out.print("Enter new category: ");
                         product.setCategory(scanner.nextLine());
                         break;
 
                         //out of range
-                    }else if(categoryIndex < 0 || categoryIndex > categories.size()){
+                    } else if (categoryIndex < 0 || categoryIndex > categories.size()) {
                         System.out.println("Invalid input!");
 
                         //set category
-                    }else{
-                        product.setCategory(categories.get(categoryIndex-1));
+                    } else {
+                        product.setCategory(categories.get(categoryIndex - 1));
                         break;
                     }
-                } catch (Exception e){
+                } catch (Exception e) {
                     //invalid input(not a number)
                     System.out.println("Invalid input!");
                     System.out.println();
                 }
-            }while(true);
-        }else{
+            } while (true);
+        } else {
             System.out.print("Please enter category: ");
-            scanner.nextLine();
             product.setCategory(scanner.nextLine());
         }
 
     }
 
-    public static void inputPrice(Product product){
-        do{
+    public static void inputPrice(Product product) {
+        do {
             System.out.println();
             System.out.print("Enter product price: ");
-            try{
-                System.out.println();
+            try {
                 product.setPrice(scanner.nextDouble());
                 scanner.nextLine();
-                if(product.getPrice() < 0){
+                if (product.getPrice() < 0) {
                     System.out.println("Invalid input!");
-                }else{
+                } else {
                     break;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Invalid input!");
             }
-        }while(true);
+        } while (true);
     }
 
-    public static void inputWeight(Product product){
-        do{
+    public static void inputWeight(Product product) {
+        do {
             System.out.println();
             System.out.print("Enter product weight(kg): ");
-            try{
+            try {
                 product.setWeight(scanner.nextDouble());
                 scanner.nextLine();
-                if(product.getWeight() < 0){
+                if (product.getWeight() < 0) {
                     System.out.println("Invalid input!");
-                }else{
+                } else {
                     break;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Invalid input!");
             }
-        }while(true);
+        } while (true);
     }
 
-    public static void inputDimension(Product product){
-        do{
-            try{
+    public static void inputDimension(Product product) {
+        do {
+            try {
                 System.out.println();
                 System.out.print("Enter product length(cm): ");
 
@@ -146,18 +189,18 @@ public class ProductDAO {
                 scanner.nextLine();
 
                 //validate length
-                if(product.getDimension().getLength() < 0){
+                if (product.getDimension().getLength() < 0) {
                     System.out.println("Invalid input!");
-                }else{
+                } else {
                     break;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Invalid input!");
             }
-        }while(true);
+        } while (true);
 
-        do{
-            try{
+        do {
+            try {
                 System.out.println();
                 System.out.print("Enter product width(cm): ");
 
@@ -166,18 +209,18 @@ public class ProductDAO {
                 scanner.nextLine();
 
                 //validate width
-                if(product.getDimension().getWidth() < 0){
+                if (product.getDimension().getWidth() < 0) {
                     System.out.println("Invalid input!");
-                }else{
+                } else {
                     break;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Invalid input!");
             }
-        }while(true);
+        } while (true);
 
-        do{
-            try{
+        do {
+            try {
                 System.out.println();
                 System.out.print("Enter product height(cm): ");
 
@@ -186,34 +229,122 @@ public class ProductDAO {
                 scanner.nextLine();
 
                 //validate height
-                if(product.getDimension().getHeight() < 0){
+                if (product.getDimension().getHeight() < 0) {
                     System.out.println("Invalid input!");
-                }else{
+                } else {
                     break;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Invalid input!");
             }
-        }while(true);
+        } while (true);
 
     }
 
-    public static void inputQuantity(Product product){
-        do{
-            try{
+    public static void inputQuantity(Product product) {
+        do {
+            try {
                 System.out.println();
                 System.out.print("Enter product quantity: ");
                 product.setQuantity(scanner.nextInt());
                 scanner.nextLine();
-                if(product.getQuantity() < 0){
+                if (product.getQuantity() < 0) {
                     System.out.println("Invalid input!");
-                }else{
+                } else {
                     break;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Invalid input!");
             }
-        }while(true);
+        } while (true);
+    }
+
+    public static void displayAllProduct(){
+        ArrayList<Product> products = ProductTools.retrieveAllProducts();
+        if(products.isEmpty()){
+            System.out.println("No products found!");
+        }else{
+            System.out.println("List of all products:");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------");
+            System.out.printf("%-5s|%-50s|%-20s|%-7s|%-27s|%-10s\n", "UPC", "Name", "Category", "Weight", "Dimension", "Quantity");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------");
+
+            for(Product product:products){
+                System.out.printf("%-5d|%-50s|%-20s|%-5.2fkg|%5.2fcm x %5.2fcm x %5.2fcm|%-10d\n", product.getUPC(), product.getName(), product.getCategory(), product.getWeight(), product.getDimension().getLength(), product.getDimension().getWidth(), product.getDimension().getHeight(), product.getQuantity());
+            }
+        }
+    }
+
+    public static void deleteProduct(){
+        System.out.println("Please enter product UPC to delete: ");
+        int inputUPC = scanner.nextInt();
+        scanner.nextLine();
+        if(ProductTools.deleteProduct(inputUPC)){
+            System.out.println("Product deleted successfully!");
+        }else{
+            System.out.println("Something went wrong!");
+        }
+    }
+
+    public static void updateProduct(){
+        int option = 999;
+
+        System.out.println("Please enter product UPC to update: ");
+        int inputUPC = scanner.nextInt();
+        scanner.nextLine();
+        Product product = ProductTools.retrieveProduct(inputUPC);
+        if(product == null){
+            System.out.println("Product not found!");
+        }
+
+        do{
+            System.out.println("Product information:");
+            System.out.println("1. Name: " + product.getName());
+            System.out.println("2. Description: " + product.getDesc());
+            System.out.println("3. Category: " + product.getCategory());
+            System.out.println("4. Price: " + product.getPrice());
+            System.out.println("5. Weight: " + product.getWeight());
+            System.out.println("6. Dimension: ");
+            System.out.println(product.getDimension().toString());
+            System.out.println("7. Quantity: " + product.getQuantity());
+            System.out.println();
+            System.out.print("Select an option to modify or type 0 to exit: ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+            switch(option){
+                case 0:
+                    break;
+                case 1:
+                    inputName(product);
+                    break;
+                case 2:
+                    inputDesc(product);
+                    break;
+                case 3:
+                    inputCategory(product);
+                    break;
+                case 4:
+                    inputPrice(product);
+                    break;
+                case 5:
+                    inputWeight(product);
+                    break;
+                case 6:
+                    inputDimension(product);
+                    break;
+                case 7:
+                    inputQuantity(product);
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+                    break;
+            }
+        }while(option != 0);
+
+
+
+
+
     }
 
 }
