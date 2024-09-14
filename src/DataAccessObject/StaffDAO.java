@@ -1,5 +1,6 @@
 package DataAccessObject;
 
+import DatabaseTools.LogTools;
 import DatabaseTools.StaffTools;
 import Entity.Staff;
 import Entity.Validator;
@@ -16,7 +17,7 @@ public class StaffDAO {
         System.out.print("Enter Staff ID: ");
         newStaff.setStaffID(sc.nextLine());
 
-        if (StaffTools.checkStaffID(newStaff.getStaffID())) {
+        if (StaffTools.checkUsername(newStaff.getUsername())) {
             System.out.println("Staff ID already exists! Please try another Staff ID!");
             return;
         }
@@ -115,38 +116,36 @@ public class StaffDAO {
 
     }
 
-    public static boolean checkStaffAccount() {
+    public static boolean login() {
         Scanner scanner = new Scanner(System.in);
         Staff staff = new Staff();
 
         System.out.print("Enter username: ");
         staff.setStaffID(scanner.nextLine());
+        if (!StaffTools.checkUsername(staff.getUsername())) {
+            System.out.println("Invalid username!");
+            return false;
+        }
+
         System.out.print("Enter password: ");
         staff.setPassword(scanner.nextLine());
-
-
-        if (!StaffTools.checkStaffID(staff.getStaffID())) {
-            System.out.print("Invalid username or password");
+        if (!StaffTools.checkPassword(staff.getUsername(), staff.getPassword())) {
             return false;
+        }else{
+            staff.setStaffID(StaffTools.getStaffID(staff.getUsername()));
+            LogTools.insertLog(staff.getStaffID());
+
+
+            if (StaffTools.checkAdmin(staff)) {
+                adminMenu(staff.getUsername());
+            } else {
+                staffMenu(staff.getUsername());
+            }
         }
-
-
-        if (!StaffTools.checkPassword(staff.getStaffID(), staff.getPassword())) {
-            return false;
-        }
-
-
-        if (StaffTools.checkAdmin(staff)) {
-            adminMenu();
-        } else {
-            StaffMenu();
-        }
-
         return true;
-
     }
 
-    public static void adminMenu() {
+    public static void adminMenu(String username) {
         Scanner scanner = new Scanner(System.in);
         Staff staff = new Staff();
         int choice;
@@ -200,7 +199,7 @@ public class StaffDAO {
         } while (choice != 0);
     }
 
-    public static void StaffMenu() {
+    public static void staffMenu(String username) {
         Scanner scanner = new Scanner(System.in);
         int choice;
         do {

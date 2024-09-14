@@ -1,16 +1,16 @@
 package DatabaseTools;
 
 import Database.DatabaseUtils;
-import Entity.Supplier;
+import Entity.Retailer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SupplierTools {
-    public static String retrieveMaxSupplierID(){
-        String sql = "SELECT MAX(SupplierID) FROM Supplier";
+public class RetailerTools {
+    public static String retrieveMaxRetailerID(){
+        String sql = "SELECT MAX(RetailerID) FROM Retailer";
 
         Connection connection = DatabaseUtils.getConnection();
         try {
@@ -19,31 +19,30 @@ public class SupplierTools {
             if(resultSet.next()){
                 return resultSet.getString(1);
             }else{
-                return "SUP001";
+                return "RET001";
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void insertSupplier(Supplier supplier){
-        String sql = "INSERT INTO Supplier VALUES (?,?,?,?,?)";
+    public static void insertRetailer(Retailer retailer) {
+        String sql = "INSERT INTO Retailer VALUES (?,?,?,?,?)";
         Connection connection = DatabaseUtils.getConnection();
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, supplier.getSupplierId());
+            preparedStatement.setString(1, retailer.getRetailerId());
 
 
             int result = preparedStatement.executeUpdate();
-            if(result > 0){
-                System.out.println("Supplier added successfully!");
-                System.out.println("Supplier ID: " + supplier.getSupplierId());
-            }else{
-                System.out.println("Supplier added failed!");
+            if (result > 0) {
+                System.out.println("Retailer added successfully!");
+                System.out.println("Retailer ID: " + retailer.getRetailerId());
+            } else {
+                System.out.println("Retailer added failed!");
             }
-
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

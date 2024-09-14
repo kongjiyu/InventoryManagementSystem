@@ -259,4 +259,92 @@ public class ProductDAO {
         } while (true);
     }
 
+    public static void displayAllProduct(){
+        ArrayList<Product> products = ProductTools.retrieveAllProducts();
+        if(products.isEmpty()){
+            System.out.println("No products found!");
+        }else{
+            System.out.println("List of all products:");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------");
+            System.out.printf("%-5s|%-50s|%-20s|%-7s|%-27s|%-10s\n", "UPC", "Name", "Category", "Weight", "Dimension", "Quantity");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------");
+
+            for(Product product:products){
+                System.out.printf("%-5d|%-50s|%-20s|%-5.2fkg|%5.2fcm x %5.2fcm x %5.2fcm|%-10d\n", product.getUPC(), product.getName(), product.getCategory(), product.getWeight(), product.getDimension().getLength(), product.getDimension().getWidth(), product.getDimension().getHeight(), product.getQuantity());
+            }
+        }
+    }
+
+    public static void deleteProduct(){
+        System.out.println("Please enter product UPC to delete: ");
+        int inputUPC = scanner.nextInt();
+        scanner.nextLine();
+        if(ProductTools.deleteProduct(inputUPC)){
+            System.out.println("Product deleted successfully!");
+        }else{
+            System.out.println("Something went wrong!");
+        }
+    }
+
+    public static void updateProduct(){
+        int option = 999;
+
+        System.out.println("Please enter product UPC to update: ");
+        int inputUPC = scanner.nextInt();
+        scanner.nextLine();
+        Product product = ProductTools.retrieveProduct(inputUPC);
+        if(product == null){
+            System.out.println("Product not found!");
+        }
+
+        do{
+            System.out.println("Product information:");
+            System.out.println("1. Name: " + product.getName());
+            System.out.println("2. Description: " + product.getDesc());
+            System.out.println("3. Category: " + product.getCategory());
+            System.out.println("4. Price: " + product.getPrice());
+            System.out.println("5. Weight: " + product.getWeight());
+            System.out.println("6. Dimension: ");
+            System.out.println(product.getDimension().toString());
+            System.out.println("7. Quantity: " + product.getQuantity());
+            System.out.println();
+            System.out.print("Select an option to modify or type 0 to exit: ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+            switch(option){
+                case 0:
+                    break;
+                case 1:
+                    inputName(product);
+                    break;
+                case 2:
+                    inputDesc(product);
+                    break;
+                case 3:
+                    inputCategory(product);
+                    break;
+                case 4:
+                    inputPrice(product);
+                    break;
+                case 5:
+                    inputWeight(product);
+                    break;
+                case 6:
+                    inputDimension(product);
+                    break;
+                case 7:
+                    inputQuantity(product);
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+                    break;
+            }
+        }while(option != 0);
+
+
+
+
+
+    }
+
 }
