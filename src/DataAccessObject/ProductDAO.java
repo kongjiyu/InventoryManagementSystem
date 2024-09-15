@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class ProductDAO {
     static Scanner scanner = new Scanner(System.in);
 
+    //Create
     public static void createProduct() {
         Product product = new Product();
         //input product name
@@ -259,6 +260,7 @@ public class ProductDAO {
         } while (true);
     }
 
+    //Read
     public static void displayAllProduct(){
         ArrayList<Product> products = ProductTools.retrieveAllProducts();
         if(products.isEmpty()){
@@ -275,8 +277,9 @@ public class ProductDAO {
         }
     }
 
+    //Delete
     public static void deleteProduct(){
-        System.out.println("Please enter product UPC to delete: ");
+        System.out.print("Please enter product UPC to delete: ");
         int inputUPC = scanner.nextInt();
         scanner.nextLine();
         if(ProductTools.deleteProduct(inputUPC)){
@@ -286,6 +289,7 @@ public class ProductDAO {
         }
     }
 
+    //Update
     public static void updateProduct(){
         int option = 999;
 
