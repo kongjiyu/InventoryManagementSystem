@@ -1,7 +1,9 @@
 package Driver;
 
 import DataAccessObject.ProductDAO;
+import DataAccessObject.RetailerDAO;
 import DataAccessObject.StaffDAO;
+import DataAccessObject.SupplierDAO;
 import DataAccessObject.StorageDAO;
 import DataAccessObject.TransferDAO;
 import Database.DatabaseUtils;

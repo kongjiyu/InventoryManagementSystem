@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Product {
-    private String UPC;
+    private int UPC;
     private String name;
     private String desc;
     private String category;
@@ -21,7 +21,7 @@ public class Product {
         dimension = new Dimension();
     }
 
-    public Product(String UPC, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, LocalDateTime updatedAt) {
+    public Product(int UPC, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, LocalDateTime updatedAt) {
         this.UPC = UPC;
         this.name = name;
         this.desc = desc;
@@ -33,11 +33,11 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
-    public String getUPC() {
+    public int getUPC() {
         return UPC;
     }
 
-    public void setUPC(String UPC) {
+    public void setUPC(int UPC) {
         this.UPC = UPC;
     }
 
