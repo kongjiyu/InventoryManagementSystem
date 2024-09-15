@@ -40,7 +40,6 @@ public class ProductTools {
                                 resultSet.getDouble("ProductLength"),
                                 resultSet.getDouble("ProductHeight")
                         ),
-                        resultSet.getInt("ProductQuantity"),
                         resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
                 );
             }else{
@@ -74,7 +73,6 @@ public class ProductTools {
                                 resultSet.getDouble("ProductLength"),
                                 resultSet.getDouble("ProductHeight")
                         ),
-                        resultSet.getInt("ProductQuantity"),
                         resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
                 ));
             }
@@ -104,7 +102,7 @@ public class ProductTools {
     }
 
     public static void insertProduct(Product product){
-        String sql = "INSERT INTO Product (ProductName, ProductDesc, ProductCategory, ProductPrice, ProductWeight, ProductWidth, ProductLength, ProductHeight, ProductQuantity, ProductUpdatedAt) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Product (ProductName, ProductDesc, ProductCategory, ProductPrice, ProductWeight, ProductWidth, ProductLength, ProductHeight, ProductUpdatedAt) VALUES (?,?,?,?,?,?,?,?,?)";
         String getID = "SELECT LAST_INSERT_ID()";
         Connection connection = DatabaseUtils.getConnection();
         try {
@@ -118,8 +116,7 @@ public class ProductTools {
             preparedStatement.setDouble(6, product.getDimension().getWidth());
             preparedStatement.setDouble(7, product.getDimension().getLength());
             preparedStatement.setDouble(8, product.getDimension().getHeight());
-            preparedStatement.setInt(9, product.getQuantity());
-            preparedStatement.setTimestamp(10, Timestamp.from(Instant.now()));
+            preparedStatement.setTimestamp(9, Timestamp.from(Instant.now()));
 
             int result = preparedStatement.executeUpdate();
             //return UPC if the product is inserted successfully
@@ -149,4 +146,99 @@ public class ProductTools {
         }
     }
 
+    public static ArrayList<Product> searchProducts(String field, String value) {
+        ArrayList<Product> products = new ArrayList<>();
+        String sqlField;
+
+        // Validate the field to prevent SQL injection
+        switch (field) {
+            case "ProductUPC":
+            case "ProductName":
+            case "ProductCategory":
+                sqlField = field;
+                break;
+            default:
+                System.out.println("Invalid search field.");
+                return products;
+        }
+
+        String sql = "SELECT * FROM Product WHERE " + sqlField + " LIKE ?";
+        Connection connection = DatabaseUtils.getConnection();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            if (field.equals("ProductUPC")) {
+                preparedStatement.setString(1, value);
+            } else {
+                preparedStatement.setString(1, "%" + value + "%");
+            }
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                products.add(new Product(
+                        resultSet.getInt("ProductUPC"),
+                        resultSet.getString("ProductName"),
+                        resultSet.getString("ProductDesc"),
+                        resultSet.getString("ProductCategory"),
+                        resultSet.getDouble("ProductPrice"),
+                        resultSet.getDouble("ProductWeight"),
+                        new Dimension(
+                                resultSet.getDouble("ProductWidth"),
+                                resultSet.getDouble("ProductLength"),
+                                resultSet.getDouble("ProductHeight")
+                        ),
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return products;
+    }
+
+    public static ArrayList<Product> searchProductsByRange(String field, double minValue, double maxValue) {
+        ArrayList<Product> products = new ArrayList<>();
+        String sqlField;
+
+        // Validate the field to prevent SQL injection
+        switch (field) {
+            case "ProductPrice":
+            case "ProductWeight":
+                sqlField = field;
+                break;
+            default:
+                System.out.println("Invalid search field.");
+                return products;
+        }
+
+        String sql = "SELECT * FROM Product WHERE " + sqlField + " BETWEEN ? AND ?";
+        Connection connection = DatabaseUtils.getConnection();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setDouble(1, minValue);
+            preparedStatement.setDouble(2, maxValue);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                products.add(new Product(
+                        resultSet.getInt("ProductUPC"),
+                        resultSet.getString("ProductName"),
+                        resultSet.getString("ProductDesc"),
+                        resultSet.getString("ProductCategory"),
+                        resultSet.getDouble("ProductPrice"),
+                        resultSet.getDouble("ProductWeight"),
+                        new Dimension(
+                                resultSet.getDouble("ProductWidth"),
+                                resultSet.getDouble("ProductLength"),
+                                resultSet.getDouble("ProductHeight")
+                        ),
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return products;
+    }
 }
