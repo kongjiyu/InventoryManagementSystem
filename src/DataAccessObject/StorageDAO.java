@@ -25,17 +25,30 @@ public class StorageDAO {
         //create object for product
         ProductTools pt = new ProductTools();
 
+        int option=0;
         // let user choose which style to search ProductUPC
         do{
+
             // get user prefer style to search product
             System.out.println("\n\n\n\n\n\n\n\n\n\n");
             System.out.println("[1] Search By Enter Product Name");
-            System.out.println("[2] Search By Enter Product UPC");
+            System.out.println("[2] Search By Enter Product SKU");
             System.out.println("[3] Search By Check Product List");
             System.out.println("[4] Exit");
             System.out.print(" > ");
-            int option = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                option = scanner.nextInt();
+                scanner.nextLine();
+            }catch(InputMismatchException e){
+                System.out.println("Invalid input!");
+                try {
+                    Thread.sleep(1000);
+                }catch (InterruptedException e2){
+                    e2.printStackTrace();
+                }
+                scanner.nextLine();
+                continue;
+            }
             switch(option) {
                 case 1:
                     // search by product name
@@ -65,7 +78,7 @@ public class StorageDAO {
                     }
                     break;
             }
-            // confirmation for the choosen product
+            // Confirmation for the chosen product
             if (product != null) {
                 System.out.println("\n\n\n\n\n\n\n\n\n\n");
                 System.out.println("Product Detail Confirmation");
@@ -74,10 +87,21 @@ public class StorageDAO {
                 System.out.println("=====================================================================================================");
                 System.out.printf("|%-15s|%-20s|%-20s|RM%-18.2f|%-20d|\n", product.getUPC(), product.getName(), product.getCategory(), product.getPrice(), product.getQuantity());
                 System.out.println("=====================================================================================================");
-                System.out.print("Confirm this product? <Y/N> : ");
-                if (scanner.nextLine().toUpperCase().equals("N")) {
-                    product = null;
-                }
+
+                String confirmation;
+                do {
+                    System.out.print("Confirm this product? <Y/N> : ");
+                    confirmation = scanner.nextLine().trim().toUpperCase();
+
+                    // If input is "N", clear the product and return to loop
+                    if (confirmation.equals("N")) {
+                        product = null;
+                        break;
+                    } else if (!confirmation.equals("Y")) {
+                        // If input is neither "Y" nor "N", show invalid input message
+                        System.out.println("Invalid input! Please enter Y or N.");
+                    }
+                } while (!confirmation.equals("Y") && !confirmation.equals("N"));
             }
         }while(product == null);
         return product;
@@ -158,8 +182,12 @@ public class StorageDAO {
                     if (Character.isDigit(input)){
                         int num = input - '0';
                         if (num<=5 && num>0){
-                            product = productList.get(startIndex+num-1);
-                            check = true;
+                            try {
+                                product = productList.get(startIndex + num - 1);
+                                check = true;
+                            }catch (IndexOutOfBoundsException ie) {
+                                continue;
+                            }
                         }
                     }
                     break;

@@ -144,28 +144,26 @@ public class StorageTools {
 
     // get product by Product Name
     public Product getProductByNameANDWarehouseID(String productName, String WarehouseID) {
-        // get connection with database
         Connection connection = DatabaseUtils.getConnection();
-        // create product object to return
+        List<Product> productList = new ArrayList<>();
         Product product = null;
-        //set the sql query
-        String sql =    "SELECT * " +
-                        "FROM product p " +
-                        "JOIN storage s " +
-                        "ON p.ProductUPC = s.ProductUPC " +
-                        "WHERE p.ProductName = ? " +
-                        "AND s.WarehouseID = ?";
-        // try to get the product
-        try{
+
+        String sql = "SELECT * " +
+                "FROM product p " +
+                "JOIN storage s " +
+                "ON p.ProductUPC = s.ProductUPC " +
+                "WHERE p.ProductName LIKE ? " +
+                "AND s.WarehouseID = ?";
+
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            // input the query variable
-            preparedStatement.setString(1, productName);
+            preparedStatement.setString(1, "%" + productName + "%");
             preparedStatement.setString(2, WarehouseID);
-            // get the result
+
             ResultSet resultSet = preparedStatement.executeQuery();
-            //create product if there have
-            if(resultSet.next()) {
-                product = new Product(
+
+            while (resultSet.next()) {
+                productList.add(new Product(
                         resultSet.getString("ProductUPC"),
                         resultSet.getString("ProductName"),
                         resultSet.getString("ProductDesc"),
@@ -178,20 +176,86 @@ public class StorageTools {
                                 resultSet.getDouble("ProductHeight")
                         ),
                         resultSet.getInt("Quantity"),
-                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime());
-            }else {
-                System.out.println("Product not found");
-                try{
-                    TimeUnit.SECONDS.sleep(2);
-                } catch (InterruptedException ie) {
-                    throw new RuntimeException(ie);
-                }
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()));
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return product;
+        if (productList.isEmpty()) {
+            System.out.println("Product not found!");
+            return null;
+        } else if (productList.size() == 1) {
+            return productList.get(0);
+        } else {
+            Scanner scanner = new Scanner(System.in);
+            int totalIndex = productList.size();
+            final int productsPerPage = 5;
+            int page = 0;
+            int maxPages = (totalIndex - 1) / productsPerPage;
+            boolean exit = false;
+
+            do {
+                int count = 1;
+                int startIndex = page * productsPerPage;
+                int endIndex = Math.min(startIndex + productsPerPage, totalIndex);
+
+                // Display products on the current page
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("=========================================================================================================");
+                System.out.printf("|%-3s|%-15s|%-20s|%-20s|%-20s|%-20s|\n", "No.", "Product UPC", "Product Name", "Product Category", "Product Price", "Product Quantity");
+                for (int i = startIndex; i < endIndex; i++) {
+                    System.out.println("=========================================================================================================");
+                    System.out.printf("|%-3d|%-15s|%-20s|%-20s|RM%-18.2f|%-20d|\n",
+                            count,
+                            productList.get(i).getUPC(),
+                            productList.get(i).getName(),
+                            productList.get(i).getCategory(),
+                            productList.get(i).getPrice(),
+                            productList.get(i).getQuantity());
+                    count++;
+                }
+                System.out.println("=========================================================================================================");
+                System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
+                System.out.printf("Total products: %d\n", totalIndex);
+                System.out.println("[\"A\" for last page]\t\t\t\t\t\t[\"Q\" to exit]\t\t\t\t\t\t[\"D\" for next page]");
+                System.out.print("Input: ");
+
+                String input = scanner.nextLine().trim();
+                if (input.length() == 1) {
+                    char option = input.charAt(0);
+
+                    switch (option) {
+                        case 'A':
+                        case 'a':
+                            if (page > 0) page--;
+                            break;
+                        case 'D':
+                        case 'd':
+                            if (page < maxPages) page++;
+                            break;
+                        case 'Q':
+                        case 'q':
+                            exit = true;
+                            break;
+                        default:
+                            if (Character.isDigit(option)) {
+                                int num = Character.getNumericValue(option);
+                                // Ensure that the selected number is within the displayed product range
+                                if (num >= 1 && num <= (endIndex - startIndex)) {
+                                    return productList.get(startIndex + num - 1);
+                                }
+                            }
+                            System.out.println("Invalid input. Please enter a valid option.");
+                            break;
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a single character.");
+                }
+
+            } while (!exit);
+            return null;
+        }
     }
 
     // get product by Product SKU

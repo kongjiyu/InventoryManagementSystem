@@ -5,6 +5,7 @@ import Entity.Product;
 import Entity.Warehouse;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -42,8 +43,19 @@ public class TransferDAO{
                     // let user to enter quantity
                     System.out.println("\n\n\n\n\n\n\n\n\n\n");
                     System.out.print("Enter the product quantity to transfer [999 to exit] : ");
-                    quantity = sc.nextInt();
-                    sc.nextLine();
+                    try {
+                        quantity = sc.nextInt();
+                        sc.nextLine();
+                    }catch (InputMismatchException e){
+                        sc.nextLine();
+                        System.out.println("Invalid Input!");
+                        try {
+                            Thread.sleep(1000);
+                        }catch (InterruptedException e1){
+                            e1.printStackTrace();
+                        }
+                        continue;
+                    }
                     // exit if type 999
                     if (quantity == 999) {
                         exit = true;
