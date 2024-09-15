@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class TransferTools {
 
     // transfer stock from first warehouse to another warehouse with product id and quantity
-    public boolean transferStock(String firstWarehouseID, String secondWarehouseID, String ProductUPC, int quantity) {
+    public boolean transferStock(String firstWarehouseID, String secondWarehouseID, int ProductUPC, int quantity) {
         // create object
         StorageTools st = new StorageTools();
         ProductTools pt = new ProductTools();
@@ -44,7 +44,7 @@ public class TransferTools {
     }
 
     // check warehouse have certain product or not
-    public boolean checkProductInWarehouse(String warehouseID, String productUPC) {
+    public boolean checkProductInWarehouse(String warehouseID, int productUPC) {
         Connection connection = DatabaseUtils.getConnection();
 
         String sql =    "SELECT * " +
@@ -58,7 +58,7 @@ public class TransferTools {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, warehouseID);
-            preparedStatement.setString(2, productUPC);
+            preparedStatement.setInt(2, productUPC);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()) {
                 return true;

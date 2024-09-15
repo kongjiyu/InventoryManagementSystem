@@ -3,10 +3,10 @@ package DataAccessObject;
 public class TransferSet{
     private String firstWarehouseID;
     private String secondWarehouseID;
-    private String ProductUPC;
+    private int ProductUPC;
     private int Quantity;
 
-    TransferSet(String firstWarehouseID, String secondWarehouseID, String ProductUPC, int Quantity) {
+    TransferSet(String firstWarehouseID, String secondWarehouseID, int ProductUPC, int Quantity) {
         this.firstWarehouseID = firstWarehouseID;
         this.secondWarehouseID = secondWarehouseID;
         this.ProductUPC = ProductUPC;
@@ -29,11 +29,11 @@ public class TransferSet{
         this.secondWarehouseID = secondWarehouseID;
     }
 
-    public String getProductUPC() {
+    public int getProductUPC() {
         return ProductUPC;
     }
 
-    public void setProductUPC(String productUPC) {
+    public void setProductUPC(int productUPC) {
         ProductUPC = productUPC;
     }
 

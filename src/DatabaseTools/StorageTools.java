@@ -46,7 +46,7 @@ public class StorageTools {
                 }
                 // If not skipping, add the product to the productList
                 productList.add(new Product(
-                        resultSet.getString("ProductUPC"),
+                        resultSet.getInt("ProductUPC"),
                         resultSet.getString("ProductName"),
                         resultSet.getString("ProductDesc"),
                         resultSet.getString("ProductCategory"),
@@ -104,7 +104,7 @@ public class StorageTools {
                 }
 
                 for (TransferSet transferSet : transferList) {
-                    if (transferSet.getProductUPC().equals(resultSet.getString("ProductUPC"))) {
+                    if (transferSet.getProductUPC() == (resultSet.getInt("ProductUPC"))) {
                         skip = true;  // Set flag to skip adding this product
                         break;  // Exit the loop since we found a match
                     }
@@ -117,7 +117,7 @@ public class StorageTools {
 
                 // If not skipping, add the product to the productList
                 productList.add(new Product(
-                        resultSet.getString("ProductUPC"),
+                        resultSet.getInt("ProductUPC"),
                         resultSet.getString("ProductName"),
                         resultSet.getString("ProductDesc"),
                         resultSet.getString("ProductCategory"),
@@ -164,7 +164,7 @@ public class StorageTools {
 
             while (resultSet.next()) {
                 productList.add(new Product(
-                        resultSet.getString("ProductUPC"),
+                        resultSet.getInt("ProductUPC"),
                         resultSet.getString("ProductName"),
                         resultSet.getString("ProductDesc"),
                         resultSet.getString("ProductCategory"),
@@ -259,7 +259,7 @@ public class StorageTools {
     }
 
     // get product by Product SKU
-    public Product getProductByUPCANDWarehouseID(String productUPC, String WarehouseID) {
+    public Product getProductByUPCANDWarehouseID(int productUPC, String WarehouseID) {
         // get connection with database
         Connection connection = DatabaseUtils.getConnection();
         // create product object to return
@@ -275,14 +275,14 @@ public class StorageTools {
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // input the query variable
-            preparedStatement.setString(1, productUPC);
+            preparedStatement.setInt(1, productUPC);
             preparedStatement.setString(2, WarehouseID);
             // get the result
             ResultSet resultSet = preparedStatement.executeQuery();
             // create product if there have
             if(resultSet.next()) {
                 product = new Product(
-                        resultSet.getString("ProductUPC"),
+                        resultSet.getInt("ProductUPC"),
                         resultSet.getString("ProductName"),
                         resultSet.getString("ProductDesc"),
                         resultSet.getString("ProductCategory"),
@@ -343,7 +343,7 @@ public class StorageTools {
 
     }
 
-    public void insertStorageForWarehouseProduct(String WarehouseID, String ProductUPC, int Quantity) {
+    public void insertStorageForWarehouseProduct(String WarehouseID, int ProductUPC, int Quantity) {
         // get connection to database
         Connection connection = DatabaseUtils.getConnection();
         // sql string
@@ -351,7 +351,7 @@ public class StorageTools {
         try{
            PreparedStatement preparedStatement = connection.prepareStatement(sql);
            preparedStatement.setString(1, getNewStorageID());
-           preparedStatement.setString(2, ProductUPC);
+           preparedStatement.setInt (2, ProductUPC);
            preparedStatement.setString(3, WarehouseID);
            preparedStatement.setInt(4, Quantity);
 
