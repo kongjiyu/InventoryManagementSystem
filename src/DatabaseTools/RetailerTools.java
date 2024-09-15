@@ -111,4 +111,30 @@ public class RetailerTools {
         }
         return retailer;
     }
+
+    public static ArrayList<Retailer> searchRetailers(String field, String value) {
+        ArrayList<Retailer> retailers = new ArrayList<>();
+        String sql = "SELECT * FROM Retailer WHERE " + field + " LIKE ?";
+        Connection connection = DatabaseUtils.getConnection();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "%" + value + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                retailers.add(new Retailer(
+                        resultSet.getString("RetailerID"),
+                        resultSet.getString("RetailerName"),
+                        resultSet.getString("RetailerAddress"),
+                        resultSet.getString("RetailerPhone"),
+                        resultSet.getString("RetailerEmail")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println("An error occurred while searching for retailers.");
+            e.printStackTrace();
+        }
+
+        return retailers;
+    }
 }

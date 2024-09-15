@@ -1,16 +1,14 @@
-DELETE FROM StockRequest;
-DELETE FROM LOG;
-DELETE FROM Inventory;
-DELETE FROM Staff;
-DELETE FROM Retailer;
-DELETE FROM Transfer;
-DELETE FROM Warehouse;
-DELETE FROM Purchase;
-DELETE FROM Product;
-DELETE FROM Supplier;
-DELETE FROM Payment;
-DELETE FROM Report;
-DELETE FROM Storage;
+TRUNCATE TABLE StockRequest;
+TRUNCATE TABLE LOG;
+TRUNCATE TABLE Inventory;
+TRUNCATE TABLE Staff;
+TRUNCATE TABLE Storage;
+TRUNCATE TABLE Retailer;
+TRUNCATE TABLE Transfer;
+TRUNCATE TABLE Warehouse;
+TRUNCATE TABLE Purchase;
+TRUNCATE TABLE Product;
+TRUNCATE TABLE Supplier;
 
 DROP TABLE IF EXISTS StockRequest;
 DROP TABLE IF EXISTS LOG;
@@ -23,8 +21,6 @@ DROP TABLE IF EXISTS Warehouse;
 DROP TABLE IF EXISTS Purchase;
 DROP TABLE IF EXISTS Product;
 DROP TABLE IF EXISTS Supplier;
-DROP TABLE IF EXISTS Report;
-
 
 CREATE TABLE Staff
 (
@@ -75,7 +71,6 @@ CREATE TABLE Product
     ProductWidth     DECIMAL(10, 2) NOT NULL,
     ProductLength    DECIMAL(10, 2) NOT NULL,
     ProductHeight    DECIMAL(10, 2) NOT NULL,
-    ProductQuantity  DECIMAL(10)    NOT NULL,
     ProductUpdatedAt TIMESTAMP      NOT NULL,
     PRIMARY KEY (ProductUPC)
 );
@@ -112,15 +107,17 @@ CREATE TABLE Supplier
     PRIMARY KEY (SupplierID)
 );
 
-CREATE TABLE Report
+CREATE TABLE Purchase
 (
-    Date                     TIMESTAMP      NOT NULL,
-    TotalSales               DECIMAL(10, 2) NOT NULL,
-    TopSalesProduct          VARCHAR(100)   NOT NULL,
-    TopSalesProductQuantity  DECIMAL(10)    NOT NULL,
-    TopSalesStaff            VARCHAR(100)   NOT NULL,
-    TopSalesStaffPerformance DECIMAL(10, 2) NOT NULL,
-    PRIMARY KEY (Date)
+    PurchaseID   VARCHAR(10)    NOT NULL,
+    PurchaseDate DATE           NOT NULL,
+    ProductUPC   INT    NOT NULL,
+    ItemQuantity DECIMAL(10)    NOT NULL,
+    ItemPrice    DECIMAL(10, 2) NOT NULL,
+    SupplierID   VARCHAR(10)    NOT NULL,
+    PRIMARY KEY (PurchaseID),
+    FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC),
+    FOREIGN KEY (SupplierID) REFERENCES Supplier (SupplierID)
 );
 
 CREATE TABLE Inventory
