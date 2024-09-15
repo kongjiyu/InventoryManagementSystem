@@ -83,7 +83,6 @@ CREATE TABLE Transfer
     ProductUPC      INT  NOT NULL,
     Quantity       DECIMAL(10)  NOT NULL,
     TransferDate   DATE         NOT NULL,
-    TransferStatus VARCHAR(100) NOT NULL,
     PRIMARY KEY (TransferID),
     FOREIGN KEY (FromWarehouse) REFERENCES Warehouse (WarehouseID),
     FOREIGN KEY (ToWarehouse) REFERENCES Warehouse (WarehouseID),
@@ -126,6 +125,7 @@ CREATE TABLE Inventory
     InventoryID   VARCHAR(10)  NOT NULL,
     ProductUPC    INT  NOT NULL,
     Quantity      DECIMAL(10)  NOT NULL,
+    Price         DECIMAL(10,2)  NOT NULL,
     SupplierID    VARCHAR(10),
     RetailerID    VARCHAR(10),
     InventoryType VARCHAR(100) NOT NULL,
@@ -143,9 +143,9 @@ CREATE TABLE Inventory
 CREATE TABLE Storage
 (
     StorageID   VARCHAR(10) NOT NULL,
-    RetailerID  VARCHAR(10) NOT NULL,
+    RetailerID  VARCHAR(10),
     ProductUPC  INT NOT NULL,
-    WarehouseID VARCHAR(10) NOT NULL,
+    WarehouseID VARCHAR(10),
     Quantity    DECIMAL(10) NOT NULL,
     PRIMARY KEY (StorageID),
     FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC),
