@@ -15,6 +15,7 @@ public class Product {
     private double weight;
     private Dimension dimension;
     private LocalDateTime updatedAt;
+    private int quantity;
 
     public Product(){
         dimension = new Dimension();
@@ -29,6 +30,18 @@ public class Product {
         this.weight = weight;
         this.dimension = dimension;
         this.updatedAt = updatedAt;
+    }
+
+    public Product(int UPC, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, LocalDateTime updatedAt) {
+        this.UPC = UPC;
+        this.name = name;
+        this.desc = desc;
+        this.category = category;
+        this.price = price;
+        this.weight = weight;
+        this.dimension = dimension;
+        this.updatedAt = updatedAt;
+        this.quantity = quantity;
     }
 
     public int getUPC() {
@@ -93,5 +106,13 @@ public class Product {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

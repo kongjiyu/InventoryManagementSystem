@@ -71,7 +71,7 @@ public class TransferTools {
     }
 
     // record transfer record
-    public boolean recordTransfer(String TransferID, String FromWarehouse, String ToWarehosue, String ProductUPC, int Quantity){
+    public boolean recordTransfer(String TransferID, String FromWarehouse, String ToWarehosue, int ProductUPC, int Quantity){
         Connection connection = DatabaseUtils.getConnection();
 
         String sql = "INSERT INTO transfer VALUES(?,?,?,?,?,?)";
@@ -81,7 +81,7 @@ public class TransferTools {
             preparedStatement.setString(1, TransferID);
             preparedStatement.setString(2, FromWarehouse);
             preparedStatement.setString(3, ToWarehosue);
-            preparedStatement.setString(4, ProductUPC);
+            preparedStatement.setInt(4, ProductUPC);
             preparedStatement.setInt(5, Quantity);
             preparedStatement.setDate(6, new java.sql.Date(Instant.now().toEpochMilli()));
             preparedStatement.executeUpdate();

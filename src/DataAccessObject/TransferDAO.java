@@ -31,7 +31,7 @@ public class TransferDAO{
             flag = false;
             exit = false;
             // get product
-            product = sDAO.getProductUPC(warehouseID,transferList);
+            product = sDAO.getProductUPC(warehouseID, transferList);
             // check is null then exit
             if (product == null) {
                 exit = true;

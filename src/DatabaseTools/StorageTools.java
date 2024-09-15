@@ -311,7 +311,7 @@ public class StorageTools {
     }
 
     //update the new quantity to the database by using productUPC
-    public void updateProductQuantityByProductSKU(String productUPC, String warehouseID, int quantity){
+    public void updateProductQuantityByProductSKU(int productUPC, String warehouseID, int quantity){
 
         // get Connection from the database
         Connection connection = DatabaseUtils.getConnection();
@@ -331,7 +331,7 @@ public class StorageTools {
             // input the variable from the parameter
             preparedStatement.setInt(1, quantity);
             preparedStatement.setTimestamp(2, Timestamp.from(Instant.now()));
-            preparedStatement.setString(3, productUPC);
+            preparedStatement.setInt(3, productUPC);
             preparedStatement.setString(4, warehouseID);
 
             //run the sql query
