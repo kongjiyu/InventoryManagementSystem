@@ -196,5 +196,4 @@ public class StorageDAO {
         return product;
     }
 
-
 }
