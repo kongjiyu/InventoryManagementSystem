@@ -239,7 +239,7 @@ public class WarehouseDAO {
         }
     }
 
-    public Warehouse getWarehouse(){
+    public Warehouse getWarehouseToTransfer(){
         // create the object for further uses
         Scanner scanner = new Scanner(System.in);
         WarehouseTools wt = new WarehouseTools();

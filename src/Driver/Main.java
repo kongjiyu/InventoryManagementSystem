@@ -15,6 +15,6 @@ public class Main {
     public static void main(String[] args) {
         Connection connection = DatabaseUtils.getConnection();
         TransferDAO tDAO = new TransferDAO();
-        System.out.println(tDAO.transferStock("W001"));
+        System.out.println(tDAO.distributeStock("W001"));
     }
 }

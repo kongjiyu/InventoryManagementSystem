@@ -130,9 +130,8 @@ CREATE TABLE Inventory
     RetailerID    VARCHAR(10),
     InventoryType VARCHAR(100) NOT NULL,
     InventoryTime TIMESTAMP    NOT NULL,
-    expiryDate    DATE,
     remarks       VARCHAR(200),
-    receivedBy    VARCHAR(100) NOT NULL,
+    receivedBy    VARCHAR(100),
     PRIMARY KEY (InventoryID),
     FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC),
     FOREIGN KEY (receivedBy) REFERENCES Staff (StaffID),
@@ -158,10 +157,11 @@ CREATE TABLE StockRequest
     RequestID   VARCHAR(10)  NOT NULL,
     ProductUPC      INT  NOT NULL,
     Quantity INT NOT NULL,
-    requestedBy VARCHAR(100) NOT NULL,
+    requestedBy VARCHAR(10) NOT NULL,
     warehouseID VARCHAR(10) NOT NULL,
     requestDate DATE NOT NULL,
     PRIMARY KEY (RequestID),
     FOREIGN KEY (ProductUPC) REFERENCES Product (ProductUPC),
-    FOREIGN KEY (warehouseID) REFERENCES Warehouse (WarehouseID)
-)
+    FOREIGN KEY (warehouseID) REFERENCES Warehouse (WarehouseID),
+    FOREIGN KEY (requestedBy) REFERENCES Staff (StaffID)
+);

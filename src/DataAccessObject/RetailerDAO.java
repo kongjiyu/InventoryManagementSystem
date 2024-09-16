@@ -5,6 +5,7 @@ import Driver.Utils;
 import Entity.Retailer;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class RetailerDAO {
@@ -278,5 +279,100 @@ public class RetailerDAO {
             }
         }while(option != 6);
 
+    }
+
+    public Retailer getRetailer(){
+        // Create objects for further use
+        Scanner scanner = new Scanner(System.in);
+        RetailerTools rt = new RetailerTools();
+        Retailer retailer = null;
+        int choice = 0;
+
+        // Let user choose how to search for retailer
+        do{
+            System.out.println("\n\n\n\n\n\n\n\n\n\n");
+            System.out.println("[1] Search Retailer by ID");
+            System.out.println("[2] Search Retailer by Name");
+            System.out.println("[3] List All Retailers");
+            System.out.println("[999] Exit");
+            System.out.print(" > ");
+
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input!");
+                scanner.nextLine();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                }
+                continue;
+            }
+
+            switch(choice) {
+                // Find retailer by ID
+                case 1:
+                    System.out.print("Enter Retailer ID: ");
+                    String id = scanner.nextLine();
+                    retailer = rt.getRetailerById(id);
+                    break;
+                // Find retailer by Name
+                case 2:
+                    System.out.print("Enter Retailer Name: ");
+                    String name = scanner.nextLine();
+                    retailer = rt.getRetailerByName(name);
+                    break;
+                // List all retailers
+                case 3:
+                    retailer = rt.getRetailerByList();
+                    break;
+                // Exit loop
+                case 999:
+                    return null;
+                // Invalid input
+                default:
+                    System.out.println("Invalid input!");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+
+            // Confirm retailer selection
+            if (retailer != null) {
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("Retailer Detail Confirmation");
+                System.out.println("===============================================================================================================================================================================================");
+                System.out.printf("|%-15s|%-20s|%-100s|%-20s|%-30s|\n", "Retailer ID", "Retailer Name", "Retailer Address", "Retailer Phone", "Retailer Email");
+                System.out.println("===============================================================================================================================================================================================");
+                System.out.printf("|%-15s|%-20s|%-100s|%-20s|%-30s|\n",
+                        retailer.getRetailerId(),
+                        retailer.getRetailerName(),
+                        retailer.getRetailerAddress(),
+                        retailer.getRetailerPhone(),
+                        retailer.getRetailerEmail());
+                System.out.println("===============================================================================================================================================================================================");
+
+                String confirmation;
+                do {
+                    System.out.print("Confirm this retailer? <Y/N> : ");
+                    confirmation = scanner.nextLine().trim().toUpperCase();
+
+                    if (confirmation.equals("N")) {
+                        retailer = null;
+                        break;
+                    } else if (!confirmation.equals("Y")) {
+                        System.out.println("Invalid input! Please enter Y or N.");
+                    }
+                } while (!confirmation.equals("Y") && !confirmation.equals("N"));
+            }
+        } while (retailer == null);
+
+        // Return the selected retailer
+        return retailer;
     }
 }

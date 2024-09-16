@@ -367,7 +367,9 @@ public class StorageTools {
         Connection connection = DatabaseUtils.getConnection();
         String storageID = null;
         //sql string
-        String sql = "SELECT MAX(StorageID) AS MAX_STORAGE_ID FROM storage";
+        String sql =    "SELECT MAX(StorageID) " +
+                        "AS MAX_STORAGE_ID " +
+                        "FROM storage";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
@@ -382,4 +384,149 @@ public class StorageTools {
             throw new RuntimeException(e);
         }
     }
+
+    // Check if product exists in storage (warehouse or retailer)
+    public boolean checkProductInStorage(String storageID, int productUPC, String storageType) {
+        Connection connection = DatabaseUtils.getConnection();
+        String sql = "";
+        if (storageType.equalsIgnoreCase("Warehouse")) {
+            sql =   "SELECT * " +
+                    "FROM product p " +
+                    "JOIN storage s " +
+                    "ON p.ProductUPC = s.ProductUPC " +
+                    "WHERE s.WarehouseID = ? " +
+                    "AND s.ProductUPC = ?";
+        } else if (storageType.equalsIgnoreCase("Retailer")) {
+            sql =   "SELECT * " +
+                    "FROM product p " +
+                    "JOIN storage s " +
+                    "ON p.ProductUPC = s.ProductUPC " +
+                    "WHERE s.RetailerID = ? " +
+                    "AND s.ProductUPC = ?";
+        } else {
+            throw new IllegalArgumentException("Invalid storage type.");
+        }
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, storageID);
+            preparedStatement.setInt(2, productUPC);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            return resultSet.next();
+        } catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Get product by UPC and storage ID (warehouse or retailer)
+    public Product getProductByUPCAndStorageID(int productUPC, String storageID, String storageType) {
+        Connection connection = DatabaseUtils.getConnection();
+        Product product = null;
+        String sql = "";
+        if (storageType.equalsIgnoreCase("Warehouse")) {
+            sql =   "SELECT * " +
+                    "FROM product p " +
+                    "JOIN storage s " +
+                    "ON p.ProductUPC = s.ProductUPC " +
+                    "WHERE s.ProductUPC = ? " +
+                    "AND s.WarehouseID = ?";
+        } else if (storageType.equalsIgnoreCase("Retailer")) {
+            sql = "SELECT * FROM product p JOIN storage s ON p.ProductUPC = s.ProductUPC WHERE s.ProductUPC = ? AND s.RetailerID = ?";
+        } else {
+            throw new IllegalArgumentException("Invalid storage type.");
+        }
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, productUPC);
+            preparedStatement.setString(2, storageID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                product = new Product(
+                        resultSet.getInt("ProductUPC"),
+                        resultSet.getString("ProductName"),
+                        resultSet.getString("ProductDesc"),
+                        resultSet.getString("ProductCategory"),
+                        resultSet.getDouble("ProductPrice"),
+                        resultSet.getDouble("ProductWeight"),
+                        new Dimension(
+                                resultSet.getDouble("ProductWidth"),
+                                resultSet.getDouble("ProductLength"),
+                                resultSet.getDouble("ProductHeight")
+                        ),
+                        resultSet.getInt("Quantity"),
+                        resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime()
+                );
+            } else {
+                System.out.println("Product not found in storage.");
+            }
+        } catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return product;
+    }
+
+    // Update product quantity in storage (warehouse or retailer)
+    public void updateProductQuantityByProductUPC(int productUPC, String storageID, int quantity, String storageType) {
+        Connection connection = DatabaseUtils.getConnection();
+        String sql = "";
+        if (storageType.equalsIgnoreCase("Warehouse")) {
+            sql =   "UPDATE storage s " +
+                    "JOIN product p " +
+                    "ON s.ProductUPC = p.ProductUPC " +
+                    "SET s.Quantity = ?, p.ProductUpdatedAt = ? " +
+                    "WHERE s.ProductUPC = ? " +
+                    "AND s.WarehouseID = ?";
+        } else if (storageType.equalsIgnoreCase("Retailer")) {
+            sql =   "UPDATE storage s " +
+                    "JOIN product p " +
+                    "ON s.ProductUPC = p.ProductUPC " +
+                    "SET s.Quantity = ?, p.ProductUpdatedAt = ? " +
+                    "WHERE s.ProductUPC = ? " +
+                    "AND s.RetailerID = ?";
+        } else {
+            throw new IllegalArgumentException("Invalid storage type.");
+        }
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, quantity);
+            preparedStatement.setTimestamp(2, Timestamp.from(Instant.now()));
+            preparedStatement.setInt(3, productUPC);
+            preparedStatement.setString(4, storageID);
+
+            preparedStatement.executeUpdate();
+        } catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Insert new product into storage (warehouse or retailer)
+    public void insertProductIntoStorage(String storageID, int productUPC, int quantity, String storageType) {
+        Connection connection = DatabaseUtils.getConnection();
+        String sql = "INSERT INTO storage (StorageID, ProductUPC, WarehouseID, RetailerID, Quantity) VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, getNewStorageID());
+            preparedStatement.setInt(2, productUPC);
+            if (storageType.equalsIgnoreCase("Warehouse")) {
+                preparedStatement.setString(3, storageID);
+                preparedStatement.setNull(4, Types.VARCHAR);
+            } else if (storageType.equalsIgnoreCase("Retailer")) {
+                preparedStatement.setNull(3, Types.VARCHAR);
+                preparedStatement.setString(4, storageID);
+            } else {
+                throw new IllegalArgumentException("Invalid storage type.");
+            }
+            preparedStatement.setInt(5, quantity);
+
+            preparedStatement.executeUpdate();
+        } catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
