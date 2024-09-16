@@ -242,5 +242,51 @@ public class SupplierDAO {
             scanner.nextLine();
         }
     }
+
+    public static void supplierMenu(){
+        int option = 999;
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+
+        do{
+            System.out.println("Manage Supplier");
+            System.out.println("1. Display All Supplier");
+            System.out.println("2. Search Supplier");
+            System.out.println("3. Delete Supplier");
+            System.out.println("4. Update Supplier");
+            System.out.println("5. Create New Supplier");
+            System.out.println("6. Exit");
+
+            option = Utils.getIntInput("Please select an option: ");
+            switch(option){
+                case 1:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    displayAllSuppliers();
+                    break;
+                case 2:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    searchSupplier();
+                    break;
+                case 3:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    deleteSupplier();
+                    break;
+                case 4:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    updateSupplier();
+                    break;
+                case 5:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    createSupplier();
+                    break;
+                case 6:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+                    break;
+            }
+        }while(option != 6);
+
+    }
     
 }

@@ -332,4 +332,50 @@ public class WarehouseDAO {
         // return the data
         return warehouse;
     }
+
+    public static void warehouseMenu(){
+        int option = 999;
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+
+        do{
+            System.out.println("Manage Warehouse");
+            System.out.println("1. Display All Warehouse");
+            System.out.println("2. Search Warehouse");
+            System.out.println("3. Delete Warehouse");
+            System.out.println("4. Update Warehouse");
+            System.out.println("5. Create New Warehouse");
+            System.out.println("6. Exit");
+
+            option = Utils.getIntInput("Please select an option: ");
+            switch(option){
+                case 1:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    displayAllWarehouses();
+                    break;
+                case 2:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    searchWarehouse();
+                    break;
+                case 3:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    deleteWarehouse();
+                    break;
+                case 4:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    updateWarehouse();
+                    break;
+                case 5:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    createWarehouse();
+                    break;
+                case 6:
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+                    break;
+            }
+        }while(option != 6);
+
+    }
 }
