@@ -134,13 +134,46 @@ public class ProductTools {
     }
 
     public static boolean deleteProduct(int UPC){
+        String closeForeignKeyChecks = "SET FOREIGN_KEY_CHECKS = 0;";
         String sql = "DELETE FROM Product WHERE ProductUPC = ?";
+        String openForeignKeyChecks = "SET FOREIGN_KEY_CHECKS = 1;";
+
         Connection connection = DatabaseUtils.getConnection();
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(closeForeignKeyChecks);
+            preparedStatement.execute();
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, UPC);
-            return preparedStatement.executeUpdate() > 0;
+            boolean result =  preparedStatement.executeUpdate() > 0;
+            preparedStatement = connection.prepareStatement(openForeignKeyChecks);
+            preparedStatement.execute();
+            return result;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean updateProduct(Product product){
+        String sql =    "UPDATE product " +
+                        "SET ProductName = ? , ProductDesc = ? , ProductCategory = ?, ProductPrice = ?, ProductWeight = ?, ProductWidth = ?, ProductLength = ?, ProductHeight = ?, ProductUpdatedAt = ?" +
+                        "WHERE ProductUPC = ?;";
+        Connection connection = DatabaseUtils.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setString(2, product.getDesc());
+            preparedStatement.setString(3, product.getCategory());
+            preparedStatement.setDouble(4, product.getPrice());
+            preparedStatement.setDouble(5, product.getWeight());
+            preparedStatement.setDouble(6, product.getDimension().getWidth());
+            preparedStatement.setDouble(7, product.getDimension().getLength());
+            preparedStatement.setDouble(8, product.getDimension().getHeight());
+            preparedStatement.setTimestamp(9, Timestamp.from(Instant.now()));
+            preparedStatement.setInt(10, product.getUPC());
+            preparedStatement.executeUpdate();
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

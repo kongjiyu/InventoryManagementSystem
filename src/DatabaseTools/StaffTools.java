@@ -190,7 +190,7 @@ public class StaffTools {
                             resultSet.getString("StaffEmail"),
                             resultSet.getString("StaffPhone"),
                             resultSet.getString("StaffAddress"),
-                            resultSet.getInt("AdminPrivilege") == 1,
+                            true,
                             resultSet.getInt("AdminPrivilege"),
                             resultSet.getString("WarehouseID")
                     ));

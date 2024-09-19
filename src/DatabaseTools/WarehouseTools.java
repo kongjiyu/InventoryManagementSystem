@@ -40,7 +40,10 @@ public class WarehouseTools implements WarehouseService{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, warehouse.getWarehouseId());
-
+            preparedStatement.setString(2, warehouse.getWarehouseName());
+            preparedStatement.setString(3, warehouse.getWarehouseAddress());
+            preparedStatement.setString(4, warehouse.getWarehousePhone());
+            preparedStatement.setString(5, warehouse.getWarehouseEmail());
 
             int result = preparedStatement.executeUpdate();
             if (result > 0) {
@@ -49,6 +52,26 @@ public class WarehouseTools implements WarehouseService{
             } else {
                 System.out.println("Warehouse added failed!");
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateWarehouse(Warehouse warehouse) {
+        String sql =    "UPDATE warehouse " +
+                        "SET WarehouseName = ? , WarehouseAddress = ? , WarehousePhone = ?, WarehouseEmail = ?" +
+                        "WHERE WarehouseID = ?;";
+        Connection connection = DatabaseUtils.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, warehouse.getWarehouseName());
+            preparedStatement.setString(2, warehouse.getWarehouseAddress());
+            preparedStatement.setString(3, warehouse.getWarehousePhone());
+            preparedStatement.setString(4, warehouse.getWarehouseEmail());
+            preparedStatement.setString(5, warehouse.getWarehouseId());
+
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

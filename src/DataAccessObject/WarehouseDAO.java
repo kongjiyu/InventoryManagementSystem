@@ -244,6 +244,13 @@ public class WarehouseDAO {
             option = Utils.getIntInput("Select an option to modify or type 0 to exit: ");
             switch(option){
                 case 0:
+                    WarehouseTools.updateWarehouse(warehouse);
+                    System.out.println("Update successfull!");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 1:
                     inputName(warehouse);
@@ -264,7 +271,7 @@ public class WarehouseDAO {
                     }catch (InterruptedException e){
                         e.printStackTrace();
                     }
-                    break;
+
             }
         }while(option != 0);
     }
@@ -420,7 +427,7 @@ public class WarehouseDAO {
                 System.out.println("Invalid input!");
                 scanner.nextLine();
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 }catch (InterruptedException ie) {
                     ie.printStackTrace();
                 }

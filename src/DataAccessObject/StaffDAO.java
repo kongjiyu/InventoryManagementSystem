@@ -30,6 +30,11 @@ public class StaffDAO {
 
         if (StaffTools.checkID(newStaff.getStaffID())) {
             System.out.println("Staff ID already exists! Please try another Staff ID!");
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
             return;
         }
 
@@ -39,40 +44,50 @@ public class StaffDAO {
             if (!Validator.validateUsername(newStaff.getUsername())) {
                 System.out.println("Invalid Username Format! Please try again!");
                 System.out.println("Username must contain at least one Uppercase and lowercase letters!");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         } while (!Validator.validateUsername(newStaff.getUsername()));
 
         do {
-            System.out.println("\n\n\n\n\n\n\n\n\n\n");
             System.out.print("Enter Password: ");
             newStaff.setPassword(sc.nextLine());
             if (!Validator.validatePassword(newStaff.getPassword())) {
                 System.out.println("Invalid Password");
                 System.out.println("Password must contain at least one uppercase letter, one lowercase letter, one number, " +
                         "one symbol, and be between 8 and 12 characters long.");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         } while (!Validator.validatePassword(newStaff.getPassword()));
 
         do {
-            System.out.println("\n\n\n\n\n\n\n\n\n\n");
             System.out.print("Enter Staff Malaysia IC: ");
             newStaff.setStaffIC(sc.nextLine());
 
             if(!Validator.validateIc(newStaff.getStaffIC())) {
                 System.out.println("Invalid Ic");
                 System.out.println("IC number should be between 12 digits");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         } while (!Validator.validateIc(newStaff.getStaffIC()));
 
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         System.out.print("Enter Name: ");
         newStaff.setName(sc.nextLine());
 
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         newStaff.setAge(getIntInput("Enter age: "));
 
         boolean check = false;
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         do {
 
             System.out.print("Enter Hire Date (YYYY-MM-DD): ");
@@ -81,14 +96,23 @@ public class StaffDAO {
                 if (!Validator.validateHireDate(newStaff.getHireDate().toString())) {
                     System.out.println("Invalid Hire Date");
                     System.out.println("Hire Date must be in the format YYYY-MM-DD");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                 }else {
                     check = true;
                 }
             }catch (DateTimeParseException e) {
                 System.out.println("Invalid date format! Please enter the date in the format YYYY-MM-DD.");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException ie){
+                    ie.printStackTrace();
+                }
             }
         } while (!check);
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         do {
 
             System.out.print("Enter Date of Birth (YYYY-MM-DD): ");
@@ -97,17 +121,25 @@ public class StaffDAO {
                 if (!Validator.validateDOB(newStaff.getBirthDate().toString())) {
                     System.out.println("Invalid Date of Birth");
                     System.out.println("Date of Birth must be in the format YYYY-MM-DD");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                 }else {
                     check = true;
                 }
             }catch (DateTimeParseException e) {
                 System.out.println("Invalid date format! Please enter the date in the format YYYY-MM-DD.");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException ie){
+                    ie.printStackTrace();
+                }
             }
         } while (!check);
 
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         newStaff.setSalary(Utils.getDoubleInput("Enter Salaray: "));
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         do {
 
             System.out.print("Enter Email: ");
@@ -115,28 +147,30 @@ public class StaffDAO {
             if (!Validator.validateEmail(newStaff.getEmail())) {
                 System.out.println("Invalid Email");
                 System.out.println("Email Must End With @xxxxx.com");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         } while (!Validator.validateEmail(newStaff.getEmail()));
 
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         System.out.print("Enter Phone Number: ");
         newStaff.setPhone(sc.nextLine());
 
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         System.out.print("Enter Address: ");
         newStaff.setAddress(sc.nextLine());
 
         String adminPrivilege;
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         do {
 
-            System.out.println("Is this staff an Admin? (Y/N): ");
+            System.out.print("Is this staff an Admin? (Y/N): ");
             adminPrivilege = sc.nextLine().toUpperCase();
             if (adminPrivilege.equals("Y")) {
                 newStaff.setAdmin(true);
                 String adminType;
                 do {
-
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n");
                     System.out.println("[0] Super Admin (Full access to all functions)");
                     System.out.println("[1] HR Admin (Manage Account, User Log)");
                     System.out.println("[2] Warehouse Manager (Manage Warehouse, Stock Management, Check Request Log)");
@@ -169,6 +203,11 @@ public class StaffDAO {
                             break;
                         default:
                             System.out.println("Invalid Input. Please select a valid option from 0 to 4.");
+                            try {
+                                Thread.sleep(500);
+                            }catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
                             break;
                     }
                 } while (!adminType.equals("0") && !adminType.equals("1") && !adminType.equals("2") && !adminType.equals("3") && !adminType.equals("4"));
@@ -177,6 +216,11 @@ public class StaffDAO {
                 newStaff.setAdmin(false);
             } else {
                 System.out.println("Invalid Input. Please enter 'Y' or 'N'");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         } while (!adminPrivilege.equals("Y") && !adminPrivilege.equals("N"));
 
@@ -211,6 +255,11 @@ public class StaffDAO {
                 check = true;
             }else {
                 System.out.println("Staff ID does not exist. Please try again.");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         } while(!check);
         Staff staff = StaffTools.retrieveStaff(staffID);
@@ -245,6 +294,11 @@ public class StaffDAO {
                     String username = scanner.nextLine();
                     if (!Validator.validateUsername(staff.getUsername())) {
                         System.out.println("Username Exists!");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                     }else {
                         staff.setUsername(username);
                         check = true;
@@ -259,6 +313,11 @@ public class StaffDAO {
                         System.out.println("Invalid Password");
                         System.out.println("Password must contain at least one uppercase letter, one lowercase letter, one number, " +
                                 "one symbol, and be between 8 and 12 characters long.");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                     }else {
                         staff.setPassword(password);
                         check = true;
@@ -273,6 +332,11 @@ public class StaffDAO {
                     if(!Validator.validateIc(staff.getStaffIC())) {
                         System.out.println("Invalid Ic");
                         System.out.println("IC number should be between 12 digits");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                     }
                 } while (!Validator.validateIc(staff.getStaffIC()));
             case 4:
@@ -284,6 +348,11 @@ public class StaffDAO {
                     int age = Utils.getIntInput("Enter new Age: ");
                     if (age < 0 || age > 200) {
                         System.out.println("Invalid Age!");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                     } else {
                         check = true;
                         staff.setAge(age);
@@ -301,6 +370,11 @@ public class StaffDAO {
                         if (!Validator.validateHireDate(hireDate.toString())) {
                             System.out.println("Invalid Hire Date");
                             System.out.println("Hire Date must be in the format YYYY-MM-DD");
+                            try {
+                                Thread.sleep(500);
+                            }catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
                         }else {
                             staff.setBirthDate(hireDate);
                             check = true;
@@ -308,6 +382,11 @@ public class StaffDAO {
 
                     } catch (DateTimeParseException e) {
                         System.out.println("Invalid date format! Please enter the date in the format YYYY-MM-DD.");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException ie){
+                            ie.printStackTrace();
+                        }
                     }
                 }while(!check);
                 break;
@@ -322,6 +401,11 @@ public class StaffDAO {
                         if (!Validator.validateDOB(birthDate.toString())) {
                             System.out.println("Invalid Date of Birth");
                             System.out.println("Hire Date must be in the format YYYY-MM-DD");
+                            try {
+                                Thread.sleep(500);
+                            }catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
                         }else {
                             staff.setBirthDate(birthDate);
                             check = true;
@@ -343,6 +427,11 @@ public class StaffDAO {
                     if (!Validator.validateEmail(staff.getEmail())) {
                         System.out.println("Invalid Email");
                         System.out.println("Email Must End With @xxxxx.com");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                     }
                 } while (!Validator.validateEmail(staff.getEmail()));
                 staff.setEmail(scanner.nextLine());
@@ -382,25 +471,55 @@ public class StaffDAO {
                                 case "0":
                                     staff = new Admin(staff.getStaffID(), staff.getUsername(), staff.getPassword(), staff.getStaffIC(), staff.getName(), staff.getAge(), staff.getHireDate(), staff.getBirthDate(), staff.getSalary(), staff.getEmail(), staff.getPhone(), staff.getAddress(), staff.isAdmin(), 0, staff.getWarehouseID());
                                     System.out.println("Super Admin selected.");
+                                    try {
+                                        Thread.sleep(500);
+                                    }catch (InterruptedException e){
+                                        e.printStackTrace();
+                                    }
                                     break;
                                 case "1":
                                     staff = new Admin(staff.getStaffID(), staff.getUsername(), staff.getPassword(), staff.getStaffIC(), staff.getName(), staff.getAge(), staff.getHireDate(), staff.getBirthDate(), staff.getSalary(), staff.getEmail(), staff.getPhone(), staff.getAddress(), staff.isAdmin(), 1, staff.getWarehouseID()); // Set HR Admin
                                     System.out.println("HR Admin selected.");
+                                    try {
+                                        Thread.sleep(500);
+                                    }catch (InterruptedException e){
+                                        e.printStackTrace();
+                                    }
                                     break;
                                 case "2":
                                     staff = new Admin(staff.getStaffID(), staff.getUsername(), staff.getPassword(), staff.getStaffIC(), staff.getName(), staff.getAge(), staff.getHireDate(), staff.getBirthDate(), staff.getSalary(), staff.getEmail(), staff.getPhone(), staff.getAddress(), staff.isAdmin(), 2, staff.getWarehouseID()); // Set Warehouse Manager
                                     System.out.println("Warehouse Manager selected.");
+                                    try {
+                                        Thread.sleep(500);
+                                    }catch (InterruptedException e){
+                                        e.printStackTrace();
+                                    }
                                     break;
                                 case "3":
                                     staff = new Admin(staff.getStaffID(), staff.getUsername(), staff.getPassword(), staff.getStaffIC(), staff.getName(), staff.getAge(), staff.getHireDate(), staff.getBirthDate(), staff.getSalary(), staff.getEmail(), staff.getPhone(), staff.getAddress(), staff.isAdmin(), 3, staff.getWarehouseID());; // Set Product Manager
                                     System.out.println("Product Manager selected.");
+                                    try {
+                                        Thread.sleep(500);
+                                    }catch (InterruptedException e){
+                                        e.printStackTrace();
+                                    }
                                     break;
                                 case "4":
                                     staff = new Admin(staff.getStaffID(), staff.getUsername(), staff.getPassword(), staff.getStaffIC(), staff.getName(), staff.getAge(), staff.getHireDate(), staff.getBirthDate(), staff.getSalary(), staff.getEmail(), staff.getPhone(), staff.getAddress(), staff.isAdmin(), 4, staff.getWarehouseID());; // Set Normal Staff (No admin privileges)
                                     System.out.println("Normal Staff selected.");
+                                    try {
+                                        Thread.sleep(500);
+                                    }catch (InterruptedException e){
+                                        e.printStackTrace();
+                                    }
                                     break;
                                 default:
                                     System.out.println("Invalid Input. Please select a valid option from 0 to 4.");
+                                    try {
+                                        Thread.sleep(500);
+                                    }catch (InterruptedException e){
+                                        e.printStackTrace();
+                                    }
                                     break;
                             }
                         } while (!adminType.equals("0") && !adminType.equals("1") && !adminType.equals("2") && !adminType.equals("3") && !adminType.equals("4"));
@@ -409,6 +528,11 @@ public class StaffDAO {
                         staff.setAdmin(false);
                     } else {
                         System.out.println("Invalid Input. Please enter 'Y' or 'N'");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                     }
                 } while (!adminPrivilege.equals("Y") && !adminPrivilege.equals("N"));
                 break;
@@ -423,6 +547,11 @@ public class StaffDAO {
                         staff.setWarehouseID(warehouseID);
                     }else {
                         System.out.println("Invalid Warehouse ID!");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                     }
                 }while (!check);
                 break;
@@ -438,6 +567,11 @@ public class StaffDAO {
 
         // Update the chosen field in the database
         StaffTools.updateStaff(staff);
+        try {
+            Thread.sleep(500);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
     }
 
     public static void deleteStaff() {
@@ -446,6 +580,11 @@ public class StaffDAO {
 
         if (staffList.isEmpty()) {
             System.out.println("No staff found.");
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
             return;
         }
 
@@ -511,9 +650,19 @@ public class StaffDAO {
                             }
                         }
                         System.out.println("Invalid input. Please enter a valid option.");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                 }
             } else {
                 System.out.println("Invalid input. Please enter a single character.");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         } while (!exit);
     }
@@ -524,6 +673,11 @@ public class StaffDAO {
 
         if (staffList.isEmpty()) {
             System.out.println("No staff found.");
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
             return;
         }
 
@@ -540,18 +694,18 @@ public class StaffDAO {
 
             // Display staff on the current page
             System.out.println("\n\n\n\n\n\n\n\n\n\n");
-            System.out.println("========================================================================================================================");
+            System.out.println("====================================================================================");
             System.out.printf("|%-3s|%-15s|%-20s|%-20s|%-20s|\n", "No.", "Staff ID", "Staff Name", "Position", "Warehouse ID");
 
             for (int i = startIndex; i < endIndex; i++) {
                 Staff staff = staffList.get(i);
                 String position = staff.isAdmin() ? getAdminPosition(((Admin) staff).getPrivilege()) : "Staff";  // Check if admin
-                System.out.println("========================================================================================================================");
+                System.out.println("====================================================================================");
                 System.out.printf("|%-3d|%-15s|%-20s|%-20s|%-20s|\n", count, staff.getStaffID(), staff.getName(), position, staff.getWarehouseID());
                 count++;
             }
 
-            System.out.println("========================================================================================================================");
+            System.out.println("====================================================================================");
             System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
             System.out.printf("Total staff: %d\n", totalIndex);
             System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");
@@ -577,9 +731,19 @@ public class StaffDAO {
                         break;
                     default:
                         System.out.println("Invalid input. Please enter a valid navigation option.");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                 }
             } else {
                 System.out.println("Invalid input. Please enter a single character.");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         } while (!exit);
     }
@@ -853,6 +1017,11 @@ public class StaffDAO {
                     return;
                 default:
                     System.out.print("Please try again for select");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                     break;
             }
         } while (choice != 0);
@@ -864,12 +1033,13 @@ public class StaffDAO {
         do{
             System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
             System.out.println("Manage Product");
+            System.out.println("=====================");
             System.out.println("[1] Display All Staff");
             System.out.println("[2] Add new Staff");
             System.out.println("[3] Delete Staff");
             System.out.println("[4] Update Staff");
             System.out.println("[5] Exit");
-
+            System.out.println("=====================");
             option = Utils.getIntInput("Please select an option: ");
             switch(option){
                 case 1:
