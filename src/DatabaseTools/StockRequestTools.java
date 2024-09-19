@@ -9,16 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StockRequestTools {
-    private static List<StockRequest> stockRequestLog = new ArrayList<>();
-
-    public void createStockRequest(StockRequest request) {
-        stockRequestLog.add(request);
-        System.out.println("Stock request created successfully.");
-    }
-
-    public static List<StockRequest> getStockRequestLog() {
-        return stockRequestLog;
-    }
 
     public static StockRequest stockRequestLog(String RequestID) {
         StockRequest stockRequest = null;
