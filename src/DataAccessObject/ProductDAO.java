@@ -409,12 +409,12 @@ public class ProductDAO {
         do{
             System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
             System.out.println("Manage Product");
-            System.out.println("1. Display All Product");
-            System.out.println("2. Search product");
-            System.out.println("3. Delete product");
-            System.out.println("4. Update product");
-            System.out.println("5. Create new product");
-            System.out.println("6. Exit");
+            System.out.println("[1] Display All Product");
+            System.out.println("[2] Search product");
+            System.out.println("[3] Delete product");
+            System.out.println("[4] Update product");
+            System.out.println("[5] Create new product");
+            System.out.println("[6] Exit");
 
             option = Utils.getIntInput("Please select an option: ");
             switch(option){

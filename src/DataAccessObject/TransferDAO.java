@@ -4,6 +4,8 @@ import DatabaseTools.TransferTools;
 import Entity.Product;
 import Entity.Warehouse;
 import Entity.Retailer;
+import Model.DistributionSet;
+import Model.TransferSet;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;

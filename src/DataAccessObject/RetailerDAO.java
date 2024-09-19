@@ -34,7 +34,7 @@ public class RetailerDAO {
         inputEmail(retailer);
 
         //generate id of the retailer
-        retailer.setRetailerId(generateRetailerId());
+        retailer.setRetailerId(RetailerTools.retrieveMaxRetailerID());
 
         do{
             //confirm product information
@@ -44,13 +44,12 @@ public class RetailerDAO {
             System.out.println("3. Phone: " + retailer.getRetailerPhone());
             System.out.println("4. Email: " + retailer.getRetailerEmail());
             System.out.print("Are you sure the retailer information is correct? (y/n) : ");
-            if (scanner.next().equalsIgnoreCase("y")) {
+            String choice = scanner.nextLine();
+            if (choice.equalsIgnoreCase("y")) {
                 RetailerTools.insertRetailer(retailer);
                 break;
-            } else {
-                System.out.print("Select an option to modify: ");
-                int option = scanner.nextInt();
-                scanner.nextLine();
+            } else if (choice.equalsIgnoreCase("n")) {
+                int option = Utils.getIntInput("Select an option to modify: ");
                 switch (option) {
                     case 1:
                         inputName(retailer);
@@ -66,7 +65,19 @@ public class RetailerDAO {
                         break;
                     default:
                         System.out.println("Invalid option!");
+                        try{
+                            Thread.sleep(500);
+                        }catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         break;
+                }
+            }else {
+                System.out.println("Invalid Input!");
+                try{
+                    Thread.sleep(500);
+                }catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }while(true);
@@ -97,27 +108,89 @@ public class RetailerDAO {
     }
 
     public static String generateRetailerId(){
-        String maxRetailerID = RetailerTools.retrieveMaxRetailerID().replace("S", "");
-        return "RET" + (Integer.parseInt(maxRetailerID) + 1);
+        String maxRetailerID = RetailerTools.retrieveMaxRetailerID().replace("R", "");
+        return "R" + String.format("%03d", (Integer.parseInt(maxRetailerID) + 1));
     }
 
     //Read
-    public static void displayAllRetailers(){
+    public static void displayAllRetailers() {
         ArrayList<Retailer> retailers = RetailerTools.retrieveAllRetailers();
-        if(retailers.isEmpty()){
+
+        if (retailers.isEmpty()) {
             System.out.println("No retailers found!");
-        }else{
-            System.out.println("List of all retailers:");
-            System.out.println("-----");
-            System.out.printf("%-10s|%-50s|%-50s|%-20s|%-50s\n", "ID", "Name", "Address", "Phone", "Email");
-            System.out.println("----");
-
-            for(Retailer retailer : retailers){
-                System.out.printf("%-10s|%-50s|%-50s|%-20s|%-50s\n", retailer.getRetailerId(), retailer.getRetailerName(), retailer.getRetailerAddress(), retailer.getRetailerPhone(), retailer.getRetailerEmail());
+            try{
+                Thread.sleep(500);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        } else {
+            Scanner scanner = new Scanner(System.in);
+            int totalRetailers = retailers.size();
+            final int retailersPerPage = 5;  // Number of retailers to show per page
+            int page = 0;
+            int maxPages = (totalRetailers - 1) / retailersPerPage;
+            boolean exit = false;
 
-            System.out.println("Press [enter] to continue...");
-            scanner.nextLine();
+            do {
+                int count = 1;
+                int startIndex = page * retailersPerPage;
+                int endIndex = Math.min(startIndex + retailersPerPage, totalRetailers);
+
+                // Display the current page of retailers
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("List of all retailers:");
+                System.out.println("=========================================================================================================================================================================================");
+                System.out.printf("%-10s|%-50s|%-50s|%-20s|%-50s|\n", "ID", "Name", "Address", "Phone", "Email");
+                System.out.println("=========================================================================================================================================================================================");
+
+                for (int i = startIndex; i < endIndex; i++) {
+                    Retailer retailer = retailers.get(i);
+                    System.out.printf("%-10s|%-50s|%-50s|%-20s|%-50s|\n", retailer.getRetailerId(), retailer.getRetailerName(), retailer.getRetailerAddress(), retailer.getRetailerPhone(), retailer.getRetailerEmail());
+                    count++;
+                }
+
+                System.out.println("=========================================================================================================================================================================================");
+                System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
+                System.out.printf("Total retailers: %d\n", totalRetailers);
+                System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");
+                System.out.print("Select navigation option: ");
+
+                String input = scanner.nextLine().trim();
+
+                if (input.length() == 1) {
+                    char option = input.charAt(0);
+
+                    switch (option) {
+                        case 'A':
+                        case 'a':
+                            if (page > 0) page--;
+                            break;
+                        case 'D':
+                        case 'd':
+                            if (page < maxPages) page++;
+                            break;
+                        case 'Q':
+                        case 'q':
+                            exit = true;
+                            break;
+                        default:
+                            System.out.println("Invalid input. Please enter 'A', 'D', or 'Q'.");
+                            try{
+                                Thread.sleep(500);
+                            }catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a single character.");
+                    try{
+                        Thread.sleep(500);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } while (!exit);
         }
     }
 
@@ -126,9 +199,14 @@ public class RetailerDAO {
         System.out.print("Please enter retailer ID to delete: ");
         String inputRetailerID = scanner.nextLine();
         if(RetailerTools.deleteRetailer(inputRetailerID)){
-            System.out.println("Product deleted successfully");
+            System.out.println("Retailer deleted successfully");
         }else{
-            System.out.println("Something went wrong!");
+            System.out.println("Retailer not found!\n");
+        }
+        try {
+            Thread.sleep(500);
+        }catch (InterruptedException e){
+            e.printStackTrace();
         }
     }
 
@@ -140,15 +218,15 @@ public class RetailerDAO {
         String retailerID = scanner.nextLine();
         Retailer retailer = RetailerTools.retrieveRetailer(retailerID);
         if(retailer == null){
-            System.out.println("Product not found!");
+            return;
         }
 
         do{
             System.out.println("Retailer information:");
-            System.out.println("1. Name: " + retailer.getRetailerName());
-            System.out.println("2. Address: " + retailer.getRetailerAddress());
-            System.out.println("3. Phone: " + retailer.getRetailerPhone());
-            System.out.println("4. Email: " + retailer.getRetailerEmail());
+            System.out.println("[1] Name: " + retailer.getRetailerName());
+            System.out.println("[2] Address: " + retailer.getRetailerAddress());
+            System.out.println("[3] Phone: " + retailer.getRetailerPhone());
+            System.out.println("[4] Email: " + retailer.getRetailerEmail());
             System.out.println();
             option = Utils.getIntInput("Select an option to modify or type 0 to exit: ");
             switch(option){
@@ -168,6 +246,11 @@ public class RetailerDAO {
                     break;
                 default:
                     System.out.println("Invalid option!");
+                    try{
+                        Thread.sleep(500);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }while(option != 0);
@@ -179,14 +262,12 @@ public class RetailerDAO {
         String searchValue = "";
 
         System.out.println("Search Retailer By:");
-        System.out.println("1. ID");
-        System.out.println("2. Name");
-        System.out.println("3. Address");
-        System.out.println("4. Phone");
-        System.out.println("5. Email");
-        System.out.print("Select an option (1-5): ");
-
-        int option = Utils.getIntInput("");
+        System.out.println("[1] ID");
+        System.out.println("[2] Name");
+        System.out.println("[3] Address");
+        System.out.println("[4] Phone");
+        System.out.println("[5] Email");
+        int option = Utils.getIntInput("Select an option (1-5): ");
 
         switch (option) {
             case 1:
@@ -211,6 +292,11 @@ public class RetailerDAO {
                 break;
             default:
                 System.out.println("Invalid option!");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
                 return;
         }
 
@@ -221,33 +307,91 @@ public class RetailerDAO {
         if (retailers.isEmpty()) {
             System.out.println("No retailers found!");
         } else {
-            System.out.println("Search Results:");
-            System.out.printf("%-10s | %-20s | %-30s | %-15s | %-25s\n", "ID", "Name", "Address", "Phone", "Email");
-            System.out.println("-------------------------------------------------------------------------------------------");
-            for (Retailer retailer : retailers) {
-                System.out.printf("%-10s | %-20s | %-30s | %-15s | %-25s\n",
-                        retailer.getRetailerId(),
-                        retailer.getRetailerName(),
-                        retailer.getRetailerAddress(),
-                        retailer.getRetailerPhone(),
-                        retailer.getRetailerEmail());
-            }
+            int totalRetailers = retailers.size();
+            final int retailersPerPage = 5;  // Number of retailers to show per page
+            int page = 0;
+            int maxPages = (totalRetailers - 1) / retailersPerPage;
+            boolean exit = false;
+
+            do {
+                int count = 1;
+                int startIndex = page * retailersPerPage;
+                int endIndex = Math.min(startIndex + retailersPerPage, totalRetailers);
+
+                // Display the current page of retailers
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("Search Results:");
+                System.out.println("=========================================================================================================================================================================================");
+                System.out.printf("%-10s|%-50s|%-50s|%-20s|%-50s|\n", "ID", "Name", "Address", "Phone", "Email");
+                System.out.println("=========================================================================================================================================================================================");
+
+                for (int i = startIndex; i < endIndex; i++) {
+                    Retailer retailer = retailers.get(i);
+                    System.out.printf("%-10s|%-50s|%-50s|%-20s|%-50s|\n", retailer.getRetailerId(), retailer.getRetailerName(), retailer.getRetailerAddress(), retailer.getRetailerPhone(), retailer.getRetailerEmail());
+                    count++;
+                }
+
+                System.out.println("=========================================================================================================================================================================================");
+                System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
+                System.out.printf("Total retailers: %d\n", totalRetailers);
+                System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");
+                System.out.print("Select navigation option: ");
+
+                String input = scanner.nextLine().trim();
+
+                if (input.length() == 1) {
+                    char choice = input.charAt(0);
+
+                    switch (choice) {
+                        case 'A':
+                        case 'a':
+                            if (page > 0) page--;
+                            break;
+                        case 'D':
+                        case 'd':
+                            if (page < maxPages) page++;
+                            break;
+                        case 'Q':
+                        case 'q':
+                            exit = true;
+                            break;
+                        default:
+                            System.out.println("Invalid input. Please enter 'A', 'D', or 'Q'.");
+                            try{
+                                Thread.sleep(500);
+                            }catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a single character.");
+                    try{
+                        Thread.sleep(500);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } while (!exit);
         }
+
     }
 
     public static void retailerMenu(){
         int option = 999;
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+
 
         do{
+            System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
             System.out.println("Manage Retailer");
-            System.out.println("1. Display All Retailer");
-            System.out.println("2. Search Retailer");
-            System.out.println("3. Delete Retailer");
-            System.out.println("4. Update Retailer");
-            System.out.println("5. Create New Retailer");
-            System.out.println("6. Exit");
-
+            System.out.println("========================");
+            System.out.println("[1] Display All Retailer");
+            System.out.println("[2] Search Retailer");
+            System.out.println("[3] Delete Retailer");
+            System.out.println("[4] Update Retailer");
+            System.out.println("[5] Create New Retailer");
+            System.out.println("[6] Exit");
+            System.out.println("========================");
             option = Utils.getIntInput("Please select an option: ");
             switch(option){
                 case 1:
@@ -275,6 +419,11 @@ public class RetailerDAO {
                     break;
                 default:
                     System.out.println("Invalid option!");
+                    try{
+                        Thread.sleep(500);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }while(option != 6);

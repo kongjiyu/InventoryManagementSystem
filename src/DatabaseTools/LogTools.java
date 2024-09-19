@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public class LogTools {
     public static void insertLog(String staffID){
-        String sql = "INSERT INTO log (Time, staff_id) VALUES (?,?)";
+        String sql = "INSERT INTO log (Time, StaffID) VALUES (?,?)";
 
         Connection connection = DatabaseUtils.getConnection();
         try {

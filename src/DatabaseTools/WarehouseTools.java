@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class WarehouseTools {
+public class WarehouseTools implements WarehouseService{
     public static String retrieveMaxWarehouseID(){
         String sql = "SELECT MAX(WarehouseID) FROM Warehouse";
 
@@ -78,13 +78,21 @@ public class WarehouseTools {
     }
 
     public static boolean deleteWarehouse(String warehouseID) {
-        String sql = "DELETE FROM Warehouse WHERE WarehouseID = ?";
+        String closeForeignKeyChecks = "SET FOREIGN_KEY_CHECKS = 0;";
+        String OpenForeignKeyChecks = "SET FOREIGN_KEY_CHECKS = 1;";
+        String sql = "DELETE FROM Warehouse WHERE WarehouseID = ?;";
         Connection connection = DatabaseUtils.getConnection();
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(closeForeignKeyChecks);
+            preparedStatement.execute();
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, warehouseID);
-            return preparedStatement.executeUpdate() > 0;
+            boolean result = preparedStatement.executeUpdate() > 0;
+            preparedStatement = connection.prepareStatement(OpenForeignKeyChecks);
+            preparedStatement.execute();
+            return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -399,5 +407,33 @@ public class WarehouseTools {
             } while (!exit);
         }
         return warehouse;
+    }
+
+    public static boolean isWarehouseIDExists(String warehouseID) {
+        // SQL query to check if the warehouseID exists in the Warehouse table
+        String sql = "SELECT 1 FROM Warehouse WHERE WarehouseID = ?";
+
+        // Establish the database connection
+        Connection connection = DatabaseUtils.getConnection();  // Assume DatabaseUtils provides a connection to the database
+
+        try {
+            // Prepare the SQL statement
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, warehouseID);  // Set the warehouseID parameter
+
+            // Execute the query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // If a record is found, return true, otherwise false
+            if (resultSet.next()) {
+                return true;  // WarehouseID exists
+            } else {
+                return false;  // WarehouseID does not exist
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("An error occurred while checking the WarehouseID.");
+        }
     }
 }

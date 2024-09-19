@@ -1,5 +1,6 @@
 package DataAccessObject;
 
+import DatabaseTools.StaffTools;
 import DatabaseTools.StockRequestTools;
 import Entity.StockRequest;
 
@@ -14,6 +15,7 @@ public class StockRequestDAO {
         String continueEntering;
 
         do {
+            System.out.println("\n\n\n\n\n\n\n\n\n\n");
             System.out.println("Enter Stock Request Details");
 
             StockRequest request = new StockRequest();
@@ -43,9 +45,15 @@ public class StockRequestDAO {
             } while (quantity <= 0);
             request.setQuantity(quantity);
 
-            System.out.print("Enter Requester Name: ");
-            String requestedBy = scanner.nextLine();
-            request.setRequestBy(requestedBy);
+
+            do {
+                System.out.print("Enter Requester ID: ");
+                request.setRequestBy(scanner.nextLine());
+                if (!StaffTools.checkID(request.getRequestBy())){
+                    System.out.println("Invalid Staff ID!");
+                    request.setRequestBy(null);
+                }
+            }while (request.getRequestBy() == null);
 
             String warehouseId;
             do {

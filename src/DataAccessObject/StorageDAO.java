@@ -5,8 +5,8 @@ import java.util.*;
 import DatabaseTools.ProductTools;
 import DatabaseTools.StorageTools;
 import Entity.Product;
+import Model.TransferSet;
 
-import static DatabaseTools.ProductTools.retrieveProduct;
 import static Driver.Utils.getIntInput;
 
 public class StorageDAO {
@@ -60,7 +60,7 @@ public class StorageDAO {
                     break;
                 case 2:
                     //search by product SKU
-                    int productUPC = getIntInput("Enter Product UPC");
+                    int productUPC = getIntInput("Enter Product UPC: ");
                     // set product when get the product
                     product = st.getProductByUPCANDWarehouseID(productUPC, warehouseID);
                     break;

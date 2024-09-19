@@ -3,26 +3,26 @@ package Entity;
 import java.time.LocalDate;
 
 public class Staff {
-    private String staffID;
-    private String username;
-    private String password;
-    private String staffIC;
-    private String name;
-    private int age;
-    private String department;
-    private LocalDate hireDate;
-    private LocalDate birthDate;
-    private double salary;
-    private String email;
-    private String phone;
-    private String address;
-    private boolean isAdmin;
+    protected String staffID;
+    protected String username;
+    protected String password;
+    protected String staffIC;
+    protected String name;
+    protected int age;
+    protected LocalDate hireDate;
+    protected LocalDate birthDate;
+    protected double salary;
+    protected String email;
+    protected String phone;
+    protected String address;
+    protected boolean isAdmin;
+    protected String warehouseID;
 
     public Staff() {
 
     }
 
-    public Staff(String staffID, String username, String password, String staffIC, String name, int age, LocalDate hireDate, LocalDate birthDate, double salary, String email, String phone, String address, boolean isAdmin) {
+    public Staff(String staffID, String username, String password, String staffIC, String name, int age, LocalDate hireDate, LocalDate birthDate, double salary, String email, String phone, String address, boolean isAdmin, String warehouseID) {
         this.staffID = staffID;
         this.username = username;
         this.password = password;
@@ -36,6 +36,7 @@ public class Staff {
         this.phone = phone;
         this.address = address;
         this.isAdmin = isAdmin;
+        this.warehouseID = warehouseID;
     }
 
     public String getStaffID() {
@@ -85,10 +86,6 @@ public class Staff {
     public void setAge(int age) {
         this.age = age;
     }
-
-    public String getDepartment() { return department; }
-
-    public void setDepartment(String department) { this.department = department; }
 
     public LocalDate getHireDate() {
         return hireDate;
@@ -144,5 +141,13 @@ public class Staff {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public String getWarehouseID() {
+        return warehouseID;
+    }
+
+    public void setWarehouseID(String warehouseID) {
+        this.warehouseID = warehouseID;
     }
 }
