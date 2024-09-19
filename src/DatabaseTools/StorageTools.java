@@ -1,7 +1,8 @@
 package DatabaseTools;
 
 import DataAccessObject.TransferDAO;
-import DataAccessObject.TransferSet;
+import Entity.Storage;
+import Model.TransferSet;
 import Database.DatabaseUtils;
 import Entity.Product;
 import Model.Dimension;
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.time.Instant;
 
 
-public class StorageTools {
+public class StorageTools implements StorageService {
 
     // get the Product List by insert Warehouse ID
     public List<Product> getProductListByWarehouseID(String warehouseID) {
@@ -184,6 +185,11 @@ public class StorageTools {
 
         if (productList.isEmpty()) {
             System.out.println("Product not found!");
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return null;
         } else if (productList.size() == 1) {
             return productList.get(0);
@@ -258,7 +264,7 @@ public class StorageTools {
         }
     }
 
-    // get product by Product SKU
+    // get product by Product UPC
     public Product getProductByUPCANDWarehouseID(int productUPC, String WarehouseID) {
         // get connection with database
         Connection connection = DatabaseUtils.getConnection();

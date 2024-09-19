@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class RetailerTools {
+public class RetailerTools implements RetailerService{
 
     public static String retrieveMaxRetailerID(){
         String sql = "SELECT MAX(RetailerID) FROM Retailer";
@@ -36,6 +36,7 @@ public class RetailerTools {
         }
     }
 
+
     public static void insertRetailer(Retailer retailer) {
         String sql = "INSERT INTO Retailer VALUES (?, ?, ?, ?, ?)";
         Connection connection = DatabaseUtils.getConnection();
@@ -52,8 +53,18 @@ public class RetailerTools {
             if (result > 0) {
                 System.out.println("Retailer added successfully!");
                 System.out.println("Retailer ID: " + retailer.getRetailerId());
+                try{
+                    Thread.sleep(500);
+                }catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             } else {
                 System.out.println("Failed to add retailer!");
+                try{
+                    Thread.sleep(500);
+                }catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -85,13 +96,20 @@ public class RetailerTools {
     }
 
     public static boolean deleteRetailer(String retailerID) {
+        String CloseForeignKeyCheck = "SET FOREIGN_KEY_CHECKS = 0";
+        String OpenForeignKeyCheck = "SET FOREIGN_KEY_CHECKS = 1;";
         String sql = "DELETE FROM Retailer WHERE RetailerID = ?";
         Connection connection = DatabaseUtils.getConnection();
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(CloseForeignKeyCheck);
+            preparedStatement.execute();
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, retailerID);
-            return preparedStatement.executeUpdate() > 0;
+            boolean changes =  preparedStatement.executeUpdate() > 0;
+            preparedStatement = connection.prepareStatement(OpenForeignKeyCheck);
+            preparedStatement.execute();
+            return changes;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -175,7 +193,7 @@ public class RetailerTools {
         if (retailerList.isEmpty()) {
             System.out.println("No retailers found!");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException ie) {
                 throw new RuntimeException(ie);
             }
@@ -309,7 +327,7 @@ public class RetailerTools {
         if (retailerList.isEmpty()) {
             System.out.println("No retailers found!");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException ie) {
                 throw new RuntimeException(ie);
             }

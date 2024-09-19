@@ -22,23 +22,6 @@ DROP TABLE IF EXISTS Purchase;
 DROP TABLE IF EXISTS Product;
 DROP TABLE IF EXISTS Supplier;
 
-CREATE TABLE Staff
-(
-    StaffID        VARCHAR(10)   NOT NULL,
-    StaffUsername  VARCHAR(20)   NOT NULL,
-    Password       VARCHAR(100)  NOT NULL,
-    StaffIC        VARCHAR(20)   NOT NULL,
-    StaffName      VARCHAR(100)  NOT NULL,
-    StaffAge       DECIMAL(3)    NOT NULL,
-    StaffHireDate  DATE          NOT NULL,
-    StaffBirthDate DATE          NOT NULL,
-    StaffSalary    DECIMAL(7, 2) NOT NULL,
-    StaffEmail     VARCHAR(100)  NOT NULL,
-    StaffPhone     VARCHAR(20)   NOT NULL,
-    StaffAddress   VARCHAR(100)  NOT NULL,
-    AdminPrivilege DECIMAL(1)    ,
-    PRIMARY KEY (StaffID)
-);
 
 CREATE TABLE Retailer
 (
@@ -59,6 +42,27 @@ CREATE TABLE Warehouse
     WarehouseEmail VARCHAR(100) NOT NULL,
     PRIMARY KEY (WarehouseID)
 );
+
+CREATE TABLE Staff
+(
+    StaffID        VARCHAR(10)   NOT NULL,
+    StaffUsername  VARCHAR(20)   NOT NULL,
+    Password       VARCHAR(100)  NOT NULL,
+    StaffIC        VARCHAR(20)   NOT NULL,
+    StaffName      VARCHAR(100)  NOT NULL,
+    StaffAge       DECIMAL(3)    NOT NULL,
+    StaffHireDate  DATE          NOT NULL,
+    StaffBirthDate DATE          NOT NULL,
+    StaffSalary    DECIMAL(7, 2) NOT NULL,
+    StaffEmail     VARCHAR(100)  NOT NULL,
+    StaffPhone     VARCHAR(20)   NOT NULL,
+    StaffAddress   VARCHAR(100)  NOT NULL,
+    AdminPrivilege DECIMAL(1),
+    WarehouseID    VARCHAR(10) NOT NULL,
+    PRIMARY KEY (StaffID),
+    FOREIGN KEY (WarehouseID) REFERENCES Warehouse (WarehouseID)
+);
+
 
 CREATE TABLE Product
 (

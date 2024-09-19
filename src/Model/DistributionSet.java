@@ -1,4 +1,4 @@
-package DataAccessObject;
+package Model;
 
 public class DistributionSet {
     private String warehouseID;

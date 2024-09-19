@@ -39,15 +39,16 @@ public class WarehouseDAO {
         do{
             //confirm product information
             System.out.println("Warehouse information:");
-            System.out.println("1. Name: " + warehouse.getWarehouseName());
-            System.out.println("2. Address: " + warehouse.getWarehouseAddress());
-            System.out.println("3. Phone: " + warehouse.getWarehousePhone());
-            System.out.println("4. Email: " + warehouse.getWarehouseEmail());
+            System.out.println("[1] Name: " + warehouse.getWarehouseName());
+            System.out.println("[2] Address: " + warehouse.getWarehouseAddress());
+            System.out.println("[3] Phone: " + warehouse.getWarehousePhone());
+            System.out.println("[4] Email: " + warehouse.getWarehouseEmail());
             System.out.print("Are you sure the warehouse information is correct? (y/n) : ");
-            if (scanner.next().equalsIgnoreCase("y")) {
+            String choice = scanner.nextLine();
+            if (choice.equalsIgnoreCase("y")) {
                 WarehouseTools.insertWarehouse(warehouse);
                 break;
-            } else {
+            } else if (choice.equalsIgnoreCase("n")) {
                 System.out.print("Select an option to modify: ");
                 int option = scanner.nextInt();
                 scanner.nextLine();
@@ -66,7 +67,19 @@ public class WarehouseDAO {
                         break;
                     default:
                         System.out.println("Invalid option!");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                         break;
+                }
+            }else {
+                System.out.println("Invalid Input!");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
                 }
             }
         }while(true);
@@ -75,50 +88,113 @@ public class WarehouseDAO {
     public static void inputName(Warehouse warehouse){
         System.out.println();
         System.out.print("Please enter warehouse name: ");
-        String warehouseName = scanner.nextLine();
+        warehouse.setWarehouseName(scanner.nextLine());
     }
 
     public static void inputAddress(Warehouse warehouse){
         System.out.println();
         System.out.print("Please enter warehouse address: ");
-        String warehouseAddress = scanner.nextLine();
+        warehouse.setWarehouseAddress(scanner.nextLine());
     }
 
     public static void inputPhone(Warehouse warehouse){
         System.out.println();
         System.out.print("Please enter warehouse phone number: ");
-        String warehousePhoneNumber = scanner.nextLine();
+        warehouse.setWarehousePhone(scanner.nextLine());
     }
 
     public static void inputEmail(Warehouse warehouse){
         System.out.println();
         System.out.print("Please enter warehouse email: ");
-        String warehouseEmail = scanner.nextLine();
+        warehouse.setWarehouseEmail(scanner.nextLine());
     }
 
     public static String generateWarehouseId(){
-        String maxWarehouseID = WarehouseTools.retrieveMaxWarehouseID().replace("S", "");
+        String maxWarehouseID = WarehouseTools.retrieveMaxWarehouseID().replace("W", "");
         return "W" + (Integer.parseInt(maxWarehouseID) + 1);
     }
 
     //Read
     public static void displayAllWarehouses(){
         ArrayList<Warehouse> warehouses = WarehouseTools.retrieveAllWarehouses();
-        if(warehouses.isEmpty()){
+
+        if (warehouses.isEmpty()) {
             System.out.println("No warehouses found!");
-        }else{
-            System.out.println("List of all warehouses:");
-            System.out.println("-----");
-            System.out.printf("%-10s|%-50s|%-50s|%-20s|%-50s\n", "ID", "Name", "Address", "Phone", "Email");
-            System.out.println("----");
-
-            for(Warehouse warehouse : warehouses){
-                System.out.printf("%-10s|%-50s|%-50s|%-20s|%-50s\n", warehouse.getWarehouseId(), warehouse.getWarehouseName(), warehouse.getWarehouseAddress(), warehouse.getWarehousePhone(), warehouse.getWarehouseEmail());
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException e){
+                e.printStackTrace();
             }
+        } else {
+            Scanner scanner = new Scanner(System.in);
+            int totalWarehouses = warehouses.size();
+            final int warehousesPerPage = 5;  // Number of warehouses to show per page
+            int page = 0;
+            int maxPages = (totalWarehouses - 1) / warehousesPerPage;
+            boolean exit = false;
 
-            System.out.println("Press [enter] to continue...");
-            scanner.nextLine();
+            do {
+                int count = 1;
+                int startIndex = page * warehousesPerPage;
+                int endIndex = Math.min(startIndex + warehousesPerPage, totalWarehouses);
+
+                // Display the current page of warehouses
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("List of all warehouses:");
+                System.out.println("=========================================================================================================================================================================================");
+                System.out.printf("%-10s|%-50s|%-50s|%-20s|%-50s|\n", "ID", "Name", "Address", "Phone", "Email");
+                System.out.println("=========================================================================================================================================================================================");
+
+                for (int i = startIndex; i < endIndex; i++) {
+                    Warehouse warehouse = warehouses.get(i);
+                    System.out.printf("%-10s|%-50s|%-50s|%-20s|%-50s|\n", warehouse.getWarehouseId(), warehouse.getWarehouseName(), warehouse.getWarehouseAddress(), warehouse.getWarehousePhone(), warehouse.getWarehouseEmail());
+                    count++;
+                }
+
+                System.out.println("=========================================================================================================================================================================================");
+                System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
+                System.out.printf("Total warehouses: %d\n", totalWarehouses);
+                System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");
+                System.out.print("Select navigation option: ");
+
+                String input = scanner.nextLine().trim();
+
+                if (input.length() == 1) {
+                    char option = input.charAt(0);
+
+                    switch (option) {
+                        case 'A':
+                        case 'a':
+                            if (page > 0) page--;
+                            break;
+                        case 'D':
+                        case 'd':
+                            if (page < maxPages) page++;
+                            break;
+                        case 'Q':
+                        case 'q':
+                            exit = true;
+                            break;
+                        default:
+                            System.out.println("Invalid input. Please enter 'A', 'D', or 'Q'.");
+                            try{
+                                Thread.sleep(500);
+                            }catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a single character.");
+                    try{
+                        Thread.sleep(500);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } while (!exit);
         }
+
     }
 
     //Delete
@@ -127,8 +203,18 @@ public class WarehouseDAO {
         String inputWarehouseID = scanner.nextLine();
         if(WarehouseTools.deleteWarehouse(inputWarehouseID)){
             System.out.println("Product deleted successfully");
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
         }else{
-            System.out.println("Something went wrong!");
+            System.out.println("Warehouse Not found!");
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -140,19 +226,31 @@ public class WarehouseDAO {
         String warehouseID = scanner.nextLine();
         Warehouse warehouse = WarehouseTools.retrieveWarehouse(warehouseID);
         if(warehouse == null){
-            System.out.println("Product not found!");
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return;
         }
 
         do{
             System.out.println("Warehouse information:");
-            System.out.println("1. Name: " + warehouse.getWarehouseName());
-            System.out.println("2. Address: " + warehouse.getWarehouseAddress());
-            System.out.println("3. Phone: " + warehouse.getWarehousePhone());
-            System.out.println("4. Email: " + warehouse.getWarehouseEmail());
+            System.out.println("[1] Name: " + warehouse.getWarehouseName());
+            System.out.println("[2] Address: " + warehouse.getWarehouseAddress());
+            System.out.println("[3] Phone: " + warehouse.getWarehousePhone());
+            System.out.println("[4] Email: " + warehouse.getWarehouseEmail());
             System.out.println();
             option = Utils.getIntInput("Select an option to modify or type 0 to exit: ");
             switch(option){
                 case 0:
+                    WarehouseTools.updateWarehouse(warehouse);
+                    System.out.println("Update successfull!");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 1:
                     inputName(warehouse);
@@ -168,7 +266,12 @@ public class WarehouseDAO {
                     break;
                 default:
                     System.out.println("Invalid option!");
-                    break;
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+
             }
         }while(option != 0);
     }
@@ -180,14 +283,13 @@ public class WarehouseDAO {
         String searchValue = "";
 
         System.out.println("Search Warehouse By:");
-        System.out.println("1. ID");
-        System.out.println("2. Name");
-        System.out.println("3. Address");
-        System.out.println("4. Phone");
-        System.out.println("5. Email");
-        System.out.print("Select an option (1-5): ");
+        System.out.println("[1] ID");
+        System.out.println("[2] Name");
+        System.out.println("[3] Address");
+        System.out.println("[4] Phone");
+        System.out.println("[5] Email");
 
-        int option = Utils.getIntInput("");
+        int option = Utils.getIntInput("Select an option (1-5): ");
 
         switch (option) {
             case 1:
@@ -212,6 +314,11 @@ public class WarehouseDAO {
                 break;
             default:
                 System.out.println("Invalid option!");
+                try{
+                    Thread.sleep(500);
+                }catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 return;
         }
 
@@ -221,21 +328,81 @@ public class WarehouseDAO {
 
         if (warehouses.isEmpty()) {
             System.out.println("No warehouses found!");
-        } else {
-            System.out.println("Search Results:");
-            System.out.printf("%-10s | %-20s | %-30s | %-15s | %-25s\n", "ID", "Name", "Address", "Phone", "Email");
-            System.out.println("-------------------------------------------------------------------------------------------");
-            for (Warehouse warehouse : warehouses) {
-                System.out.printf("%-10s | %-20s | %-30s | %-15s | %-25s\n",
-                        warehouse.getWarehouseId(),
-                        warehouse.getWarehouseName(),
-                        warehouse.getWarehouseAddress(),
-                        warehouse.getWarehousePhone(),
-                        warehouse.getWarehouseEmail());
+            try{
+                Thread.sleep(500);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        } else {
+            int totalWarehouses = warehouses.size();
+            final int warehousesPerPage = 5;  // Number of warehouses to show per page
+            int page = 0;
+            int maxPages = (totalWarehouses - 1) / warehousesPerPage;
+            boolean exit = false;
 
-            System.out.println("Press [enter] to continue...");
-            scanner.nextLine();
+            do {
+                int startIndex = page * warehousesPerPage;
+                int endIndex = Math.min(startIndex + warehousesPerPage, totalWarehouses);
+
+                // Display the current page of search results
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("Search Results:");
+                System.out.println("=========================================================================================================================================================================================");
+                System.out.printf("%-10s | %-50s | %-50s | %-20s | %-50s |\n", "ID", "Name", "Address", "Phone", "Email");
+                System.out.println("=========================================================================================================================================================================================");
+
+                for (int i = startIndex; i < endIndex; i++) {
+                    Warehouse warehouse = warehouses.get(i);
+                    System.out.printf("%-10s | %-50s | %-50s | %-20s | %-50s |\n",
+                            warehouse.getWarehouseId(),
+                            warehouse.getWarehouseName(),
+                            warehouse.getWarehouseAddress(),
+                            warehouse.getWarehousePhone(),
+                            warehouse.getWarehouseEmail());
+                }
+
+                System.out.println("=========================================================================================================================================================================================");
+                System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
+                System.out.printf("Total warehouses: %d\n", totalWarehouses);
+                System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");
+                System.out.print("Select navigation option: ");
+
+                String input = scanner.nextLine().trim();
+
+                if (input.length() == 1) {
+                    char userInput = input.charAt(0);
+
+                    switch (userInput) {
+                        case 'A':
+                        case 'a':
+                            if (page > 0) page--;
+                            break;
+                        case 'D':
+                        case 'd':
+                            if (page < maxPages) page++;
+                            break;
+                        case 'Q':
+                        case 'q':
+                            exit = true;
+                            break;
+                        default:
+                            System.out.println("Invalid input. Please enter 'A', 'D', or 'Q'.");
+                            try{
+                                Thread.sleep(500);
+                            }catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a single character.");
+                    try{
+                        Thread.sleep(500);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } while (!exit);
         }
     }
 
@@ -260,7 +427,7 @@ public class WarehouseDAO {
                 System.out.println("Invalid input!");
                 scanner.nextLine();
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 }catch (InterruptedException ie) {
                     ie.printStackTrace();
                 }
@@ -335,16 +502,18 @@ public class WarehouseDAO {
 
     public static void warehouseMenu(){
         int option = 999;
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
 
         do{
+            System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
             System.out.println("Manage Warehouse");
-            System.out.println("1. Display All Warehouse");
-            System.out.println("2. Search Warehouse");
-            System.out.println("3. Delete Warehouse");
-            System.out.println("4. Update Warehouse");
-            System.out.println("5. Create New Warehouse");
-            System.out.println("6. Exit");
+            System.out.println("=========================");
+            System.out.println("[1] Display All Warehouse");
+            System.out.println("[2] Search Warehouse");
+            System.out.println("[3] Delete Warehouse");
+            System.out.println("[4] Update Warehouse");
+            System.out.println("[5] Create New Warehouse");
+            System.out.println("[6] Exit");
+            System.out.println("=========================");
 
             option = Utils.getIntInput("Please select an option: ");
             switch(option){
@@ -373,6 +542,11 @@ public class WarehouseDAO {
                     break;
                 default:
                     System.out.println("Invalid option!");
+                    try{
+                        Thread.sleep(500);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }while(option != 6);

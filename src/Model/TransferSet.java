@@ -1,4 +1,4 @@
-package DataAccessObject;
+package Model;
 
 public class TransferSet{
     private String firstWarehouseID;
@@ -6,7 +6,7 @@ public class TransferSet{
     private int ProductUPC;
     private int Quantity;
 
-    TransferSet(String firstWarehouseID, String secondWarehouseID, int ProductUPC, int Quantity) {
+    public TransferSet(String firstWarehouseID, String secondWarehouseID, int ProductUPC, int Quantity) {
         this.firstWarehouseID = firstWarehouseID;
         this.secondWarehouseID = secondWarehouseID;
         this.ProductUPC = ProductUPC;

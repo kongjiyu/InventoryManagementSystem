@@ -2,7 +2,7 @@ package DataAccessObject;
 
 import java.util.Scanner;
 
-public class PaymentDAO {
+public class  PaymentDAO {
     static Scanner scanner = new Scanner(System.in);
 
     public boolean payByCash(double amount) {

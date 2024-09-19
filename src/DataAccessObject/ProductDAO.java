@@ -36,19 +36,20 @@ public class ProductDAO {
         do{
             //confirm product information
             System.out.println("Product information:");
-            System.out.println("1. Name: " + product.getName());
-            System.out.println("2. Description: " + product.getDesc());
-            System.out.println("3. Category: " + product.getCategory());
-            System.out.println("4. Price: " + product.getPrice());
-            System.out.println("5. Weight: " + product.getWeight());
-            System.out.println("6. Dimension: ");
+            System.out.println("[1] Name: " + product.getName());
+            System.out.println("[2] Description: " + product.getDesc());
+            System.out.println("[3] Category: " + product.getCategory());
+            System.out.println("[4] Price: " + product.getPrice());
+            System.out.println("[5] Weight: " + product.getWeight());
+            System.out.println("[6] Dimension: ");
             System.out.println(product.getDimension().toString());
             System.out.println();
             System.out.print("Are you sure the product information is correct? (y/n) : ");
-            if (scanner.next().equalsIgnoreCase("y")) {
+            String answer = scanner.nextLine();
+            if (answer.equalsIgnoreCase("y")) {
                 ProductTools.insertProduct(product);
                 break;
-            } else {
+            } else if (answer.equalsIgnoreCase("n")) {
                 System.out.print("Select an option to modify: ");
                 int option = scanner.nextInt();
                 scanner.nextLine();
@@ -73,7 +74,19 @@ public class ProductDAO {
                         break;
                     default:
                         System.out.println("Invalid option!");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                         break;
+                }
+            }else {
+                System.out.println("Invalid input!");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
                 }
             }
         }while(true);
@@ -119,6 +132,11 @@ public class ProductDAO {
                         //out of range
                     } else if (categoryIndex < 0 || categoryIndex > categories.size()) {
                         System.out.println("Invalid input!");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException ie){
+                            ie.printStackTrace();
+                        }
 
                         //set category
                     } else {
@@ -129,6 +147,11 @@ public class ProductDAO {
                     //invalid input(not a number)
                     System.out.println("Invalid input!");
                     System.out.println();
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException ie){
+                        ie.printStackTrace();
+                    }
                 }
             } while (true);
         } else {
@@ -147,11 +170,21 @@ public class ProductDAO {
                 scanner.nextLine();
                 if (product.getPrice() < 0) {
                     System.out.println("Invalid input!");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException ie){
+                        ie.printStackTrace();
+                    }
                 } else {
                     break;
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input!");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException ie){
+                    ie.printStackTrace();
+                }
             }
         } while (true);
     }
@@ -165,11 +198,21 @@ public class ProductDAO {
                 scanner.nextLine();
                 if (product.getWeight() < 0) {
                     System.out.println("Invalid input!");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                 } else {
                     break;
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input!");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException ie){
+                    ie.printStackTrace();
+                }
             }
         } while (true);
     }
@@ -187,11 +230,21 @@ public class ProductDAO {
                 //validate length
                 if (product.getDimension().getLength() < 0) {
                     System.out.println("Invalid input!");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException ie){
+                        ie.printStackTrace();
+                    }
                 } else {
                     break;
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input!");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException ie){
+                    ie.printStackTrace();
+                }
             }
         } while (true);
 
@@ -240,20 +293,88 @@ public class ProductDAO {
     //Read
     public static void displayAllProduct(){
         ArrayList<Product> products = ProductTools.retrieveAllProducts();
-        if(products.isEmpty()){
-            System.out.println("No products found!");
-        }else{
-            System.out.println("List of all products:");
-            System.out.println("------------------------------------------------------------------------------------------------------------------");
-            System.out.printf("%-5s|%-50s|%-20s|%-7s|%-27s|\n", "UPC", "Name", "Category", "Weight", "Dimension");
-            System.out.println("------------------------------------------------------------------------------------------------------------------");
 
-            for(Product product:products){
-                System.out.printf("%-5d|%-50s|%-20s|%-5.2fkg|%5.2fcm x %5.2fcm x %5.2fcm|\n", product.getUPC(), product.getName(), product.getCategory(), product.getWeight(), product.getDimension().getLength(), product.getDimension().getWidth(), product.getDimension().getHeight());
+        if (products.isEmpty()) {
+            System.out.println("No products found!");
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException ie){
+                ie.printStackTrace();
             }
+        } else {
+            Scanner scanner = new Scanner(System.in);
+            int totalProducts = products.size();
+            final int productsPerPage = 5;  // Number of products to show per page
+            int page = 0;
+            int maxPages = (totalProducts - 1) / productsPerPage;
+            boolean exit = false;
+
+            do {
+                int startIndex = page * productsPerPage;
+                int endIndex = Math.min(startIndex + productsPerPage, totalProducts);
+
+                // Display the current page of products
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("List of all products:");
+                System.out.println("===================================================================================================================");
+                System.out.printf("|%-5s|%-50s|%-20s|%-7s|%-27s|\n", "UPC", "Name", "Category", "Weight", "Dimension");
+                System.out.println("===================================================================================================================");
+
+                for (int i = startIndex; i < endIndex; i++) {
+                    Product product = products.get(i);
+                    System.out.printf("|%-5d|%-50s|%-20s|%-5.2fkg|%5.2fcm x %5.2fcm x %5.2fcm|\n",
+                            product.getUPC(),
+                            product.getName(),
+                            product.getCategory(),
+                            product.getWeight(),
+                            product.getDimension().getLength(),
+                            product.getDimension().getWidth(),
+                            product.getDimension().getHeight());
+                }
+
+                System.out.println("===================================================================================================================");
+                System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
+                System.out.printf("Total products: %d\n", totalProducts);
+                System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");
+                System.out.print("Select navigation option: ");
+
+                String input = scanner.nextLine().trim();
+
+                if (input.length() == 1) {
+                    char option = input.charAt(0);
+
+                    switch (option) {
+                        case 'A':
+                        case 'a':
+                            if (page > 0) page--;
+                            break;
+                        case 'D':
+                        case 'd':
+                            if (page < maxPages) page++;
+                            break;
+                        case 'Q':
+                        case 'q':
+                            exit = true;
+                            break;
+                        default:
+                            System.out.println("Invalid input. Please enter 'A', 'D', or 'Q'.");
+                            try {
+                                Thread.sleep(500);
+                            }catch (InterruptedException ie){
+                                ie.printStackTrace();
+                            }
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a single character.");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException ie){
+                        ie.printStackTrace();
+                    }
+                }
+
+            } while (!exit);
         }
-        System.out.println("Press [enter] to continue...");
-        scanner.nextLine();
     }
 
     //Delete
@@ -262,11 +383,14 @@ public class ProductDAO {
         if(ProductTools.deleteProduct(inputUPC)){
             System.out.println("Product deleted successfully!");
         }else{
-            System.out.println("Something went wrong!");
+            System.out.println("Product Not Found!");
         }
 
-        System.out.println("Press [enter] to continue...");
-        scanner.nextLine();
+        try {
+            Thread.sleep(500);
+        }catch (InterruptedException ie){
+            ie.printStackTrace();
+        }
     }
 
     //Update
@@ -276,23 +400,34 @@ public class ProductDAO {
             int inputUPC = Utils.getIntInput("Please enter product UPC to update: ");
             Product product = ProductTools.retrieveProduct(inputUPC);
             if(product == null){
-                System.out.println("Product not found!");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException ie){
+                    ie.printStackTrace();
+                }
+                return;
             }
 
             do{
                 System.out.println("Product information:");
-                System.out.println("1. Name: " + product.getName());
-                System.out.println("2. Description: " + product.getDesc());
-                System.out.println("3. Category: " + product.getCategory());
-                System.out.println("4. Price: " + product.getPrice());
-                System.out.println("5. Weight: " + product.getWeight());
-                System.out.println("6. Dimension: ");
+                System.out.println("[1] Name: " + product.getName());
+                System.out.println("[2] Description: " + product.getDesc());
+                System.out.println("[3] Category: " + product.getCategory());
+                System.out.println("[4] Price: " + product.getPrice());
+                System.out.println("[5] Weight: " + product.getWeight());
+                System.out.println("[6] Dimension: ");
                 System.out.println(product.getDimension().toString());
                 System.out.println();
-                System.out.print("Select an option to modify or type 0 to exit: ");
                 option = Utils.getIntInput("Select an option to modify or type 0 to exit: ");
                 switch(option){
                     case 0:
+                        ProductTools.updateProduct(product);
+                        System.out.println("Update successful!");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException ie){
+                            ie.printStackTrace();
+                        }
                         break;
                     case 1:
                         inputName(product);
@@ -314,6 +449,11 @@ public class ProductDAO {
                         break;
                     default:
                         System.out.println("Invalid option!");
+                        try {
+                            Thread.sleep(500);
+                        }catch (InterruptedException ie){
+                            ie.printStackTrace();
+                        }
                         break;
                 }
             }while(option != 0);
@@ -369,6 +509,11 @@ public class ProductDAO {
                 break;
             default:
                 System.out.println("Invalid option!");
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException ie){
+                    ie.printStackTrace();
+                }
                 return;
         }
 
@@ -382,24 +527,84 @@ public class ProductDAO {
 
         if (products.isEmpty()) {
             System.out.println("No products found!");
-        } else {
-            System.out.println("Search Results:");
-            System.out.println("------------------------------------------------------------------------------------------");
-            System.out.printf("%-5s|%-20s|%-15s|%-10s|%-10s|\n", "UPC", "Name", "Category", "Price", "Weight");
-            System.out.println("------------------------------------------------------------------------------------------");
-            for (Product product : products) {
-                System.out.printf("%-5d|%-20s|%-15s|%-10.2f|%-10.2f|\n",
-                        product.getUPC(),
-                        product.getName(),
-                        product.getCategory(),
-                        product.getPrice(),
-                        product.getWeight()
-                );
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException ie){
+                ie.printStackTrace();
             }
+        } else {
+            Scanner scanner = new Scanner(System.in);
+            int totalProducts = products.size();
+            final int productsPerPage = 5;  // Number of products to show per page
+            int page = 0;
+            int maxPages = (totalProducts - 1) / productsPerPage;
+            boolean exit = false;
 
-            System.out.println("Press [enter] to continue...");
-            scanner.nextLine();
+            do {
+                int startIndex = page * productsPerPage;
+                int endIndex = Math.min(startIndex + productsPerPage, totalProducts);
+
+                // Display the current page of search results
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("Search Results:");
+                System.out.println("==================================================================");
+                System.out.printf("|%-5s|%-20s|%-15s|%-10s|%-10s|\n", "UPC", "Name", "Category", "Price", "Weight");
+                System.out.println("==================================================================");
+
+                for (int i = startIndex; i < endIndex; i++) {
+                    Product product = products.get(i);
+                    System.out.printf("|%-5d|%-20s|%-15s|%-10.2f|%-10.2f|\n",
+                            product.getUPC(),
+                            product.getName(),
+                            product.getCategory(),
+                            product.getPrice(),
+                            product.getWeight());
+                }
+
+                System.out.println("==================================================================");
+                System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
+                System.out.printf("Total products: %d\n", totalProducts);
+                System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");
+                System.out.print("Select navigation option: ");
+
+                String input = scanner.nextLine().trim();
+
+                if (input.length() == 1) {
+                    char optionChar = input.charAt(0);
+
+                    switch (optionChar) {
+                        case 'A':
+                        case 'a':
+                            if (page > 0) page--;
+                            break;
+                        case 'D':
+                        case 'd':
+                            if (page < maxPages) page++;
+                            break;
+                        case 'Q':
+                        case 'q':
+                            exit = true;
+                            break;
+                        default:
+                            System.out.println("Invalid input. Please enter 'A', 'D', or 'Q'.");
+                            try {
+                                Thread.sleep(500);
+                            }catch (InterruptedException ie){
+                                ie.printStackTrace();
+                            }
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a single character.");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException ie){
+                        ie.printStackTrace();
+                    }
+                }
+
+            } while (!exit);
         }
+
     }
 
     //Menu
@@ -409,12 +614,14 @@ public class ProductDAO {
         do{
             System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
             System.out.println("Manage Product");
-            System.out.println("1. Display All Product");
-            System.out.println("2. Search product");
-            System.out.println("3. Delete product");
-            System.out.println("4. Update product");
-            System.out.println("5. Create new product");
-            System.out.println("6. Exit");
+            System.out.println("=======================");
+            System.out.println("[1] Display All Product");
+            System.out.println("[2] Search product");
+            System.out.println("[3] Delete product");
+            System.out.println("[4] Update product");
+            System.out.println("[5] Create new product");
+            System.out.println("[6] Exit");
+            System.out.println("=======================");
 
             option = Utils.getIntInput("Please select an option: ");
             switch(option){
@@ -443,6 +650,11 @@ public class ProductDAO {
                     break;
                 default:
                     System.out.println("Invalid option!");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                     break;
             }
 
