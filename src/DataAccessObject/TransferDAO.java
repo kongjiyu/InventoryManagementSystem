@@ -53,7 +53,7 @@ public class TransferDAO{
                         sc.nextLine();
                         System.out.println("Invalid Input!");
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(500);
                         }catch (InterruptedException e1){
                             e1.printStackTrace();
                         }
@@ -201,7 +201,7 @@ public class TransferDAO{
                 sc.nextLine();
                 System.out.println("Invalid Input!");
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
@@ -331,7 +331,7 @@ public class TransferDAO{
 
                     System.out.println("Distribution completed successfully.");
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     }catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -342,7 +342,7 @@ public class TransferDAO{
                     // Do not proceed
                     System.out.println("Distribution canceled.");
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     }catch (InterruptedException e) {
                         e.printStackTrace();
                     }

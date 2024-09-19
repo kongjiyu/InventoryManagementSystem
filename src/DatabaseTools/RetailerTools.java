@@ -193,7 +193,7 @@ public class RetailerTools implements RetailerService{
         if (retailerList.isEmpty()) {
             System.out.println("No retailers found!");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException ie) {
                 throw new RuntimeException(ie);
             }
@@ -327,7 +327,7 @@ public class RetailerTools implements RetailerService{
         if (retailerList.isEmpty()) {
             System.out.println("No retailers found!");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException ie) {
                 throw new RuntimeException(ie);
             }

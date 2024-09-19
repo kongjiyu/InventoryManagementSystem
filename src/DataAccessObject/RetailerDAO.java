@@ -453,7 +453,7 @@ public class RetailerDAO {
                 System.out.println("Invalid input!");
                 scanner.nextLine();
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
                 }

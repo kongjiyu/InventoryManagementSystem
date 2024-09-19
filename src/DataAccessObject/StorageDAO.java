@@ -43,7 +43,7 @@ public class StorageDAO {
             }catch(InputMismatchException e){
                 System.out.println("Invalid input!");
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 }catch (InterruptedException e2){
                     e2.printStackTrace();
                 }

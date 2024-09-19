@@ -234,7 +234,7 @@ public class StaffDAO {
             System.out.println("Staff Registered Failed. Please try again!");
         }
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         }catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -558,7 +558,7 @@ public class StaffDAO {
             default:
                 System.out.println("Invalid choice.");
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 }catch (InterruptedException e) {
                     e.printStackTrace();
                 }

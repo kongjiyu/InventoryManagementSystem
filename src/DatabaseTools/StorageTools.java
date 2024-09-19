@@ -186,7 +186,7 @@ public class StorageTools implements StorageService {
         if (productList.isEmpty()) {
             System.out.println("Product not found!");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             }catch (InterruptedException e) {
                 e.printStackTrace();
             }

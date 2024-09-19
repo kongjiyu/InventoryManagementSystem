@@ -205,7 +205,7 @@ public class WarehouseTools implements WarehouseService{
         if (warehouseList.isEmpty()) {
             System.out.println("No Warehouse founded!");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             }catch (InterruptedException ie) {
                 throw new RuntimeException(ie);
             }
@@ -355,7 +355,7 @@ public class WarehouseTools implements WarehouseService{
         if (warehouseList.isEmpty()) {
             System.out.println("No Warehouse founded!");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             }catch (InterruptedException ie) {
                 throw new RuntimeException(ie);
             }
