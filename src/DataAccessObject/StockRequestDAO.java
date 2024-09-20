@@ -4,6 +4,7 @@ import DatabaseTools.StaffTools;
 import DatabaseTools.StockRequestTools;
 import Driver.Utils;
 import Entity.StockRequest;
+import org.omg.CORBA.Request;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +103,7 @@ public class StockRequestDAO {
                 System.out.println("==============================================================================================");
 
                 for (int i = startIndex; i < endIndex; i++) {
-                    var request = stockRequestLog.get(i);
+                    StockRequest request = stockRequestLog.get(i);
                     System.out.printf("|%-15s | %-10s | %-10d | %-15s | %-15s | %-12s|\n",
                             request.getRequestId(),
                             request.getProductUPC(),

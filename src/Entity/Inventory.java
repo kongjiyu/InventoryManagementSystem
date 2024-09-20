@@ -5,16 +5,19 @@ import java.time.LocalDateTime;
 
 public class Inventory {
     private String id;
-    private Product product;
+    private int productUPC;
     private int quantity;
     private double price;
-    private Supplier supplier;
-    private Retailer retailer;
+    private String supplierID;
+    private String retailerID;
+    private String warehouseID;
     private String inventoryType;
     private LocalDateTime inventoryTime;
-    private LocalDate expiryDate;
     private String remarks;
     private String receivedBy;
+
+    public Inventory() {
+    }
 
     public String getId() {
         return id;
@@ -24,12 +27,12 @@ public class Inventory {
         this.id = id;
     }
 
-    public Product getProduct() {
-        return product;
+    public int getProductUPC() {
+        return productUPC;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductUPC(int product) {
+        this.productUPC = product;
     }
 
     public int getQuantity() {
@@ -48,20 +51,20 @@ public class Inventory {
         this.price = price;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
+    public String getSupplierID() {
+        return supplierID;
     }
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
+    public void setSupplierID(String supplier) {
+        this.supplierID = supplier;
     }
 
-    public Retailer getRetailer() {
-        return retailer;
+    public String getRetailerID() {
+        return retailerID;
     }
 
-    public void setRetailer(Retailer retailer) {
-        this.retailer = retailer;
+    public void setRetailerID(String retailerID) {
+        this.retailerID = retailerID;
     }
 
     public String getInventoryType() {
@@ -80,14 +83,6 @@ public class Inventory {
         this.inventoryTime = inventoryTime;
     }
 
-    public LocalDate getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(LocalDate expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-
     public String getRemarks() {
         return remarks;
     }
@@ -102,5 +97,13 @@ public class Inventory {
 
     public void setReceivedBy(String receivedBy) {
         this.receivedBy = receivedBy;
+    }
+
+    public String getWarehouseID() {
+        return warehouseID;
+    }
+
+    public void setWarehouseID(String warehouseID) {
+        this.warehouseID = warehouseID;
     }
 }
