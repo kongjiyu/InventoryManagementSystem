@@ -110,5 +110,31 @@ public class StockRequestTools {
         }
     }
 
+    public static List<StockRequest> retrieveAllStockRequests() {
+        String sql = "SELECT * FROM StockRequest";
+        List<StockRequest> stockRequests = new ArrayList<>();
+        Connection connection = DatabaseUtils.getConnection();
 
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                stockRequests.add(new StockRequest(
+                        resultSet.getString("RequestID"),
+                        resultSet.getString("ProductUPC"),
+                        resultSet.getInt("Quantity"),
+                        resultSet.getString("requestedBy"),
+                        resultSet.getString("warehouseID"),
+                        resultSet.getDate("requestDate").toLocalDate()
+
+                ));
+            }
+            if (stockRequests.isEmpty()) {
+                return null;
+            }
+            return stockRequests;
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

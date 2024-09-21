@@ -1,6 +1,7 @@
 package DataAccessObject;
 
 import DatabaseTools.InventoryTools;
+import DatabaseTools.StorageTools;
 import DatabaseTools.SupplierTools;
 import Driver.Utils;
 import Entity.Inventory;
@@ -14,7 +15,7 @@ public class InventoryDAO {
         Inventory inventory = new Inventory();
         InventoryTools inventoryTools = new InventoryTools();
         boolean isConfirmed = false;
-
+        StorageTools storageTools = new StorageTools();
         System.out.println("Stock In");
 
         // Collect initial details
@@ -37,11 +38,11 @@ public class InventoryDAO {
         // Confirmation and option to reset fields
         while (!isConfirmed) {
             // Display entered details for confirmation
-            System.out.println("----------------------------------------------------------------------------------");
+            System.out.println("==================================================================================");
             System.out.printf("%-11s|%-10s|%11s|%-15s|%-100s\n", "Product UPC", "Quantity", "Supplier ID", "Total Price", "Remarks");
-            System.out.println("----------------------------------------------------------------------------------");
+            System.out.println("==================================================================================");
             System.out.printf("%-11s|%-10d|%-11s|RM%-13.2f|%-100s\n", inventory.getProductUPC(), inventory.getQuantity(), inventory.getSupplierID(), inventory.getPrice(), inventory.getRemarks());
-            System.out.println("----------------------------------------------------------------------------------");
+            System.out.println("==================================================================================");
             System.out.println("The stock in details are correct? (Y to confirm, N to modify fields): ");
             String option = scanner.nextLine();
 
@@ -52,6 +53,7 @@ public class InventoryDAO {
                 inventory.setReceivedBy(staffID);
                 inventory.setWarehouseID(warehouseID);
                 inventoryTools.insertStockIn(inventory);
+                storageTools.insertProductIntoStorage(inventory.getWarehouseID(), inventory.getProductUPC(), inventory.getQuantity(), "Warehouse");
                 System.out.println("Stock-in entry successfully recorded.");
                 isConfirmed = true;  // Exit the loop
             } else if (option.equalsIgnoreCase("N")) {

@@ -837,6 +837,7 @@ public class StaffDAO {
         Scanner scanner = new Scanner(System.in);
         int adminPrivilege = StaffTools.getStaffPrivilege(username);
         TransferDAO tDAO = new TransferDAO();
+        InventoryDAO inventoryDAO = new InventoryDAO();
         int choice;
         do {
 
@@ -946,7 +947,7 @@ public class StaffDAO {
                     break;
                 case 5:
                     // All Admins and Staff: Stock In
-
+                    inventoryDAO.stockIn(StaffTools.getStaffWarehouseID(username), StaffTools.getStaffWarehouseID(username));
                     break;
                 case 6:
                     // All Admins and Staff: Stock Transfer
@@ -963,13 +964,13 @@ public class StaffDAO {
                 case 9:
                     if (adminPrivilege == 0 || adminPrivilege == 1) {
                         // Super Admin and HR Admin: Check User Log
-
+                        LogDAO.displayLogList();
                     }
                     break;
                 case 10:
                     if (adminPrivilege == 0 || adminPrivilege == 2) {
                         // Super Admin and Warehouse Manager: Staff Request Log
-
+                        StockRequestDAO.displayStockRequests();
                     }
                     break;
                 case 11:
@@ -989,6 +990,7 @@ public class StaffDAO {
     public static void staffMenu(String username) {
         Scanner scanner = new Scanner(System.in);
         TransferDAO tDAO = new TransferDAO();
+        InventoryDAO inventoryDAO = new InventoryDAO();
         int choice;
         do {
             System.out.println("\n\n\n\n\n\n\n\n\n\n");
@@ -1005,6 +1007,7 @@ public class StaffDAO {
 
             switch (choice) {
                 case 1:
+                    inventoryDAO.stockIn(StaffTools.getStaffWarehouseID(username), StaffTools.getStaffWarehouseID(username));
                     break;
                 case 2:
                     tDAO.transferStock(StaffTools.getStaffWarehouseID(username));

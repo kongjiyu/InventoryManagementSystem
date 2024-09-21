@@ -4,7 +4,6 @@ import DatabaseTools.StaffTools;
 import DatabaseTools.StockRequestTools;
 import Driver.Utils;
 import Entity.StockRequest;
-import org.omg.CORBA.Request;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,4 +156,85 @@ public class StockRequestDAO {
             } while (!exit);
         }
     }
+
+    public static void displayStockRequests() {
+        List<StockRequest> stockRequests = StockRequestTools.retrieveAllStockRequests();
+
+        if (stockRequests == null || stockRequests.isEmpty()) {
+            System.out.println("No stock requests found!");
+        } else {
+            Scanner scanner = new Scanner(System.in);
+            int totalRequests = stockRequests.size();
+            final int requestsPerPage = 5;  // Number of stock requests to show per page
+            int page = 0;
+            int maxPages = (totalRequests - 1) / requestsPerPage;
+            boolean exit = false;
+
+            do {
+                int startIndex = page * requestsPerPage;
+                int endIndex = Math.min(startIndex + requestsPerPage, totalRequests);
+
+                // Display the current page of stock requests in a table format
+                System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("Stock Request List:");
+                System.out.println("=======================================================================================");
+                System.out.printf("|%-10s | %-10s | %-10s | %-15s | %-12s | %-12s|\n", "Request ID", "Product UPC", "Quantity", "Requested By", "Warehouse ID", "Request Date");
+                System.out.println("=======================================================================================");
+
+                for (int i = startIndex; i < endIndex; i++) {
+                    StockRequest request = stockRequests.get(i);
+                    System.out.printf("|%-10s | %-10s | %-10d | %-15s | %-12s | %-12s|\n",
+                            request.getRequestId(),
+                            request.getProductUPC(),
+                            request.getQuantity(),
+                            request.getRequestBy(),
+                            request.getWarehouseId(),
+                            request.getRequestDate().toString());
+                }
+
+                System.out.println("=======================================================================================");
+                System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
+                System.out.printf("Total stock requests: %d\n", totalRequests);
+                System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");
+                System.out.print("Select navigation option: ");
+
+                String input = scanner.nextLine().trim();
+
+                if (input.length() == 1) {
+                    char option = input.charAt(0);
+
+                    switch (option) {
+                        case 'A':
+                        case 'a':
+                            if (page > 0) page--;
+                            break;
+                        case 'D':
+                        case 'd':
+                            if (page < maxPages) page++;
+                            break;
+                        case 'Q':
+                        case 'q':
+                            exit = true;
+                            break;
+                        default:
+                            System.out.println("Invalid input. Please enter 'A', 'D', or 'Q'.");
+                            try {
+                                Thread.sleep(500);
+                            }catch (InterruptedException ie) {
+                                ie.printStackTrace();
+                            }
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a single character.");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+                }
+
+            } while (!exit);
+        }
+    }
+
 }
