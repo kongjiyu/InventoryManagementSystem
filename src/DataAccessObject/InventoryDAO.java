@@ -23,6 +23,7 @@ public class InventoryDAO {
         InventoryTools inventoryTools = new InventoryTools();
         boolean isConfirmed = false;
         StorageTools storageTools = new StorageTools();
+        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         System.out.println("Stock In");
 
         // Collect initial details
@@ -45,12 +46,12 @@ public class InventoryDAO {
         // Confirmation and option to reset fields
         while (!isConfirmed) {
             // Display entered details for confirmation
-            System.out.println("==================================================================================");
-            System.out.printf("%-11s|%-10s|%11s|%-15s|%-100s\n", "Product UPC", "Quantity", "Supplier ID", "Total Price", "Remarks");
-            System.out.println("==================================================================================");
-            System.out.printf("%-11s|%-10d|%-11s|RM%-13.2f|%-100s\n", inventory.getProductUPC(), inventory.getQuantity(), inventory.getSupplierID(), inventory.getPrice(), inventory.getRemarks());
-            System.out.println("==================================================================================");
-            System.out.println("The stock in details are correct? (Y to confirm, N to modify fields): ");
+            System.out.println("=========================================================================================================================================================");
+            System.out.printf("|%-11s|%-10s|%11s|%-15s|%-100s|\n", "Product UPC", "Quantity", "Supplier ID", "Total Price", "Remarks");
+            System.out.println("=========================================================================================================================================================");
+            System.out.printf("|%-11s|%-10d|%-11s|RM%-13.2f|%-100s|\n", inventory.getProductUPC(), inventory.getQuantity(), inventory.getSupplierID(), inventory.getPrice(), inventory.getRemarks());
+            System.out.println("=========================================================================================================================================================");
+            System.out.print("The stock in details are correct? (Y to confirm, N to modify fields): ");
             String option = scanner.nextLine();
 
             if (option.equalsIgnoreCase("Y")) {
