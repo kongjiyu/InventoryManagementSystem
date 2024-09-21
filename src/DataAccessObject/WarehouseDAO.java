@@ -462,7 +462,7 @@ public class WarehouseDAO {
                 default:
                     System.out.println("Invalid input!");
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(500);
                     }catch (InterruptedException e){
                         e.printStackTrace();
                     }

@@ -72,7 +72,7 @@ public class StorageDAO {
                 default:
                     System.out.println("Invalid Input!");
                     try{
-                        Thread.sleep(2000);
+                        Thread.sleep(500);
                     }catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -122,7 +122,7 @@ public class StorageDAO {
         if(productList.isEmpty()) {
             System.out.println("No Product Available");
             try{
-                Thread.sleep(2000);
+                Thread.sleep(500);
             }catch (InterruptedException e) {
                 e.printStackTrace();
             }
