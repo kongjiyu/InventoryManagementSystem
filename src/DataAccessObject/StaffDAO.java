@@ -226,7 +226,11 @@ public class StaffDAO {
         } while (!adminPrivilege.equals("Y") && !adminPrivilege.equals("N"));
 
         // input the warehouse of the staff
-        newStaff.setWarehouseID(wd.getWarehouseToTransfer().getWarehouseId());
+        Warehouse warehouse = wd.getWarehouseToTransfer();
+        if (warehouse == null) {
+            return;
+        }
+        newStaff.setWarehouseID(warehouse.getWarehouseId());
 
         System.out.println("\n\n\n\n\n\n\n\n\n\n");
         if (StaffTools.registerStaff(newStaff)) {
@@ -561,6 +565,7 @@ public class StaffDAO {
                 try {
                     Thread.sleep(500);
                 }catch (InterruptedException e) {
+
                     e.printStackTrace();
                 }
                 return;
@@ -947,7 +952,7 @@ public class StaffDAO {
                     break;
                 case 5:
                     // All Admins and Staff: Stock In
-                    inventoryDAO.stockIn(StaffTools.getStaffWarehouseID(username), StaffTools.getStaffWarehouseID(username));
+                    inventoryDAO.stockIn(StaffTools.getStaffWarehouseID(username), StaffTools.getStaffID(username));
                     break;
                 case 6:
                     // All Admins and Staff: Stock Transfer
@@ -955,7 +960,7 @@ public class StaffDAO {
                     break;
                 case 7:
                     // All Admins and Staff: Stock Distribution
-                    tDAO.distributeStock(StaffTools.getStaffWarehouseID(username));
+                    inventoryDAO.distributeStock(StaffTools.getStaffWarehouseID(username));
                     break;
                 case 8:
                     // All Admins and Staff: Stock Request
@@ -1007,13 +1012,13 @@ public class StaffDAO {
 
             switch (choice) {
                 case 1:
-                    inventoryDAO.stockIn(StaffTools.getStaffWarehouseID(username), StaffTools.getStaffWarehouseID(username));
+                    inventoryDAO.stockIn(StaffTools.getStaffWarehouseID(username), StaffTools.getStaffID(username));
                     break;
                 case 2:
                     tDAO.transferStock(StaffTools.getStaffWarehouseID(username));
                     break;
                 case 3:
-                    tDAO.distributeStock(StaffTools.getStaffWarehouseID(username));
+                    inventoryDAO.distributeStock(StaffTools.getStaffWarehouseID(username));
                     break;
                 case 4:
                     StockRequestDAO.requestStock();

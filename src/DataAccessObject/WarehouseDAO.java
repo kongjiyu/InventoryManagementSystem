@@ -49,9 +49,7 @@ public class WarehouseDAO {
                 WarehouseTools.insertWarehouse(warehouse);
                 break;
             } else if (choice.equalsIgnoreCase("n")) {
-                System.out.print("Select an option to modify: ");
-                int option = scanner.nextInt();
-                scanner.nextLine();
+                int option = Utils.getIntInput("Select an option to modify: ");
                 switch (option) {
                     case 1:
                         inputName(warehouse);
@@ -111,7 +109,7 @@ public class WarehouseDAO {
 
     public static String generateWarehouseId(){
         String maxWarehouseID = WarehouseTools.retrieveMaxWarehouseID().replace("W", "");
-        return "W" + (Integer.parseInt(maxWarehouseID) + 1);
+        return ("W" + String.format("%03d", (Integer.parseInt(maxWarehouseID) + 1)));
     }
 
     //Read
@@ -462,7 +460,7 @@ public class WarehouseDAO {
                 default:
                     System.out.println("Invalid input!");
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(500);
                     }catch (InterruptedException e){
                         e.printStackTrace();
                     }
