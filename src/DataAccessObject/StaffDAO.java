@@ -3,6 +3,7 @@ package DataAccessObject;
 
 import DatabaseTools.LogTools;
 import DatabaseTools.StaffTools;
+import DatabaseTools.StorageTools;
 import DatabaseTools.WarehouseTools;
 import Driver.Utils;
 import Entity.Admin;
@@ -792,6 +793,7 @@ public class StaffDAO {
     }
 
     public static boolean login() {
+        StorageTools storageTools = new StorageTools();
         Scanner scanner = new Scanner(System.in);
         Staff staff = new Staff();
         System.out.println("\n\n\n\n\n\n\n\n\n\n");
@@ -820,7 +822,7 @@ public class StaffDAO {
         }else{
             staff.setStaffID(StaffTools.getStaffID(staff.getUsername()));
             LogTools.insertLog(staff.getStaffID());
-
+            storageTools.deductAllProductFromStorage();
 
             if (StaffTools.checkAdmin(staff)) {
                 adminMenu(staff.getUsername());

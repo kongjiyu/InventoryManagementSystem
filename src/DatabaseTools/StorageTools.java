@@ -534,5 +534,33 @@ public class StorageTools implements StorageService {
         }
     }
 
+    public void deductAllProductFromStorage(){
+        String selectQuery = "SELECT ProductUPC, Quantity FROM Storage";
+        String updateQuery = "UPDATE Storage SET Quantity = Quantity - ? WHERE ProductUPC = ?";
+        Connection connection = DatabaseUtils.getConnection();
+        try{
+            // Step 1: Retrieve all products and their quantities
+            PreparedStatement selectStmt = connection.prepareStatement(selectQuery);
+            ResultSet rs = selectStmt.executeQuery();
 
+            // Step 2: Loop through each product and deduct 80% of the quantity
+            while (rs.next()) {
+                int productUPC = rs.getInt("ProductUPC");
+                int currentQuantity = rs.getInt("Quantity");
+
+                // Calculate 80% of the current quantity
+                int quantityToDeduct = (int) (currentQuantity * 0.80);
+
+                // Update the quantity in Storage
+                PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
+                updateStmt.setInt(1, quantityToDeduct);
+                updateStmt.setInt(2, productUPC);
+                updateStmt.executeUpdate();
+
+                System.out.println("80% deducted from product UPC: " + productUPC);
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 }
