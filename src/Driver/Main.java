@@ -24,7 +24,12 @@ public class Main {
                     StaffDAO.login();
                     break;
                 case 2:
-                    inventoryDAO.stockIn("W001", "S001");
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n");
+                    System.out.println("=================================");
+                    System.out.println("|  Warehouse Management System  |");
+                    System.out.println("=================================");
+                    System.out.println("|Thank you for using our system!|");
+                    System.out.println("=================================");
                     break;
             }
         }while(choice!=2);
