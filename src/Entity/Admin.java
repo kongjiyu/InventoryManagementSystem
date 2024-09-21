@@ -14,7 +14,7 @@ public class Admin extends Staff {
     // 2 - Warehouse Manager(Manage Warehouse, Stock Management, check request log)
     // 3 - Product Manager (Manage Product)
     // null - normal staff
-    int privilege;
+    private int privilege;
 
     public Admin() {
         super();
