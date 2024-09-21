@@ -955,7 +955,7 @@ public class StaffDAO {
                     break;
                 case 7:
                     // All Admins and Staff: Stock Distribution
-                    tDAO.distributeStock(StaffTools.getStaffWarehouseID(username));
+                    inventoryDAO.distributeStock(StaffTools.getStaffWarehouseID(username));
                     break;
                 case 8:
                     // All Admins and Staff: Stock Request
@@ -1013,7 +1013,7 @@ public class StaffDAO {
                     tDAO.transferStock(StaffTools.getStaffWarehouseID(username));
                     break;
                 case 3:
-                    tDAO.distributeStock(StaffTools.getStaffWarehouseID(username));
+                    inventoryDAO.distributeStock(StaffTools.getStaffWarehouseID(username));
                     break;
                 case 4:
                     StockRequestDAO.requestStock();
