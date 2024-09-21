@@ -20,7 +20,7 @@ public class RetailerDAO {
     //Create
     public static void createRetailer(){
         Retailer retailer = new Retailer();
-
+        RetailerTools retailerTools = new RetailerTools();
         //input name
         inputName(retailer);
 
@@ -34,7 +34,7 @@ public class RetailerDAO {
         inputEmail(retailer);
 
         //generate id of the retailer
-        retailer.setRetailerId(RetailerTools.retrieveMaxRetailerID());
+        retailer.setRetailerId(retailerTools.getPrimaryKey());
 
         do{
             //confirm product information
@@ -108,7 +108,8 @@ public class RetailerDAO {
     }
 
     public static String generateRetailerId(){
-        String maxRetailerID = RetailerTools.retrieveMaxRetailerID().replace("R", "");
+        RetailerTools retailerTools = new RetailerTools();
+        String maxRetailerID = retailerTools.getPrimaryKey().replace("R", "");
         return "R" + String.format("%03d", (Integer.parseInt(maxRetailerID) + 1));
     }
 

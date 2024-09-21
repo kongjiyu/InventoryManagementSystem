@@ -108,7 +108,8 @@ public class WarehouseDAO {
     }
 
     public static String generateWarehouseId(){
-        String maxWarehouseID = WarehouseTools.retrieveMaxWarehouseID().replace("W", "");
+        WarehouseTools warehouseTools = new WarehouseTools();
+        String maxWarehouseID = warehouseTools.getPrimaryKey().replace("W", "");
         return ("W" + String.format("%03d", (Integer.parseInt(maxWarehouseID) + 1)));
     }
 

@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.time.Instant;
 
 
-public class StorageTools implements StorageService {
+public class StorageTools implements PrimaryKey {
 
     // get the Product List by insert Warehouse ID
     public List<Product> getProductListByWarehouseID(String warehouseID) {
@@ -356,7 +356,7 @@ public class StorageTools implements StorageService {
         String sql = "INSERT INTO storage(StorageID, ProductUPC, WarehouseID, Quantity) VALUES (?,?,?,?)";
         try{
            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-           preparedStatement.setString(1, getNewStorageID());
+           preparedStatement.setString(1, getPrimaryKey());
            preparedStatement.setInt (2, ProductUPC);
            preparedStatement.setString(3, WarehouseID);
            preparedStatement.setInt(4, Quantity);
@@ -368,7 +368,7 @@ public class StorageTools implements StorageService {
         }
     }
 
-    public String getNewStorageID() {
+    public String getPrimaryKey() {
         // get connection to database
         Connection connection = DatabaseUtils.getConnection();
         String storageID = null;
@@ -515,7 +515,7 @@ public class StorageTools implements StorageService {
         String sql = "INSERT INTO storage (StorageID, ProductUPC, WarehouseID, RetailerID, Quantity) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, getNewStorageID());
+            preparedStatement.setString(1, getPrimaryKey());
             preparedStatement.setInt(2, productUPC);
             if (storageType.equalsIgnoreCase("Warehouse")) {
                 preparedStatement.setString(3, storageID);

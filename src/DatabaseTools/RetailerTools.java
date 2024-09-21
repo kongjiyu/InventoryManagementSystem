@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class RetailerTools implements RetailerService{
+public class RetailerTools implements PrimaryKey{
 
-    public static String retrieveMaxRetailerID(){
+    public String getPrimaryKey(){
         String sql = "SELECT MAX(RetailerID) FROM Retailer";
         Connection connection = DatabaseUtils.getConnection();
 

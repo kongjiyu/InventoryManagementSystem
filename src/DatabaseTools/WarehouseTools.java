@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class WarehouseTools implements WarehouseService{
-    public static String retrieveMaxWarehouseID(){
+public class WarehouseTools implements PrimaryKey{
+    public String getPrimaryKey(){
         String sql = "SELECT MAX(WarehouseID) FROM Warehouse";
 
         Connection connection = DatabaseUtils.getConnection();
