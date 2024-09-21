@@ -556,8 +556,6 @@ public class StorageTools implements StorageService {
                 updateStmt.setInt(1, quantityToDeduct);
                 updateStmt.setInt(2, productUPC);
                 updateStmt.executeUpdate();
-
-                System.out.println("80% deducted from product UPC: " + productUPC);
             }
         }catch(SQLException e){
             throw new RuntimeException(e);

@@ -117,11 +117,9 @@ public class ProductDAO {
                     System.out.println((i + 1) + ". " + categories.get(i));
                 }
 
-                System.out.print("Please choose an category: ");
                 try {
                     //get user input
-                    int categoryIndex = scanner.nextInt();
-                    scanner.nextLine();
+                    int categoryIndex = Utils.getIntInput("Please choose an category: ");
 
                     //add new category
                     if (categoryIndex == 0) {
@@ -164,10 +162,8 @@ public class ProductDAO {
     public static void inputPrice(Product product) {
         do {
             System.out.println();
-            System.out.print("Enter product price: ");
             try {
-                product.setPrice(scanner.nextDouble());
-                scanner.nextLine();
+                product.setPrice(Utils.getDoubleInput("Enter product price: "));
                 if (product.getPrice() < 0) {
                     System.out.println("Invalid input!");
                     try {
@@ -192,10 +188,8 @@ public class ProductDAO {
     public static void inputWeight(Product product) {
         do {
             System.out.println();
-            System.out.print("Enter product weight(kg): ");
             try {
-                product.setWeight(scanner.nextDouble());
-                scanner.nextLine();
+                product.setWeight(Utils.getDoubleInput("Enter product weight(kg): "));
                 if (product.getWeight() < 0) {
                     System.out.println("Invalid input!");
                     try {
@@ -221,11 +215,9 @@ public class ProductDAO {
         do {
             try {
                 System.out.println();
-                System.out.print("Enter product length(cm): ");
 
                 //set length
-                product.getDimension().setLength(scanner.nextDouble());
-                scanner.nextLine();
+                product.getDimension().setLength(Utils.getDoubleInput("Enter product length(cm): "));
 
                 //validate length
                 if (product.getDimension().getLength() < 0) {
@@ -251,11 +243,9 @@ public class ProductDAO {
         do {
             try {
                 System.out.println();
-                System.out.print("Enter product width(cm): ");
 
                 //set width
-                product.getDimension().setWidth(scanner.nextDouble());
-                scanner.nextLine();
+                product.getDimension().setWidth(Utils.getDoubleInput("Enter product width(cm): "));
 
                 //validate width
                 if (product.getDimension().getWidth() < 0) {
@@ -271,11 +261,9 @@ public class ProductDAO {
         do {
             try {
                 System.out.println();
-                System.out.print("Enter product height(cm): ");
 
                 //set height
-                product.getDimension().setHeight(scanner.nextDouble());
-                scanner.nextLine();
+                product.getDimension().setHeight(Utils.getDoubleInput("Enter product height(cm): "));
 
                 //validate height
                 if (product.getDimension().getHeight() < 0) {
@@ -467,12 +455,11 @@ public class ProductDAO {
         double maxValue = 0;
 
         System.out.println("Search Product By:");
-        System.out.println("1. UPC");
-        System.out.println("2. Name");
-        System.out.println("3. Category");
-        System.out.println("4. Price Range");
-        System.out.println("5. Weight Range");
-        System.out.println("6. Quantity Range");
+        System.out.println("[1] UPC");
+        System.out.println("[2] Name");
+        System.out.println("[3] Category");
+        System.out.println("[4] Price Range");
+        System.out.println("[5] Weight Range");
         System.out.print("Select an option: ");
 
         int option = Utils.getIntInput("");

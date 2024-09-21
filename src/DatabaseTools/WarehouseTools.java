@@ -49,6 +49,11 @@ public class WarehouseTools implements WarehouseService{
             if (result > 0) {
                 System.out.println("Warehouse added successfully!");
                 System.out.println("Warehouse ID: " + warehouse.getWarehouseId());
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             } else {
                 System.out.println("Warehouse added failed!");
             }
@@ -140,7 +145,7 @@ public class WarehouseTools implements WarehouseService{
                         resultSet.getString("WarehouseEmail")
                 );
             }else{
-                System.out.println("Product not found");
+                System.out.println("Warehouse not found!");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
