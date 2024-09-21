@@ -1,7 +1,6 @@
 package DatabaseTools;
 
 import DataAccessObject.TransferDAO;
-import Entity.Storage;
 import Model.TransferSet;
 import Database.DatabaseUtils;
 import Entity.Product;
@@ -13,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.time.Instant;
 
 
-public class StorageTools implements PrimaryKey {
+public class StorageTools implements DatabaseTable {
 
     // get the Product List by insert Warehouse ID
     public List<Product> getProductListByWarehouseID(String warehouseID) {

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class RetailerTools implements PrimaryKey{
+public class RetailerTools implements DatabaseTable {
 
     public String getPrimaryKey(){
         String sql = "SELECT MAX(RetailerID) FROM Retailer";

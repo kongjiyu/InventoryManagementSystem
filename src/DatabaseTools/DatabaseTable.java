@@ -1,5 +1,5 @@
 package DatabaseTools;
 
-public interface PrimaryKey {
+public interface DatabaseTable {
     public String getPrimaryKey();
 }
