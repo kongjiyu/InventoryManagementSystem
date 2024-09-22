@@ -529,7 +529,7 @@ public class RetailerDAO {
         return retailer;
     }
 
-    public void displayReatailerStockLowerBorder() {
+    public void displayRetailerStockLowerBorder() {
         Scanner scanner = new Scanner(System.in);
         RetailerTools rt = new RetailerTools();
         List<ProductRetailerInfo> productRetailerList = rt.listLowStockProductsByRetailerWithPagination();

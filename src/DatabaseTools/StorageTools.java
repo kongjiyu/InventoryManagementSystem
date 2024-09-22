@@ -270,7 +270,7 @@ public class StorageTools implements DatabaseTable {
         // create product object to return
         Product product = null;
         //set the sql query
-        String sql =    "SELECT * " +
+        String sql =    "SELECT s.ProductUPC, ProductName, ProductDesc, ProductCategory, ProductPrice, ProductWeight, ProductWidth, ProductLength, ProductHeight, SUM(Quantity), ProductUpdatedAt " +
                 "FROM product p " +
                 "JOIN storage s " +
                 "ON p.ProductUPC = s.ProductUPC " +
@@ -298,7 +298,7 @@ public class StorageTools implements DatabaseTable {
                                 resultSet.getDouble("ProductLength"),
                                 resultSet.getDouble("ProductHeight")
                         ),
-                        resultSet.getInt("Quantity"),
+                        resultSet.getInt("SUM(Quantity)"),
                         resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime());
             }else {
                 System.out.println("Product not found");

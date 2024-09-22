@@ -984,7 +984,7 @@ public class StaffDAO {
                     break;
                 case 10:
                     // Check Retailer Stock Lower Border
-                    retailerDAO.displayReatailerStockLowerBorder();
+                    retailerDAO.displayRetailerStockLowerBorder();
                     break;
                 case 11:
                     if (adminPrivilege == 0 || adminPrivilege == 1) {
@@ -1051,7 +1051,7 @@ public class StaffDAO {
                     storageDAO.displayByWarehouse(StaffTools.getStaffWarehouseID(username));
                     break;
                 case 6:
-                    retailerDAO.displayReatailerStockLowerBorder();
+                    retailerDAO.displayRetailerStockLowerBorder();
                     break;
                 case 7:
                     break;
