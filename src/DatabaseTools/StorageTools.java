@@ -41,7 +41,7 @@ public class StorageTools implements DatabaseTable {
             TransferDAO transferDAO = new TransferDAO();
             // loop to get the product and add into the product list
             while (resultSet.next()) {
-                if(resultSet.getInt("ProductQuantity")<=0) {
+                if(resultSet.getInt("Quantity")<=0) {
                     continue;
                 }
                 // If not skipping, add the product to the productList
@@ -533,31 +533,44 @@ public class StorageTools implements DatabaseTable {
         }
     }
 
-    public void deductAllProductFromStorage(){
-        String selectQuery = "SELECT ProductUPC, Quantity FROM Storage";
-        String updateQuery = "UPDATE Storage SET Quantity = Quantity - ? WHERE ProductUPC = ?";
+    public void deductAllProductFromStorage() {
+        String selectQuery = "SELECT StorageID, ProductUPC, Quantity FROM Storage WHERE WarehouseID IS NULL";
+        String updateQuery = "UPDATE Storage SET Quantity = ? WHERE StorageID = ? AND ProductUPC = ?";
         Connection connection = DatabaseUtils.getConnection();
-        try{
-            // Step 1: Retrieve all products and their quantities
+
+        try {
+            // Step 1: Retrieve all storage records where WarehouseID is NULL
             PreparedStatement selectStmt = connection.prepareStatement(selectQuery);
             ResultSet rs = selectStmt.executeQuery();
 
-            // Step 2: Loop through each product and deduct 80% of the quantity
+            // Step 2: Loop through each storage record and deduct 80% of the quantity
             while (rs.next()) {
+                String storageID = rs.getString("StorageID");
                 int productUPC = rs.getInt("ProductUPC");
                 int currentQuantity = rs.getInt("Quantity");
 
                 // Calculate 80% of the current quantity
                 int quantityToDeduct = (int) (currentQuantity * 0.80);
+                int newQuantity = currentQuantity - quantityToDeduct;
 
-                // Update the quantity in Storage
+                // Ensure new quantity is not less than zero
+                if (newQuantity < 0) {
+                    newQuantity = 0;
+                }
+
+                // Step 3: Update the quantity in Storage for the specific StorageID and ProductUPC
                 PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
-                updateStmt.setInt(1, quantityToDeduct);
-                updateStmt.setInt(2, productUPC);
+                updateStmt.setInt(1, newQuantity);   // Set the new quantity
+                updateStmt.setString(2, storageID);  // Set the StorageID
+                updateStmt.setInt(3, productUPC);    // Set the ProductUPC
                 updateStmt.executeUpdate();
+
+                // Print success message
+                System.out.println("Successfully deducted 80% from StorageID: " + storageID + ", ProductUPC: " + productUPC);
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 }

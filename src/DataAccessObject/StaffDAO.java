@@ -607,18 +607,18 @@ public class StaffDAO {
 
             // Display staff on the current page
             System.out.println("\n\n\n\n\n\n\n\n\n\n");
-            System.out.println("============================================================================================================================");
+            System.out.println("====================================================================================");
             System.out.printf("|%-3s|%-15s|%-20s|%-20s|%-20s|\n", "No.", "Staff ID", "Staff Name", "Position", "Warehouse ID");
 
             for (int i = startIndex; i < endIndex; i++) {
                 Staff staff = staffList.get(i);
                 String position = staff.isAdmin() ? getAdminPosition(((Admin) staff).getPrivilege()) : "Staff";  // Check if admin
-                System.out.println("============================================================================================================================");
+                System.out.println("====================================================================================");
                 System.out.printf("|%-3d|%-15s|%-20s|%-20s|%-20s|\n", count, staff.getStaffID(), staff.getName(), position, staff.getWarehouseID());
                 count++;
             }
 
-            System.out.println("============================================================================================================================");
+            System.out.println("====================================================================================");
             System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
             System.out.printf("Total staff: %d\n", totalIndex);
             System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");
@@ -758,11 +758,11 @@ public class StaffDAO {
     private static boolean confirmDeletion(Staff staff, Scanner scanner) {
         System.out.println("\n\n\n\n\n\n\n\n\n\n");
         System.out.println("Staff Detail Confirmation");
-        System.out.println("============================================================================================================================");
+        System.out.println("================================================================================");
         System.out.printf("|%-15s|%-20s|%-20s|%-20s|\n", "Staff ID", "Staff Name", "Position", "Warehouse ID");
-        System.out.println("============================================================================================================================");
+        System.out.println("================================================================================");
         System.out.printf("|%-15s|%-20s|%-20s|%-20s|\n", staff.getStaffID(), staff.getName(), staff.isAdmin() ? getAdminPosition(((Admin) staff).getPrivilege()) : "Staff", staff.getWarehouseID());
-        System.out.println("============================================================================================================================");
+        System.out.println("================================================================================");
 
         String confirmation;
         do {
@@ -843,12 +843,14 @@ public class StaffDAO {
         int adminPrivilege = StaffTools.getStaffPrivilege(username);
         TransferDAO tDAO = new TransferDAO();
         InventoryDAO inventoryDAO = new InventoryDAO();
+        StorageDAO sd = new StorageDAO();
+        RetailerDAO retailerDAO = new RetailerDAO();
         int choice;
         do {
 
             // Display menu based on admin privilege
             System.out.println("\n\n\n\n\n\n\n\n\n\nAdmin Menu");
-            System.out.println("==============================");
+            System.out.println("===========================================");
             // Full access for Super Admin (privilege = 0)
             if (adminPrivilege == 0) {
                 System.out.println("[1] Manage Retailer");
@@ -859,8 +861,10 @@ public class StaffDAO {
                 System.out.println("[6] Stock Transfer");
                 System.out.println("[7] Stock Distribution");
                 System.out.println("[8] Stock Request");
-                System.out.println("[9] Check User Log");
-                System.out.println("[10] Staff Request Log");
+                System.out.println("[9] Check Warehouse Stock");
+                System.out.println("[10] Check Retailer Stock Lower Border");
+                System.out.println("[11] Check User Log");
+                System.out.println("[12] Staff Request Log");
             }
 
             // HR Admin (privilege = 1)
@@ -873,7 +877,9 @@ public class StaffDAO {
                 System.out.println("[ ] Stock Transfer");
                 System.out.println("[ ] Stock Distribution");
                 System.out.println("[ ] Stock Request");
-                System.out.println("[9] Check User Log");
+                System.out.println("[9] Check Warehouse Stock");
+                System.out.println("[10] Check Retailer Stock Lower Border");
+                System.out.println("[11] Check User Log");
                 System.out.println("[  ] Staff Request Log");
             }
 
@@ -887,8 +893,10 @@ public class StaffDAO {
                 System.out.println("[6] Stock Transfer");
                 System.out.println("[7] Stock Distribution");
                 System.out.println("[8] Stock Request");
+                System.out.println("[9] Check Warehouse Stock");
+                System.out.println("[10] Check Retailer Stock Lower Border");
                 System.out.println("[ ] Check User Log");
-                System.out.println("[10] Staff Request Log");
+                System.out.println("[12] Staff Request Log");
             }
 
             // Product Manager (privilege = 3)
@@ -901,6 +909,8 @@ public class StaffDAO {
                 System.out.println("[ ] Stock Transfer");
                 System.out.println("[ ] Stock Distribution");
                 System.out.println("[ ] Stock Request");
+                System.out.println("[9] Check Warehouse Stock");
+                System.out.println("[10] Check Retailer Stock Lower Border");
                 System.out.println("[ ] Check User Log");
                 System.out.println("[  ] Staff Request Log");
             }
@@ -915,13 +925,15 @@ public class StaffDAO {
                 System.out.println("[6] Stock Transfer");
                 System.out.println("[7] Stock Distribution");
                 System.out.println("[8] Stock Request");
-                System.out.println("[9] Check User Log");
+                System.out.println("[9] Check Warehouse Stock");
+                System.out.println("[10] Check Retailer Stock Lower Border");
+                System.out.println("[11] Check User Log");
                 System.out.println("[  ] Staff Request Log");
             }
 
             // Common exit option
-            System.out.println("[11] Exit");
-            System.out.println("==============================");
+            System.out.println("[13] Exit");
+            System.out.println("===========================================");
             choice = Utils.getIntInput("Select your option: ");
 
             // Process choices based on privilege level
@@ -967,18 +979,26 @@ public class StaffDAO {
                     StockRequestDAO.requestStock();
                     break;
                 case 9:
+                    // Check Warehouse Stock
+                    sd.displayByWarehouse(StaffTools.getStaffWarehouseID(username));
+                    break;
+                case 10:
+                    // Check Retailer Stock Lower Border
+                    retailerDAO.displayReatailerStockLowerBorder();
+                    break;
+                case 11:
                     if (adminPrivilege == 0 || adminPrivilege == 1) {
                         // Super Admin and HR Admin: Check User Log
                         LogDAO.displayLogList();
                     }
                     break;
-                case 10:
+                case 12:
                     if (adminPrivilege == 0 || adminPrivilege == 2) {
                         // Super Admin and Warehouse Manager: Staff Request Log
                         StockRequestDAO.displayStockRequests();
                     }
                     break;
-                case 11:
+                case 13:
                     return;  // Exit
                 default:
                     System.out.println("Invalid choice, please try again.");
@@ -989,13 +1009,15 @@ public class StaffDAO {
                     }
                     break;
             }
-        } while (choice != 11);
+        } while (choice != 13);
     }
 
     public static void staffMenu(String username) {
         Scanner scanner = new Scanner(System.in);
         TransferDAO tDAO = new TransferDAO();
         InventoryDAO inventoryDAO = new InventoryDAO();
+        RetailerDAO retailerDAO = new RetailerDAO();
+        StorageDAO storageDAO = new StorageDAO();
         int choice;
         do {
             System.out.println("\n\n\n\n\n\n\n\n\n\n");
@@ -1005,7 +1027,9 @@ public class StaffDAO {
             System.out.println("[2] Stock Transfer");
             System.out.println("[3] Stock Distribution");
             System.out.println("[4] Stock Request");
-            System.out.println("[5] Exit");
+            System.out.println("[5] Check Warehouse Stock");
+            System.out.println("[6] Check Retailer Stock Lower Border");
+            System.out.println("[7] Exit");
             System.out.println("=======================");
             choice = Utils.getIntInput("Select your option:");
 
@@ -1024,7 +1048,13 @@ public class StaffDAO {
                     StockRequestDAO.requestStock();
                     break;
                 case 5:
-                    return;
+                    storageDAO.displayByWarehouse(StaffTools.getStaffWarehouseID(username));
+                    break;
+                case 6:
+                    retailerDAO.displayReatailerStockLowerBorder();
+                    break;
+                case 7:
+                    break;
                 default:
                     System.out.print("Please try again for select");
                     try {
@@ -1034,7 +1064,7 @@ public class StaffDAO {
                     }
                     break;
             }
-        } while (choice != 0);
+        } while (choice != 7);
     }
 
     public static void ManageStaffMenu() {

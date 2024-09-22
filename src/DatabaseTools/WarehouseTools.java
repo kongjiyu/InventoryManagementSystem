@@ -284,6 +284,8 @@ public class WarehouseTools implements DatabaseTable {
         return warehouse;
     }
 
+
+
     public Warehouse getWarehouseById(String ID) {
         // get connection with database
         Connection connection = DatabaseUtils.getConnection();
