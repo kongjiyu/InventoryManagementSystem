@@ -7,21 +7,21 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Product {
-    private String UPC;
+    private int UPC;
     private String name;
     private String desc;
     private String category;
     private double price;
     private double weight;
     private Dimension dimension;
-    private int quantity;
     private LocalDateTime updatedAt;
+    private int quantity;
 
     public Product(){
         dimension = new Dimension();
     }
 
-    public Product(String UPC, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, LocalDateTime updatedAt) {
+    public Product(int UPC, String name, String desc, String category, double price, double weight, Dimension dimension, LocalDateTime updatedAt) {
         this.UPC = UPC;
         this.name = name;
         this.desc = desc;
@@ -29,15 +29,26 @@ public class Product {
         this.price = price;
         this.weight = weight;
         this.dimension = dimension;
-        this.quantity = quantity;
         this.updatedAt = updatedAt;
     }
 
-    public String getUPC() {
+    public Product(int UPC, String name, String desc, String category, double price, double weight, Dimension dimension, int quantity, LocalDateTime updatedAt) {
+        this.UPC = UPC;
+        this.name = name;
+        this.desc = desc;
+        this.category = category;
+        this.price = price;
+        this.weight = weight;
+        this.dimension = dimension;
+        this.updatedAt = updatedAt;
+        this.quantity = quantity;
+    }
+
+    public int getUPC() {
         return UPC;
     }
 
-    public void setUPC(String UPC) {
+    public void setUPC(int UPC) {
         this.UPC = UPC;
     }
 
@@ -89,19 +100,19 @@ public class Product {
         this.dimension = dimension;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
