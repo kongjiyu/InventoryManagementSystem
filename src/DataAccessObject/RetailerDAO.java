@@ -2,10 +2,13 @@ package DataAccessObject;
 
 import DatabaseTools.RetailerTools;
 import Driver.Utils;
+import Entity.Product;
 import Entity.Retailer;
+import Model.ProductRetailerInfo;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class RetailerDAO {
@@ -20,7 +23,7 @@ public class RetailerDAO {
     //Create
     public static void createRetailer(){
         Retailer retailer = new Retailer();
-
+        RetailerTools retailerTools = new RetailerTools();
         //input name
         inputName(retailer);
 
@@ -34,7 +37,7 @@ public class RetailerDAO {
         inputEmail(retailer);
 
         //generate id of the retailer
-        retailer.setRetailerId(RetailerTools.retrieveMaxRetailerID());
+        retailer.setRetailerId(retailerTools.getPrimaryKey());
 
         do{
             //confirm product information
@@ -108,7 +111,8 @@ public class RetailerDAO {
     }
 
     public static String generateRetailerId(){
-        String maxRetailerID = RetailerTools.retrieveMaxRetailerID().replace("R", "");
+        RetailerTools retailerTools = new RetailerTools();
+        String maxRetailerID = retailerTools.getPrimaryKey().replace("R", "");
         return "R" + String.format("%03d", (Integer.parseInt(maxRetailerID) + 1));
     }
 
@@ -523,5 +527,79 @@ public class RetailerDAO {
 
         // Return the selected retailer
         return retailer;
+    }
+
+    public void displayRetailerStockLowerBorder() {
+        Scanner scanner = new Scanner(System.in);
+        RetailerTools rt = new RetailerTools();
+        List<ProductRetailerInfo> productRetailerList = rt.listLowStockProductsByRetailerWithPagination();
+        if (productRetailerList == null) {
+            System.out.println("No products in retailer is less than 20!");
+            try{
+                Thread.sleep(500);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        int totalItems = productRetailerList.size();
+        final int itemsPerPage = 5;  // Number of items to display per page
+        int page = 0;
+        int maxPages = (totalItems - 1) / itemsPerPage;
+        boolean exit = false;
+
+        do {
+            int startIndex = page * itemsPerPage;
+            int endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+            // Display the current page of products
+            System.out.println("\n\n\n\n\n\n\n\n\n\n");
+            System.out.println("Products with less than 20 quantity at retailers:");
+            System.out.println("=================================================================");
+            System.out.printf("|%-10s|%-10s|%-10s|%-30s|\n", "UPC", "Quantity", "RetailerID", "RetailerName");
+            System.out.println("=================================================================");
+
+            for (int i = startIndex; i < endIndex; i++) {
+                ProductRetailerInfo info = productRetailerList.get(i);
+                System.out.printf("|%-10d|%-10d|%-10s|%-30s|\n", info.getProductUPC(), info.getQuantity(), info.getRetailerID(), info.getRetailerName());
+            }
+
+            System.out.println("=================================================================");
+            System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
+            System.out.printf("Total items: %d\n", totalItems);
+            System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");
+            System.out.print("Select navigation option: ");
+
+            String input = scanner.nextLine().trim();
+
+            if (input.length() == 1) {
+                char option = input.charAt(0);
+
+                switch (option) {
+                    case 'A':
+                    case 'a':
+                        if (page > 0) page--;
+                        break;
+                    case 'D':
+                    case 'd':
+                        if (page < maxPages) page++;
+                        break;
+                    case 'Q':
+                    case 'q':
+                        exit = true;
+                        break;
+                    default:
+                        System.out.println("Invalid input. Please enter 'A', 'D', or 'Q'.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a single character.");
+                try{
+                    Thread.sleep(500);
+                }catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } while (!exit);
     }
 }

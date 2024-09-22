@@ -44,7 +44,6 @@ public class TransferDAO{
             if (!exit) {
                 do {
                     // let user to enter quantity
-                    System.out.println("\n\n\n\n\n\n\n\n\n\n");
                     System.out.print("Enter the product quantity to transfer [999 to exit] : ");
                     try {
                         quantity = sc.nextInt();

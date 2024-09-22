@@ -137,7 +137,6 @@ public class InventoryDAO {
 
         // Step 2: Enter total quantity to distribute
         do {
-            System.out.println("\n\n\n\n\n\n\n\n\n\n");
             System.out.print("Enter the total quantity to distribute [999 to exit]: ");
             try {
                 totalQuantity = sc.nextInt();

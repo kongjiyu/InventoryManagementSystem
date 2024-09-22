@@ -108,7 +108,8 @@ public class WarehouseDAO {
     }
 
     public static String generateWarehouseId(){
-        String maxWarehouseID = WarehouseTools.retrieveMaxWarehouseID().replace("W", "");
+        WarehouseTools warehouseTools = new WarehouseTools();
+        String maxWarehouseID = warehouseTools.getPrimaryKey().replace("W", "");
         return ("W" + String.format("%03d", (Integer.parseInt(maxWarehouseID) + 1)));
     }
 
@@ -345,9 +346,9 @@ public class WarehouseDAO {
                 // Display the current page of search results
                 System.out.println("\n\n\n\n\n\n\n\n\n\n");
                 System.out.println("Search Results:");
-                System.out.println("=========================================================================================================================================================================================");
+                System.out.println("==================================================================================================================================================================================================");
                 System.out.printf("%-10s | %-50s | %-50s | %-20s | %-50s |\n", "ID", "Name", "Address", "Phone", "Email");
-                System.out.println("=========================================================================================================================================================================================");
+                System.out.println("==================================================================================================================================================================================================");
 
                 for (int i = startIndex; i < endIndex; i++) {
                     Warehouse warehouse = warehouses.get(i);
@@ -359,7 +360,7 @@ public class WarehouseDAO {
                             warehouse.getWarehouseEmail());
                 }
 
-                System.out.println("=========================================================================================================================================================================================");
+                System.out.println("==================================================================================================================================================================================================");
                 System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
                 System.out.printf("Total warehouses: %d\n", totalWarehouses);
                 System.out.println("[\"A\" for previous page]\t\t[\"Q\" to exit]\t\t[\"D\" for next page]");

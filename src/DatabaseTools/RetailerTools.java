@@ -2,6 +2,7 @@ package DatabaseTools;
 
 import Database.DatabaseUtils;
 import Entity.Retailer;
+import Model.ProductRetailerInfo;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,9 +10,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class RetailerTools implements RetailerService{
+public class RetailerTools implements DatabaseTable {
 
-    public static String retrieveMaxRetailerID(){
+    public String getPrimaryKey() {
         String sql = "SELECT MAX(RetailerID) FROM Retailer";
         Connection connection = DatabaseUtils.getConnection();
 
@@ -19,7 +20,7 @@ public class RetailerTools implements RetailerService{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 String maxID = resultSet.getString(1);
                 if (maxID == null) {
                     return "R001";
@@ -53,16 +54,16 @@ public class RetailerTools implements RetailerService{
             if (result > 0) {
                 System.out.println("Retailer added successfully!");
                 System.out.println("Retailer ID: " + retailer.getRetailerId());
-                try{
+                try {
                     Thread.sleep(500);
-                }catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             } else {
                 System.out.println("Failed to add retailer!");
-                try{
+                try {
                     Thread.sleep(500);
-                }catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -71,7 +72,7 @@ public class RetailerTools implements RetailerService{
         }
     }
 
-    public static ArrayList<Retailer> retrieveAllRetailers(){
+    public static ArrayList<Retailer> retrieveAllRetailers() {
         ArrayList<Retailer> retailers = new ArrayList<>();
         String sql = "SELECT * FROM Retailer";
         Connection connection = DatabaseUtils.getConnection();
@@ -80,7 +81,7 @@ public class RetailerTools implements RetailerService{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 retailers.add(new Retailer(
                         resultSet.getString("RetailerID"),
                         resultSet.getString("RetailerName"),
@@ -106,7 +107,7 @@ public class RetailerTools implements RetailerService{
             preparedStatement.execute();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, retailerID);
-            boolean changes =  preparedStatement.executeUpdate() > 0;
+            boolean changes = preparedStatement.executeUpdate() > 0;
             preparedStatement = connection.prepareStatement(OpenForeignKeyCheck);
             preparedStatement.execute();
             return changes;
@@ -125,7 +126,7 @@ public class RetailerTools implements RetailerService{
             preparedStatement.setString(1, retailerID);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 retailer = new Retailer(
                         resultSet.getString("RetailerID"),
                         resultSet.getString("RetailerName"),
@@ -174,11 +175,11 @@ public class RetailerTools implements RetailerService{
         Retailer retailer = null;
         String sql = "SELECT * FROM Retailer";
 
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 retailerList.add(new Retailer(
                         resultSet.getString("RetailerID"),
                         resultSet.getString("RetailerName"),
@@ -186,7 +187,7 @@ public class RetailerTools implements RetailerService{
                         resultSet.getString("RetailerPhone"),
                         resultSet.getString("RetailerEmail")));
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -197,7 +198,7 @@ public class RetailerTools implements RetailerService{
             } catch (InterruptedException ie) {
                 throw new RuntimeException(ie);
             }
-        } else if(retailerList.size() == 1){
+        } else if (retailerList.size() == 1) {
             return retailerList.get(0);
         } else {
             Scanner scanner = new Scanner(System.in);
@@ -214,10 +215,10 @@ public class RetailerTools implements RetailerService{
 
                 // Display retailers on the current page
                 System.out.println("\n\n\n\n\n\n\n\n\n\n");
-                System.out.println("===============================================================================================================================================================================================");
+                System.out.println("===================================================================================================================================================================================================");
                 System.out.printf("|%-3s|%-15s|%-20s|%-100s|%-20s|%-30s|\n", "No.", "Retailer ID", "Retailer Name", "Retailer Address", "Retailer Phone", "Retailer Email");
                 for (int i = startIndex; i < endIndex; i++) {
-                    System.out.println("===============================================================================================================================================================================================");
+                    System.out.println("===================================================================================================================================================================================================");
                     System.out.printf("|%-3d|%-15s|%-20s|%-100s|%-20s|%-30s|\n",
                             count,
                             retailerList.get(i).getRetailerId(),
@@ -227,7 +228,7 @@ public class RetailerTools implements RetailerService{
                             retailerList.get(i).getRetailerEmail());
                     count++;
                 }
-                System.out.println("===============================================================================================================================================================================================");
+                System.out.println("===================================================================================================================================================================================================");
                 System.out.printf("Page %d of %d\n", page + 1, maxPages + 1);
                 System.out.printf("Total retailers: %d\n", totalIndex);
                 System.out.println("[\"A\" for previous page]\t\t\t[\"Q\" to exit]\t\t\t[\"D\" for next page]");
@@ -276,12 +277,12 @@ public class RetailerTools implements RetailerService{
         Retailer retailer = null;
         String sql = "SELECT * FROM Retailer WHERE RetailerID = ?";
 
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, ID);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 retailer = new Retailer(
                         resultSet.getString("RetailerID"),
                         resultSet.getString("RetailerName"),
@@ -290,13 +291,13 @@ public class RetailerTools implements RetailerService{
                         resultSet.getString("RetailerEmail"));
             } else {
                 System.out.println("Retailer not found.");
-                try{
+                try {
                     TimeUnit.SECONDS.sleep(2);
                 } catch (InterruptedException ie) {
                     throw new RuntimeException(ie);
                 }
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return retailer;
@@ -307,12 +308,12 @@ public class RetailerTools implements RetailerService{
         List<Retailer> retailerList = new ArrayList<>();
         String sql = "SELECT * FROM Retailer WHERE RetailerName LIKE ?";
 
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, "%" + name + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 retailerList.add(new Retailer(
                         resultSet.getString("RetailerID"),
                         resultSet.getString("RetailerName"),
@@ -320,7 +321,7 @@ public class RetailerTools implements RetailerService{
                         resultSet.getString("RetailerPhone"),
                         resultSet.getString("RetailerEmail")));
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -331,7 +332,7 @@ public class RetailerTools implements RetailerService{
             } catch (InterruptedException ie) {
                 throw new RuntimeException(ie);
             }
-        } else if(retailerList.size() == 1){
+        } else if (retailerList.size() == 1) {
             return retailerList.get(0);
         } else {
             Scanner scanner = new Scanner(System.in);
@@ -404,4 +405,43 @@ public class RetailerTools implements RetailerService{
         }
         return null;
     }
+
+    public List<ProductRetailerInfo> listLowStockProductsByRetailerWithPagination() {
+        String selectQuery = "SELECT s.ProductUPC, s.Quantity, r.RetailerID, r.RetailerName " +
+                "FROM Storage s " +
+                "JOIN Retailer r ON s.RetailerID = r.RetailerID " +
+                "WHERE s.Quantity < 20 AND s.RetailerID IS NOT NULL";
+
+        Connection connection = DatabaseUtils.getConnection();
+
+        List<ProductRetailerInfo> productRetailerList = new ArrayList<>();
+
+        try {
+            // Step 1: Retrieve all products with quantity < 20 at specific retailers
+            PreparedStatement selectStmt = connection.prepareStatement(selectQuery);
+            ResultSet rs = selectStmt.executeQuery();
+
+            // Step 2: Collect the results into a list
+            while (rs.next()) {
+                ProductRetailerInfo info = new ProductRetailerInfo(
+                        rs.getInt("ProductUPC"),
+                        rs.getInt("Quantity"),
+                        rs.getString("RetailerID"),
+                        rs.getString("RetailerName")
+                );
+                productRetailerList.add(info);
+            }
+
+            if (productRetailerList.isEmpty()) {
+                return null;
+            } else {
+                // Step 3: Display the results with pagination
+                return productRetailerList;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

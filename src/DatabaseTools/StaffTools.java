@@ -83,7 +83,7 @@ public class StaffTools {
             resultSet.next();
 
             int adminPrivilege = resultSet.getInt("AdminPrivilege");
-            if(adminPrivilege >= 0 && adminPrivilege <= 3){
+            if(adminPrivilege != 4){
                 return true;
             }
             else{
@@ -122,7 +122,7 @@ public class StaffTools {
             if(staff instanceof Admin){
                 preparedStatement.setInt(13, ((Admin) staff).getPrivilege());
             }else{
-                preparedStatement.setNull(13, Types.INTEGER);
+                preparedStatement.setInt(13, 4);
             }
 
             int result = preparedStatement.executeUpdate();
@@ -176,7 +176,7 @@ public class StaffTools {
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                if (resultSet.getInt("AdminPrivilege")>=0) {
+                if (resultSet.getInt("AdminPrivilege")!=4) {
                     staffs.add(new Admin(
                             resultSet.getString("StaffID"),
                             resultSet.getString("StaffUsername"),
@@ -232,22 +232,42 @@ public class StaffTools {
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                staff = new Staff(
-                        resultSet.getString("StaffID"),
-                        resultSet.getString("StaffUsername"),
-                        resultSet.getString("Password"),
-                        resultSet.getString("StaffIC"),
-                        resultSet.getString("StaffName"),
-                        resultSet.getInt("StaffAge"),
-                        resultSet.getDate("StaffHireDate").toLocalDate(),
-                        resultSet.getDate("StaffBirthDate").toLocalDate(),
-                        resultSet.getDouble("StaffSalary"),
-                        resultSet.getString("StaffEmail"),
-                        resultSet.getString("StaffPhone"),
-                        resultSet.getString("StaffAddress"),
-                        resultSet.getInt("AdminPrivilege") == 1,
-                        resultSet.getString("WarehouseID")
-                );
+                if (resultSet.getInt("AdminPrivilege")!=4) {
+                    staff = (new Admin(
+                            resultSet.getString("StaffID"),
+                            resultSet.getString("StaffUsername"),
+                            resultSet.getString("Password"),
+                            resultSet.getString("StaffIC"),
+                            resultSet.getString("StaffName"),
+                            resultSet.getInt("StaffAge"),
+                            resultSet.getDate("StaffHireDate").toLocalDate(),
+                            resultSet.getDate("StaffBirthDate").toLocalDate(),
+                            resultSet.getDouble("StaffSalary"),
+                            resultSet.getString("StaffEmail"),
+                            resultSet.getString("StaffPhone"),
+                            resultSet.getString("StaffAddress"),
+                            true,
+                            resultSet.getInt("AdminPrivilege"),
+                            resultSet.getString("WarehouseID")
+                    ));
+                }else {
+                    staff = (new Staff(
+                            resultSet.getString("StaffID"),
+                            resultSet.getString("StaffUsername"),
+                            resultSet.getString("Password"),
+                            resultSet.getString("StaffIC"),
+                            resultSet.getString("StaffName"),
+                            resultSet.getInt("StaffAge"),
+                            resultSet.getDate("StaffHireDate").toLocalDate(),
+                            resultSet.getDate("StaffBirthDate").toLocalDate(),
+                            resultSet.getDouble("StaffSalary"),
+                            resultSet.getString("StaffEmail"),
+                            resultSet.getString("StaffPhone"),
+                            resultSet.getString("StaffAddress"),
+                            false,
+                            resultSet.getString("WarehouseID")
+                    ));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

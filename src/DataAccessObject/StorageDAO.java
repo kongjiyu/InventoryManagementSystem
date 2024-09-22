@@ -196,4 +196,79 @@ public class StorageDAO {
         return product;
     }
 
+    public void displayByWarehouse(String warehouseID) {
+        StorageTools st = new StorageTools();
+        Scanner scanner = new Scanner(System.in);
+        List<Product> productList = st.getProductListByWarehouseID(warehouseID);
+
+        if(productList.isEmpty()) {
+            System.out.println("No Product Available");
+            try{
+                Thread.sleep(500);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        //print by page
+        int totalIndex = productList.size();
+        // how many item in 1 page
+        final int product_per_page = 5;
+        int page = 0;
+        // get the maximum pages can print
+        int max_pages = (totalIndex-1) / product_per_page;
+        // check whether the prodcut been choosen or not
+        boolean check = false;
+        do {
+            int count = 1;
+            // get the start index and end index
+            int startIndex = page * product_per_page;
+            int endIndex = startIndex + product_per_page < totalIndex ? startIndex + product_per_page : totalIndex;
+            // print the product within the index
+            System.out.println("\n\n\n\n\n\n\n\n\n\n");
+            System.out.println("=========================================================================================================");
+            System.out.printf("|%-3s|%-15s|%-20s|%-20s|%-20s|%-20s|\n", "No.", "Product UPC", "Product Name", "Product Category", "Product Price", "Product Quantity");
+            for (int i = startIndex; i < endIndex; i++) {
+                System.out.println("=========================================================================================================");
+                System.out.printf("|%-3d|%-15s|%-20s|%-20s|RM%-18.2f|%-20d|\n",
+                        count,
+                        productList.get(i).getUPC(),
+                        productList.get(i).getName(),
+                        productList.get(i).getCategory(),
+                        productList.get(i).getPrice(),
+                        productList.get(i).getQuantity());
+                count++;
+            }
+            System.out.println("=========================================================================================================");
+            System.out.printf("Page %d of %d\n", page+1, max_pages + 1);
+            System.out.printf("Total product: %d\n", totalIndex);
+            System.out.println("[\"A\" for last page]\t\t\t\t\t\t[\"Q\" to exit]\t\t\t\t\t\t[\"D\" for next page]");
+            System.out.print("Input: ");
+            char input = scanner.nextLine().charAt(0);
+            switch (input) {
+                case 'A':
+                case 'a':
+                    if (page > 0)
+                        page--;
+                    break;
+                case 'D':
+                case 'd':
+                    if (page < max_pages)
+                        page++;
+                    break;
+                case 'Q':
+                case 'q':
+                    check = true;
+                    break;
+                default:
+                    System.out.println("Invalid options!");
+                    try {
+                        Thread.sleep(500);
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }while(!check);
+    }
 }

@@ -1,7 +1,6 @@
 package DatabaseTools;
 
 import DataAccessObject.TransferDAO;
-import Entity.Storage;
 import Model.TransferSet;
 import Database.DatabaseUtils;
 import Entity.Product;
@@ -13,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.time.Instant;
 
 
-public class StorageTools implements StorageService {
+public class StorageTools implements DatabaseTable {
 
     // get the Product List by insert Warehouse ID
     public List<Product> getProductListByWarehouseID(String warehouseID) {
@@ -42,7 +41,7 @@ public class StorageTools implements StorageService {
             TransferDAO transferDAO = new TransferDAO();
             // loop to get the product and add into the product list
             while (resultSet.next()) {
-                if(resultSet.getInt("ProductQuantity")<=0) {
+                if(resultSet.getInt("Quantity")<=0) {
                     continue;
                 }
                 // If not skipping, add the product to the productList
@@ -271,7 +270,7 @@ public class StorageTools implements StorageService {
         // create product object to return
         Product product = null;
         //set the sql query
-        String sql =    "SELECT * " +
+        String sql =    "SELECT s.ProductUPC, ProductName, ProductDesc, ProductCategory, ProductPrice, ProductWeight, ProductWidth, ProductLength, ProductHeight, SUM(Quantity), ProductUpdatedAt " +
                 "FROM product p " +
                 "JOIN storage s " +
                 "ON p.ProductUPC = s.ProductUPC " +
@@ -299,7 +298,7 @@ public class StorageTools implements StorageService {
                                 resultSet.getDouble("ProductLength"),
                                 resultSet.getDouble("ProductHeight")
                         ),
-                        resultSet.getInt("Quantity"),
+                        resultSet.getInt("SUM(Quantity)"),
                         resultSet.getTimestamp("ProductUpdatedAt").toLocalDateTime());
             }else {
                 System.out.println("Product not found");
@@ -356,7 +355,7 @@ public class StorageTools implements StorageService {
         String sql = "INSERT INTO storage(StorageID, ProductUPC, WarehouseID, Quantity) VALUES (?,?,?,?)";
         try{
            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-           preparedStatement.setString(1, getNewStorageID());
+           preparedStatement.setString(1, getPrimaryKey());
            preparedStatement.setInt (2, ProductUPC);
            preparedStatement.setString(3, WarehouseID);
            preparedStatement.setInt(4, Quantity);
@@ -368,7 +367,7 @@ public class StorageTools implements StorageService {
         }
     }
 
-    public String getNewStorageID() {
+    public String getPrimaryKey() {
         // get connection to database
         Connection connection = DatabaseUtils.getConnection();
         String storageID = null;
@@ -515,7 +514,7 @@ public class StorageTools implements StorageService {
         String sql = "INSERT INTO storage (StorageID, ProductUPC, WarehouseID, RetailerID, Quantity) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, getNewStorageID());
+            preparedStatement.setString(1, getPrimaryKey());
             preparedStatement.setInt(2, productUPC);
             if (storageType.equalsIgnoreCase("Warehouse")) {
                 preparedStatement.setString(3, storageID);
@@ -534,31 +533,41 @@ public class StorageTools implements StorageService {
         }
     }
 
-    public void deductAllProductFromStorage(){
-        String selectQuery = "SELECT ProductUPC, Quantity FROM Storage";
-        String updateQuery = "UPDATE Storage SET Quantity = Quantity - ? WHERE ProductUPC = ?";
+    public void deductAllProductFromStorage() {
+        String selectQuery = "SELECT StorageID, ProductUPC, Quantity FROM Storage WHERE WarehouseID IS NULL";
+        String updateQuery = "UPDATE Storage SET Quantity = ? WHERE StorageID = ? AND ProductUPC = ?";
         Connection connection = DatabaseUtils.getConnection();
-        try{
-            // Step 1: Retrieve all products and their quantities
+
+        try {
+            // Step 1: Retrieve all storage records where WarehouseID is NULL
             PreparedStatement selectStmt = connection.prepareStatement(selectQuery);
             ResultSet rs = selectStmt.executeQuery();
 
-            // Step 2: Loop through each product and deduct 80% of the quantity
+            // Step 2: Loop through each storage record and deduct 80% of the quantity
             while (rs.next()) {
+                String storageID = rs.getString("StorageID");
                 int productUPC = rs.getInt("ProductUPC");
                 int currentQuantity = rs.getInt("Quantity");
 
                 // Calculate 80% of the current quantity
                 int quantityToDeduct = (int) (currentQuantity * 0.80);
+                int newQuantity = currentQuantity - quantityToDeduct;
 
-                // Update the quantity in Storage
+                // Ensure new quantity is not less than zero
+                if (newQuantity < 0) {
+                    newQuantity = 0;
+                }
+
+                // Step 3: Update the quantity in Storage for the specific StorageID and ProductUPC
                 PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
-                updateStmt.setInt(1, quantityToDeduct);
-                updateStmt.setInt(2, productUPC);
+                updateStmt.setInt(1, newQuantity);   // Set the new quantity
+                updateStmt.setString(2, storageID);  // Set the StorageID
+                updateStmt.setInt(3, productUPC);    // Set the ProductUPC
                 updateStmt.executeUpdate();
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 }

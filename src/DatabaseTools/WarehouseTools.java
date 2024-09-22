@@ -1,9 +1,6 @@
 package DatabaseTools;
 
 import Database.DatabaseUtils;
-import Driver.Utils;
-import Entity.Warehouse;
-import Entity.Warehouse;
 import Entity.Warehouse;
 
 import java.sql.Connection;
@@ -15,8 +12,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class WarehouseTools implements WarehouseService{
-    public static String retrieveMaxWarehouseID(){
+public class WarehouseTools implements DatabaseTable {
+    public String getPrimaryKey(){
         String sql = "SELECT MAX(WarehouseID) FROM Warehouse";
 
         Connection connection = DatabaseUtils.getConnection();
@@ -286,6 +283,8 @@ public class WarehouseTools implements WarehouseService{
         }
         return warehouse;
     }
+
+
 
     public Warehouse getWarehouseById(String ID) {
         // get connection with database

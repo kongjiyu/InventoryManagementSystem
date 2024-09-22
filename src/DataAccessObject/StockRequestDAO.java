@@ -178,12 +178,12 @@ public class StockRequestDAO {
                 System.out.println("\n\n\n\n\n\n\n\n\n\n");
                 System.out.println("Stock Request List:");
                 System.out.println("=======================================================================================");
-                System.out.printf("|%-10s | %-10s | %-10s | %-15s | %-12s | %-12s|\n", "Request ID", "Product UPC", "Quantity", "Requested By", "Warehouse ID", "Request Date");
+                System.out.printf("|%-10s | %-11s | %-10s | %-15s | %-12s | %-12s|\n", "Request ID", "Product UPC", "Quantity", "Requested By", "Warehouse ID", "Request Date");
                 System.out.println("=======================================================================================");
 
                 for (int i = startIndex; i < endIndex; i++) {
                     StockRequest request = stockRequests.get(i);
-                    System.out.printf("|%-10s | %-10s | %-10d | %-15s | %-12s | %-12s|\n",
+                    System.out.printf("|%-10s | %-11s | %-10d | %-15s | %-12s | %-12s|\n",
                             request.getRequestId(),
                             request.getProductUPC(),
                             request.getQuantity(),
