@@ -564,9 +564,6 @@ public class StorageTools implements DatabaseTable {
                 updateStmt.setString(2, storageID);  // Set the StorageID
                 updateStmt.setInt(3, productUPC);    // Set the ProductUPC
                 updateStmt.executeUpdate();
-
-                // Print success message
-                System.out.println("Successfully deducted 80% from StorageID: " + storageID + ", ProductUPC: " + productUPC);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

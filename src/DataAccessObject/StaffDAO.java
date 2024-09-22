@@ -829,7 +829,7 @@ public class StaffDAO {
             LogTools.insertLog(staff.getStaffID());
             storageTools.deductAllProductFromStorage();
 
-            if (StaffTools.checkAdmin(staff)) {
+            if (StaffTools.checkAdmin(StaffTools.retrieveStaff(staff.getStaffID()))) {
                 adminMenu(staff.getUsername());
             } else {
                 staffMenu(staff.getUsername());
